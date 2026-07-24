@@ -923,38 +923,10 @@ class InfiniteGridMenu {
       )
     ).then(images => {
       images.forEach((img, i) => {
-        let x = 0;
-        let y = 0;
-        if (i === 0) {
-          // SkySentinel -> bottom-left of canvas -> cellX = 0, cellY = 0 of texture (no Y-flip)
-          x = 0;
-          y = 512;
-        } else if (i === 1) {
-          // Tribe -> bottom-right of canvas -> cellX = 1, cellY = 0 of texture (no Y-flip)
-          x = 512;
-          y = 512;
-        } else if (i === 2) {
-          // VoteSamvidhan -> top-left of canvas -> cellX = 0, cellY = 1 of texture (no Y-flip)
-          x = 0;
-          y = 0;
-        }
+        const x = (i % this.atlasSize) * cellSize;
+        const y = Math.floor(i / this.atlasSize) * cellSize;
         ctx.drawImage(img, x, y, cellSize, cellSize);
       });
-
-      if (typeof document !== 'undefined') {
-        const existing = document.getElementById('debug-canvas');
-        if (existing) existing.remove();
-        canvas.style.position = 'fixed';
-        canvas.style.top = '20px';
-        canvas.style.left = '20px';
-        canvas.style.zIndex = '99999';
-        canvas.style.width = '256px';
-        canvas.style.height = '256px';
-        canvas.style.border = '2px solid red';
-        canvas.style.background = 'blue';
-        canvas.id = 'debug-canvas';
-        document.body.appendChild(canvas);
-      }
 
       gl.bindTexture(gl.TEXTURE_2D, this.tex);
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
