@@ -1149,7 +1149,7 @@ export default function InfiniteMenu({
       const diffY = e.clientY - startY;
       const elapsed = Date.now() - startTime;
 
-      if (Math.sqrt(diffX * diffX + diffY * diffY) < 8 && elapsed < 350) {
+      if (Math.sqrt(diffX * diffX + diffY * diffY) < 15 && elapsed < 600) {
         if (sketch) {
           sketch.handleCanvasClick(e.clientX, e.clientY);
         }
