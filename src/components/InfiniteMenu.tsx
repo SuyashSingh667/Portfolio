@@ -66,57 +66,29 @@ in float vAlpha;
 in float vItemIndex;
 
 void main() {
-    vec2 uv = vUvs - 0.5;
-    float dist = length(uv);
+    int itemIndex = int(vItemIndex) % uItemCount;
+    int cellsPerRow = uAtlasSize;
+    int cellX = itemIndex % cellsPerRow;
+    int cellY = itemIndex / cellsPerRow;
+    vec2 cellSize = vec2(1.0) / vec2(float(cellsPerRow));
+    vec2 cellOffset = vec2(float(cellX), float(cellY)) * cellSize;
 
-    // 0.40 is the radius of the inner project image (occupying 80% of the circle)
-    if (dist <= 0.40) {
-        // Map texture inside the inner circle, scaling it from [0, 0.40] to [0, 0.50]
-        vec2 imageUv = uv * (0.50 / 0.40) + 0.5;
-
-        int itemIndex = int(vItemIndex + 0.1) % uItemCount;
-        int cellsPerRow = uAtlasSize;
-        int cellX = itemIndex % cellsPerRow;
-        int cellY = itemIndex / cellsPerRow;
-        vec2 cellSize = vec2(1.0) / vec2(float(cellsPerRow));
-        vec2 cellOffset = vec2(float(cellX), float(cellY)) * cellSize;
-
-        ivec2 texSize = textureSize(uTex, 0);
-        float imageAspect = float(texSize.x) / float(texSize.y);
-        float containerAspect = 1.0;
-        
-        float scale = max(imageAspect / containerAspect, 
-                         containerAspect / imageAspect);
-        
-        vec2 st = vec2(imageUv.x, 1.0 - imageUv.y);
-        st = (st - 0.5) * scale + 0.5;
-        
-        st = clamp(st, 0.0, 1.0);
-        st = st * cellSize + cellOffset;
-        
-        outColor = texture(uTex, st);
-
-        // Apply a 3D spherical shading shadow overlay on the flat circular image
-        float r = dist / 0.40; // ranges from 0.0 to 1.0 inside the image
-        float z = sqrt(max(0.0, 1.0 - r * r)); // hemispherical depth
-        
-        // Shading multiplier: center is 1.0, edge is 0.54 (more defined sphere)
-        float shading = z * 0.46 + 0.54;
-        outColor.rgb *= shading;
-
-        outColor.a *= vAlpha;
-    } else {
-        // Draw the outer drop shadow in the outer ring (dist from 0.40 to 0.50)
-        // Offset the shadow slightly to the top-left so the shadow drops to the bottom-right
-        vec2 shadowUv = uv - vec2(-0.015, 0.015);
-        float shadowDist = length(shadowUv);
-        
-        // Soft gradient fade that vanishes completely before the geometry edge (0.50)
-        float shadowFade = smoothstep(0.48, 0.38, shadowDist);
-        
-        // Render shadow as a semi-transparent black overlay (softer outer shadow)
-        outColor = vec4(0.0, 0.0, 0.0, shadowFade * 0.28 * vAlpha);
-    }
+    ivec2 texSize = textureSize(uTex, 0);
+    float imageAspect = float(texSize.x) / float(texSize.y);
+    float containerAspect = 1.0;
+    
+    float scale = max(imageAspect / containerAspect, 
+                     containerAspect / imageAspect);
+    
+    vec2 st = vec2(vUvs.x, 1.0 - vUvs.y);
+    st = (st - 0.5) * scale + 0.5;
+    
+    st = clamp(st, 0.0, 1.0);
+    
+    st = st * cellSize + cellOffset;
+    
+    outColor = texture(uTex, st);
+    outColor.a *= vAlpha;
 }
 `;
 
@@ -143,12 +115,8 @@ class Vertex {
 }
 
 class Geometry {
-  vertices: Vertex[];
-  faces: Face[];
-  constructor() {
-    this.vertices = [];
-    this.faces = [];
-  }
+  vertices: Vertex[] = [];
+  faces: Face[] = [];
 
   addVertex(...args: number[]) {
     for (let i = 0; i < args.length; i += 3) {
@@ -173,7 +141,7 @@ class Geometry {
     let f = this.faces;
 
     for (let div = 0; div < divisions; ++div) {
-      const newFaces: Face[] = new Array(f.length * 4);
+      const newFaces = new Array(f.length * 4);
 
       f.forEach((face, ndx) => {
         const mAB = this.getMidPoint(face.a, face.b, midPointCache);
@@ -246,103 +214,39 @@ class IcosahedronGeometry extends Geometry {
     super();
     const t = Math.sqrt(5) * 0.5 + 0.5;
     this.addVertex(
-      -1,
-      t,
-      0,
-      1,
-      t,
-      0,
-      -1,
-      -t,
-      0,
-      1,
-      -t,
-      0,
-      0,
-      -1,
-      t,
-      0,
-      1,
-      t,
-      0,
-      -1,
-      -t,
-      0,
-      1,
-      -t,
-      t,
-      0,
-      -1,
-      t,
-      0,
-      1,
-      -t,
-      0,
-      -1,
-      -t,
-      0,
-      1
+      -1, t, 0,
+      1, t, 0,
+      -1, -t, 0,
+      1, -t, 0,
+      0, -1, t,
+      0, 1, t,
+      0, -1, -t,
+      0, 1, -t,
+      t, 0, -1,
+      t, 0, 1,
+      -t, 0, -1,
+      -t, 0, 1
     ).addFace(
-      0,
-      11,
-      5,
-      0,
-      5,
-      1,
-      0,
-      1,
-      7,
-      0,
-      7,
-      10,
-      0,
-      10,
-      11,
-      1,
-      5,
-      9,
-      5,
-      11,
-      4,
-      11,
-      10,
-      2,
-      10,
-      7,
-      6,
-      7,
-      1,
-      8,
-      3,
-      9,
-      4,
-      3,
-      4,
-      2,
-      3,
-      2,
-      6,
-      3,
-      6,
-      8,
-      3,
-      8,
-      9,
-      4,
-      9,
-      5,
-      2,
-      4,
-      11,
-      6,
-      2,
-      10,
-      8,
-      6,
-      7,
-      9,
-      8,
-      1
+      0, 11, 5,
+      0, 5, 1,
+      0, 1, 7,
+      0, 7, 10,
+      0, 10, 11,
+      1, 5, 9,
+      5, 11, 4,
+      11, 10, 2,
+      10, 7, 6,
+      7, 1, 8,
+      3, 9, 4,
+      3, 4, 2,
+      3, 2, 6,
+      3, 6, 8,
+      3, 8, 9,
+      4, 9, 5,
+      2, 4, 11,
+      6, 2, 10,
+      8, 6, 7,
+      9, 8, 1
     );
   }
 }
@@ -394,9 +298,9 @@ function createShader(gl: WebGL2RenderingContext, type: number, source: string):
 
 function createProgram(
   gl: WebGL2RenderingContext,
-  shaderSources: string[],
+  shaderSources: [string, string],
   transformFeedbackVaryings?: string[] | null,
-  attribLocations?: Record<string, number> | null
+  attribLocations?: Record<string, number>
 ): WebGLProgram | null {
   const program = gl.createProgram();
   if (!program) return null;
@@ -442,13 +346,7 @@ function createProgram(
     return null;
   }
 
-  if (success) {
-    return program;
-  }
-
-  console.error(gl.getProgramInfoLog(program));
-  gl.deleteProgram(program);
-  return null;
+  return program;
 }
 
 function makeVertexArray(
@@ -518,13 +416,14 @@ function createAndSetupTexture(
 class ArcballControl {
   canvas: HTMLCanvasElement;
   updateCallback: (deltaTime: number) => void;
+
   isPointerDown = false;
   orientation = quat.create();
   pointerRotation = quat.create();
   rotationVelocity = 0;
   rotationAxis = vec3.fromValues(1, 0, 0);
   snapDirection = vec3.fromValues(0, 0, -1);
-  snapTargetVertex: vec3 | null = null;
+  snapTargetDirection: vec3 | null = null;
   EPSILON = 0.1;
   IDENTITY_QUAT = quat.create();
 
@@ -593,21 +492,17 @@ class ArcballControl {
         quat.slerp(this.pointerRotation, this.pointerRotation, this.IDENTITY_QUAT, INTENSITY);
       }
     } else {
-      quat.copy(this.pointerRotation, this.IDENTITY_QUAT);
+      const INTENSITY = 0.1 * timeScale;
+      quat.slerp(this.pointerRotation, this.pointerRotation, this.IDENTITY_QUAT, INTENSITY);
 
-      if (this.snapTargetVertex) {
-        const SNAPPING_INTENSITY = 0.5;
-        const currentWorldPos = vec3.negate(vec3.create(), vec3.transformQuat(vec3.create(), this.snapTargetVertex, this.orientation));
-        const a = vec3.normalize(vec3.create(), currentWorldPos);
+      if (this.snapTargetDirection) {
+        const SNAPPING_INTENSITY = 0.2;
+        const a = this.snapTargetDirection;
         const b = this.snapDirection;
         const sqrDist = vec3.squaredDistance(a, b);
-        if (sqrDist < 0.0001) {
-          this.snapTargetVertex = null;
-        } else {
-          const distanceFactor = Math.max(0.1, 1 - sqrDist * 10);
-          angleFactor *= SNAPPING_INTENSITY * distanceFactor;
-          this.quatFromVectors(a, b, snapRotation, angleFactor);
-        }
+        const distanceFactor = Math.max(0.1, 1 - sqrDist * 10);
+        angleFactor *= SNAPPING_INTENSITY * distanceFactor;
+        this.quatFromVectors(a, b, snapRotation, angleFactor);
       }
     }
 
@@ -673,14 +568,12 @@ class ArcballControl {
 
 class InfiniteGridMenu {
   TARGET_FRAME_DURATION = 1000 / 60;
-  SPHERE_RADIUS = 1.45;
+  SPHERE_RADIUS = 2;
 
   canvas: HTMLCanvasElement;
   items: any[];
   onActiveItemChange: (index: number) => void;
   onMovementChange: (isMoving: boolean) => void;
-
-  gl!: WebGL2RenderingContext;
   viewportSize!: vec2;
   drawBufferSize!: vec2;
   discProgram!: WebGLProgram | null;
@@ -696,6 +589,7 @@ class InfiniteGridMenu {
   tex!: WebGLTexture | null;
   atlasSize!: number;
   control!: ArcballControl;
+  gl!: WebGL2RenderingContext;
 
   #time = 0;
   #deltaTime = 0;
@@ -723,7 +617,6 @@ class InfiniteGridMenu {
   movementActive = false;
   onProjectSelect?: (index: number) => void;
   isZoomed = false;
-  manualSnapping = false;
 
   constructor(canvas: HTMLCanvasElement, items: any[], onActiveItemChange: (index: number) => void, onMovementChange: (isMoving: boolean) => void, onInit: ((sk: InfiniteGridMenu) => void) | null = null, scale = 1.0) {
     this.canvas = canvas;
@@ -731,7 +624,7 @@ class InfiniteGridMenu {
     this.onActiveItemChange = onActiveItemChange || (() => {});
     this.onMovementChange = onMovementChange || (() => {});
     this.scaleFactor = scale;
-    this.camera.position[2] = 4.5 * scale;
+    this.camera.position[2] = 3 * scale;
     this.#init(onInit);
   }
 
@@ -761,7 +654,7 @@ class InfiniteGridMenu {
       const matrix = this.discInstances.matrices[i];
       const worldPos = vec4.fromValues(matrix[12], matrix[13], matrix[14], 1.0);
       
-      // Skip back-facing discs (worldPos.z > 0 in world space)
+      // Skip back-facing discs (worldPos.z > 0 in camera coordinate system)
       if (worldPos[2] > 0.0) continue;
       
       const clip = vec4.create();
@@ -783,9 +676,6 @@ class InfiniteGridMenu {
       const itemIndex = nearestIndex % Math.max(1, this.items.length);
       this.onActiveItemChange(itemIndex);
       
-      const nearestVertexPos = this.instancePositions[nearestIndex];
-      this.control.snapTargetVertex = nearestVertexPos;
-      this.manualSnapping = true;
       // Force movement state to stopped so overlay shows immediately
       this.movementActive = false;
       this.onMovementChange(false);
@@ -795,7 +685,6 @@ class InfiniteGridMenu {
       }
       return true;
     } else {
-      this.manualSnapping = false;
       return false;
     }
   }
@@ -1074,11 +963,11 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
     const height = this.SPHERE_RADIUS * 0.35;
-    const referenceDistance = 2.8 * this.scaleFactor;
+    const distance = this.camera.position[2];
     if (this.camera.aspect > 1) {
-      this.camera.fov = 2 * Math.atan(height / referenceDistance);
+      this.camera.fov = 2 * Math.atan(height / distance);
     } else {
-      this.camera.fov = 2 * Math.atan(height / this.camera.aspect / referenceDistance);
+      this.camera.fov = 2 * Math.atan(height / this.camera.aspect / distance);
     }
     mat4.perspective(
       this.camera.matrices.projection,
@@ -1093,10 +982,9 @@ class InfiniteGridMenu {
   #onControlUpdate(deltaTime: number) {
     const timeScale = deltaTime / this.TARGET_FRAME_DURATION + 0.0001;
     let damping = 5 / timeScale;
-    let baseZ = (this.isZoomed ? 3.1 : 4.5) * this.scaleFactor;
-    let cameraTargetZ = baseZ;
+    let cameraTargetZ = (this.isZoomed ? 3.1 : 4.5) * this.scaleFactor;
 
-    const isMoving = this.control.isPointerDown;
+    const isMoving = this.control.isPointerDown || Math.abs(this.smoothRotationVelocity) > 0.01;
 
     if (isMoving !== this.movementActive) {
       this.movementActive = isMoving;
@@ -1104,16 +992,12 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
-      if (this.isZoomed && !this.manualSnapping) {
-        const nearestVertexIndex = this.#findNearestVertexIndex();
-        const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
-        this.onActiveItemChange(itemIndex);
-        this.control.snapTargetVertex = this.instancePositions[nearestVertexIndex];
-        this.manualSnapping = true;
-      }
+      const nearestVertexIndex = this.#findNearestVertexIndex();
+      const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
+      this.onActiveItemChange(itemIndex);
+      const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
+      this.control.snapTargetDirection = snapDirection;
     } else {
-      this.manualSnapping = false;
-      this.control.snapTargetVertex = null;
       cameraTargetZ += this.control.rotationVelocity * 80 + (this.isZoomed ? 1.4 : 0.2) * this.scaleFactor;
       damping = 7 / timeScale;
     }
@@ -1141,8 +1025,7 @@ class InfiniteGridMenu {
 
   #getVertexWorldPosition(index: number) {
     const nearestVertexPos = this.instancePositions[index];
-    const rotated = vec3.transformQuat(vec3.create(), nearestVertexPos, this.control.orientation);
-    return vec3.negate(rotated, rotated); // Negate because discs are drawn at -p
+    return vec3.transformQuat(vec3.create(), nearestVertexPos, this.control.orientation);
   }
 }
 
@@ -1235,8 +1118,6 @@ export default function InfiniteMenu({
         if (sketch) {
           const hit = sketch.handleCanvasClick(e.clientX, e.clientY);
           if (hit) {
-            // Set hasClickedProject directly — no stale closure issue
-            // since setLocalHasClickedProject is a stable useState setter
             setLocalHasClickedProject(true);
             if (propsOnProjectSelect) {
               propsOnProjectSelect(0);
