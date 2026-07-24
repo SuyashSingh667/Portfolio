@@ -746,21 +746,12 @@ class InfiniteGridMenu {
     let nearestIndex = -1;
     let minNDCDist = Infinity;
 
-    console.log("=== CANVAS CLICK ===");
-    console.log("Client click:", clientX, clientY);
-    console.log("Click NDC:", x.toFixed(4), y.toFixed(4));
-    console.log("Camera Position Z:", this.camera.position[2]);
-
     for (let i = 0; i < this.DISC_INSTANCE_COUNT; i++) {
       const matrix = this.discInstances.matrices[i];
       const worldPos = [matrix[12], matrix[13], matrix[14]];
-      const title = this.items[i % this.items.length]?.title || "Unknown";
       
       // Depth check: skip discs on the back half of the sphere
-      if (worldPos[2] < 0.0) {
-        console.log(`Skipped back-facing: index ${i} (${title}), world Z = ${worldPos[2].toFixed(4)}`);
-        continue;
-      }
+      if (worldPos[2] < 0.0) continue;
       
       const clip = [worldPos[0], worldPos[1], worldPos[2], 1.0];
       
@@ -768,15 +759,11 @@ class InfiniteGridMenu {
       const y_clip = viewProj[1]*clip[0] + viewProj[5]*clip[1] + viewProj[9]*clip[2] + viewProj[13]*clip[3];
       const w_clip = viewProj[3]*clip[0] + viewProj[7]*clip[1] + viewProj[11]*clip[2] + viewProj[15]*clip[3];
 
-      if (w_clip === 0) {
-        console.log(`w_clip is 0 for: index ${i} (${title})`);
-        continue;
-      }
+      if (w_clip === 0) continue;
       const ndcX = x_clip / w_clip;
       const ndcY = y_clip / w_clip;
 
       const dist = Math.sqrt((ndcX - x) * (ndcX - x) + (ndcY - y) * (ndcY - y));
-      console.log(`Candidate: index ${i} (${title}), world = [${worldPos[0].toFixed(2)}, ${worldPos[1].toFixed(2)}, ${worldPos[2].toFixed(2)}], NDC = [${ndcX.toFixed(2)}, ${ndcY.toFixed(2)}], dist = ${dist.toFixed(4)}`);
 
       if (dist < minNDCDist) {
         minNDCDist = dist;
@@ -784,10 +771,8 @@ class InfiniteGridMenu {
       }
     }
 
-    console.log("Selected Nearest Index:", nearestIndex, "item:", nearestIndex !== -1 ? nearestIndex % this.items.length : -1);
     if (nearestIndex !== -1) {
       const itemIndex = nearestIndex % Math.max(1, this.items.length);
-      console.log("Activating project:", this.items[itemIndex]?.title);
       this.onActiveItemChange(itemIndex);
       
       const nearestVertexPos = this.instancePositions[nearestIndex];
