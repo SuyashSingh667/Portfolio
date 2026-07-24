@@ -1118,9 +1118,8 @@ class InfiniteGridMenu {
     const n = this.control.snapDirection;
     const inversOrientation = quat.conjugate(quat.create(), this.control.orientation);
     const nt = vec3.transformQuat(vec3.create(), n, inversOrientation);
-    vec3.negate(nt, nt); // Negate because discs are drawn at -p
 
-    let maxD = -1;
+    let maxD = -Infinity;
     let nearestVertexIndex = 0;
     for (let i = 0; i < this.instancePositions.length; ++i) {
       const d = vec3.dot(nt, this.instancePositions[i]);
