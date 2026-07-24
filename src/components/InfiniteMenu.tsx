@@ -998,6 +998,9 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
+      if (!this.control.snapTargetDirection) {
+        this.manualSnapping = false;
+      }
       if (!this.manualSnapping) {
         const nearestVertexIndex = this.#findNearestVertexIndex();
         const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
