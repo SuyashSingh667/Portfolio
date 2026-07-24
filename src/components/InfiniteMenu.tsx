@@ -748,16 +748,15 @@ class InfiniteGridMenu {
     let nearestIndex = -1;
     let minNDCDist = Infinity;
 
-    for (let i = 0; i < this.instancePositions.length; i++) {
-      const p = vec3.transformQuat(vec3.create(), this.instancePositions[i], this.control.orientation);
-      // Discs are drawn at -p
-      const discWorldPos = vec3.negate(vec3.create(), p);
+    for (let i = 0; i < this.DISC_INSTANCE_COUNT; i++) {
+      const matrix = this.discInstances.matrices[i];
+      const worldPos = vec4.fromValues(matrix[12], matrix[13], matrix[14], 1.0);
       
-      // Depth check: skip discs on the back half of the sphere (z < 0 in world space)
-      if (discWorldPos[2] < 0.0) continue;
+      // Skip back-facing discs (worldPos.z > 0 in world space)
+      if (worldPos[2] > 0.0) continue;
       
-      const clip = vec4.fromValues(discWorldPos[0], discWorldPos[1], discWorldPos[2], 1.0);
-      vec4.transformMat4(clip, clip, viewProj);
+      const clip = vec4.create();
+      vec4.transformMat4(clip, worldPos, viewProj);
 
       if (clip[3] <= 0.0001) continue;
       const ndcX = clip[0] / clip[3];
