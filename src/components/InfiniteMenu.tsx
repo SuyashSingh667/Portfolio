@@ -753,7 +753,8 @@ class InfiniteGridMenu {
       const worldPos = [matrix[12], matrix[13], matrix[14]];
       
       // Depth check: skip discs on the back half of the sphere
-      if (worldPos[2] < 0.0) continue;
+      // worldPos is -(1+s)*p, so front-facing discs (p.z > 0) have worldPos.z < 0
+      if (worldPos[2] > 0.0) continue;
       
       const clip = [worldPos[0], worldPos[1], worldPos[2], 1.0];
       
@@ -1225,6 +1226,12 @@ export default function InfiniteMenu({
       if (Math.sqrt(diffX * diffX + diffY * diffY) < 8 && elapsed < 350) {
         if (sketch) {
           sketch.handleCanvasClick(e.clientX, e.clientY);
+          // Set hasClickedProject directly from the event handler
+          // to avoid stale closure issues through the class callback chain
+          setLocalHasClickedProject(true);
+          if (propsOnProjectSelect) {
+            propsOnProjectSelect(0);
+          }
         }
       }
     };
