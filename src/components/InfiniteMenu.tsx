@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
-import { mat4, quat, vec2, vec3 } from 'gl-matrix';
+import { mat4, quat, vec2, vec3, vec4 } from 'gl-matrix';
 import FlickerText from './FlickerText';
 import './InfiniteMenu.css';
 
@@ -748,23 +748,20 @@ class InfiniteGridMenu {
     let nearestIndex = -1;
     let minNDCDist = Infinity;
 
-    for (let i = 0; i < this.DISC_INSTANCE_COUNT; i++) {
-      const matrix = this.discInstances.matrices[i];
-      const worldPos = [matrix[12], matrix[13], matrix[14]];
+    for (let i = 0; i < this.instancePositions.length; i++) {
+      const p = vec3.transformQuat(vec3.create(), this.instancePositions[i], this.control.orientation);
+      // Discs are drawn at -p
+      const discWorldPos = vec3.negate(vec3.create(), p);
       
-      // Depth check: skip discs on the back half of the sphere
-      // worldPos is -(1+s)*p, so front-facing discs (p.z > 0) have worldPos.z < 0
-      if (worldPos[2] > 0.0) continue;
+      // Depth check: skip discs on the back half of the sphere (z < 0 in world space)
+      if (discWorldPos[2] < 0.0) continue;
       
-      const clip = [worldPos[0], worldPos[1], worldPos[2], 1.0];
-      
-      const x_clip = viewProj[0]*clip[0] + viewProj[4]*clip[1] + viewProj[8]*clip[2] + viewProj[12]*clip[3];
-      const y_clip = viewProj[1]*clip[0] + viewProj[5]*clip[1] + viewProj[9]*clip[2] + viewProj[13]*clip[3];
-      const w_clip = viewProj[3]*clip[0] + viewProj[7]*clip[1] + viewProj[11]*clip[2] + viewProj[15]*clip[3];
+      const clip = vec4.fromValues(discWorldPos[0], discWorldPos[1], discWorldPos[2], 1.0);
+      vec4.transformMat4(clip, clip, viewProj);
 
-      if (w_clip === 0) continue;
-      const ndcX = x_clip / w_clip;
-      const ndcY = y_clip / w_clip;
+      if (clip[3] <= 0.0001) continue;
+      const ndcX = clip[0] / clip[3];
+      const ndcY = clip[1] / clip[3];
 
       const dist = Math.sqrt((ndcX - x) * (ndcX - x) + (ndcY - y) * (ndcY - y));
 
