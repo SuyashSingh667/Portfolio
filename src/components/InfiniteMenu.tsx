@@ -601,9 +601,13 @@ class ArcballControl {
         const a = this.snapTargetDirection;
         const b = this.snapDirection;
         const sqrDist = vec3.squaredDistance(a, b);
-        const distanceFactor = Math.max(0.1, 1 - sqrDist * 10);
-        angleFactor *= SNAPPING_INTENSITY * distanceFactor;
-        this.quatFromVectors(a, b, snapRotation, angleFactor);
+        if (sqrDist < 0.0001) {
+          this.snapTargetDirection = null;
+        } else {
+          const distanceFactor = Math.max(0.1, 1 - sqrDist * 10);
+          angleFactor *= SNAPPING_INTENSITY * distanceFactor;
+          this.quatFromVectors(a, b, snapRotation, angleFactor);
+        }
       }
     }
 
@@ -615,7 +619,7 @@ class ArcballControl {
     quat.slerp(this._combinedQuat, this._combinedQuat, combinedQuat, RA_INTENSITY);
     quat.normalize(this._combinedQuat, this._combinedQuat);
 
-    const rad = Math.acos(this._combinedQuat[3]) * 2.0;
+    const rad = Math.acos(Math.max(-1, Math.min(1, this._combinedQuat[3]))) * 2.0;
     const s = Math.sin(rad / 2.0);
     let rv = 0;
     if (s > 0.000001) {
@@ -634,7 +638,12 @@ class ArcballControl {
 
   quatFromVectors(a: vec3, b: vec3, out: quat, angleFactor = 1) {
     const axis = vec3.cross(vec3.create(), a, b);
-    vec3.normalize(axis, axis);
+    const len = vec3.length(axis);
+    if (len < 0.00001) {
+      quat.identity(out);
+      return { q: out, axis: vec3.fromValues(0, 1, 0), angle: 0 };
+    }
+    vec3.scale(axis, axis, 1 / len);
     const d = Math.max(-1, Math.min(1, vec3.dot(a, b)));
     const angle = Math.acos(d) * angleFactor;
     quat.setAxisAngle(out, axis, angle);
