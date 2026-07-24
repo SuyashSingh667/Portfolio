@@ -1063,10 +1063,10 @@ export default function InfiniteMenu({
   const [isMoving, setIsMoving] = useState(false);
   const [localHasClickedProject, setLocalHasClickedProject] = useState(false);
   const hasClickedProject = propsHasClickedProject || localHasClickedProject;
-  const setHasClickedProject = () => {
+  const setHasClickedProject = (index: number = 0) => {
     setLocalHasClickedProject(true);
     if (propsOnProjectSelect) {
-      propsOnProjectSelect(0);
+      propsOnProjectSelect(index);
     }
   };
 
@@ -1116,13 +1116,7 @@ export default function InfiniteMenu({
 
       if (Math.sqrt(diffX * diffX + diffY * diffY) < 8 && elapsed < 350) {
         if (sketch) {
-          const hit = sketch.handleCanvasClick(e.clientX, e.clientY);
-          if (hit) {
-            setLocalHasClickedProject(true);
-            if (propsOnProjectSelect) {
-              propsOnProjectSelect(0);
-            }
-          }
+          sketch.handleCanvasClick(e.clientX, e.clientY);
         }
       }
     };
@@ -1140,7 +1134,7 @@ export default function InfiniteMenu({
       sketch.isZoomed = hasClickedProject;
       sketchRef.current = sketch;
       sketch.onProjectSelect = (index: number) => {
-        setHasClickedProject();
+        setHasClickedProject(index);
       };
 
       canvas.addEventListener('pointerdown', onPointerDown);
