@@ -1107,13 +1107,14 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
-      if (this.isZoomed && !this.manualSnapping && !this.control.snapTargetDirection) {
+      if (this.isZoomed && !this.manualSnapping) {
         const nearestVertexIndex = this.#findNearestVertexIndex();
         const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
         this.onActiveItemChange(itemIndex);
         const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
         vec3.negate(snapDirection, snapDirection);
         this.control.snapTargetDirection = snapDirection;
+        this.manualSnapping = true;
       }
     } else {
       this.manualSnapping = false;
