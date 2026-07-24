@@ -1106,7 +1106,7 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
-      if (!this.manualSnapping && !this.control.snapTargetDirection) {
+      if (this.isZoomed && !this.manualSnapping && !this.control.snapTargetDirection) {
         const nearestVertexIndex = this.#findNearestVertexIndex();
         const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
         this.onActiveItemChange(itemIndex);
