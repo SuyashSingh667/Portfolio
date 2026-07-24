@@ -1170,12 +1170,11 @@ export default function InfiniteMenu({
   const [activeItem, setActiveItem] = useState<InfiniteMenuItem | null>(null);
   const [isMoving, setIsMoving] = useState(false);
   const [localHasClickedProject, setLocalHasClickedProject] = useState(false);
-  const hasClickedProject = propsHasClickedProject !== undefined ? propsHasClickedProject : localHasClickedProject;
+  const hasClickedProject = propsHasClickedProject || localHasClickedProject;
   const setHasClickedProject = () => {
+    setLocalHasClickedProject(true);
     if (propsOnProjectSelect) {
       propsOnProjectSelect(0);
-    } else {
-      setLocalHasClickedProject(true);
     }
   };
 
