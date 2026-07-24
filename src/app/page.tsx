@@ -42,7 +42,7 @@ const projects: Project[] = [
   {
     title: "Tribe",
     description: "Centralised campus clubs and events hub with custom calendar-based planning, event discovery, and light AI recommendations.",
-    image: "/images/projects/tribe_v2.png",
+    image: "/images/projects/tribe_v2.jpg?cb=1",
     link: "https://github.com/SuyashSingh667/Tribe",
   },
   {
