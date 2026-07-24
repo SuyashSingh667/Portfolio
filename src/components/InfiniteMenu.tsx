@@ -714,6 +714,7 @@ class InfiniteGridMenu {
   movementActive = false;
   onProjectSelect?: (index: number) => void;
   isZoomed = false;
+  manualSnapping = false;
 
   constructor(canvas: HTMLCanvasElement, items: any[], onActiveItemChange: (index: number) => void, onMovementChange: (isMoving: boolean) => void, onInit: ((sk: InfiniteGridMenu) => void) | null = null, scale = 1.0) {
     this.canvas = canvas;
@@ -781,10 +782,13 @@ class InfiniteGridMenu {
       const snapDirection = vec3.normalize(vec3.create(), vertexWorldPos);
       vec3.negate(snapDirection, snapDirection); // Negate because discs are drawn at -p
       this.control.snapTargetDirection = snapDirection;
+      this.manualSnapping = true;
 
       if (this.onProjectSelect) {
         this.onProjectSelect(itemIndex);
       }
+    } else {
+      this.manualSnapping = false;
     }
   }
 
@@ -1092,7 +1096,7 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
-      if (!this.isZoomed) {
+      if (!this.manualSnapping) {
         const nearestVertexIndex = this.#findNearestVertexIndex();
         const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
         this.onActiveItemChange(itemIndex);
@@ -1100,6 +1104,7 @@ class InfiniteGridMenu {
         this.control.snapTargetDirection = snapDirection;
       }
     } else {
+      this.manualSnapping = false;
       cameraTargetZ += this.control.rotationVelocity * 80 + (this.isZoomed ? 1.4 : 0.2) * this.scaleFactor;
       damping = 7 / timeScale;
     }
