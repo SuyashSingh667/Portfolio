@@ -1106,7 +1106,7 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
-      if (!this.manualSnapping) {
+      if (!this.manualSnapping && !this.control.snapTargetDirection) {
         const nearestVertexIndex = this.#findNearestVertexIndex();
         const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
         this.onActiveItemChange(itemIndex);
@@ -1115,6 +1115,7 @@ class InfiniteGridMenu {
       }
     } else {
       this.manualSnapping = false;
+      this.control.snapTargetDirection = null;
       cameraTargetZ += this.control.rotationVelocity * 80 + (this.isZoomed ? 1.4 : 0.2) * this.scaleFactor;
       damping = 7 / timeScale;
     }
