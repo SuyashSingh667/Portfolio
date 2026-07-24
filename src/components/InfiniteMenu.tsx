@@ -618,6 +618,14 @@ class InfiniteGridMenu {
   onProjectSelect?: (index: number) => void;
   isZoomed = false;
   manualSnapping = false;
+  itemIndicesArray!: Float32Array;
+
+  getItemIndex(index: number): number {
+    if (this.itemIndicesArray && this.itemIndicesArray[index] !== undefined) {
+      return this.itemIndicesArray[index];
+    }
+    return index % Math.max(1, this.items.length);
+  }
 
   constructor(canvas: HTMLCanvasElement, items: any[], onActiveItemChange: (index: number) => void, onMovementChange: (isMoving: boolean) => void, onInit: ((sk: InfiniteGridMenu) => void) | null = null, scale = 1.0) {
     this.canvas = canvas;
@@ -673,8 +681,8 @@ class InfiniteGridMenu {
       }
     }
 
-    if (nearestIndex !== -1) {
-      const itemIndex = nearestIndex % Math.max(1, this.items.length);
+    if (nearestIndex !== -1 && minNDCDist < 0.35) {
+      const itemIndex = this.getItemIndex(nearestIndex);
       this.onActiveItemChange(itemIndex);
       
       const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestIndex));
@@ -867,11 +875,26 @@ class InfiniteGridMenu {
       gl.vertexAttribDivisor(loc, 1);
     }
 
-    // Set up instanced attribute buffer for item indices
+    // Set up instanced attribute buffer for item indices with balanced distribution for 3 items
     const itemIndices = new Float32Array(count);
+    const itemCount = Math.max(1, this.items.length);
+    const overrideMap: Record<number, number> = {
+      25: 0, // SkySentinel (Center)
+      4: 1,  // Tribe (Top)
+      33: 2, // VoteSamvidhan (Top-Left)
+      24: 1, // Tribe (Top-Right)
+      22: 0, // SkySentinel (Bottom-Left)
+      13: 2, // VoteSamvidhan (Bottom-Right)
+      5: 2   // VoteSamvidhan (Bottom)
+    };
     for (let i = 0; i < count; ++i) {
-      itemIndices[i] = i % Math.max(1, this.items.length);
+      if (itemCount === 3 && overrideMap[i] !== undefined) {
+        itemIndices[i] = overrideMap[i];
+      } else {
+        itemIndices[i] = i % itemCount;
+      }
     }
+    this.itemIndicesArray = itemIndices;
     const itemIndexBuf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, itemIndexBuf);
     gl.bufferData(gl.ARRAY_BUFFER, itemIndices, gl.STATIC_DRAW);
@@ -1003,7 +1026,7 @@ class InfiniteGridMenu {
       }
       if (!this.manualSnapping) {
         const nearestVertexIndex = this.#findNearestVertexIndex();
-        const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
+        const itemIndex = this.getItemIndex(nearestVertexIndex);
         this.onActiveItemChange(itemIndex);
         const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
         this.control.snapTargetDirection = snapDirection;
