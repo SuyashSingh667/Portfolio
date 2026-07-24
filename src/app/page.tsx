@@ -213,9 +213,11 @@ function Chapter({ num, eyebrow, title, children }: { num: string; eyebrow: stri
 }
 
 const ConsoleLogger = () => {
+  const [mounted, setMounted] = useState(false);
   const [logs, setLogs] = useState<string[]>(globalLogs);
 
   useEffect(() => {
+    setMounted(true);
     onLogChange = (newLogs) => {
       setLogs(newLogs);
     };
@@ -223,6 +225,8 @@ const ConsoleLogger = () => {
       onLogChange = null;
     };
   }, []);
+
+  if (!mounted) return null;
 
   return (
     <div className="fixed bottom-4 left-4 z-[9999] max-w-[90vw] bg-black/90 text-green-400 font-mono text-[10px] p-3 rounded border border-green-500/30 overflow-y-auto max-h-[30vh] pointer-events-none">
