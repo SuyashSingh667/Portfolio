@@ -524,7 +524,7 @@ class ArcballControl {
   rotationVelocity = 0;
   rotationAxis = vec3.fromValues(1, 0, 0);
   snapDirection = vec3.fromValues(0, 0, -1);
-  snapTargetDirection: vec3 | null = null;
+  snapTargetVertex: vec3 | null = null;
   EPSILON = 0.1;
   IDENTITY_QUAT = quat.create();
 
@@ -595,13 +595,14 @@ class ArcballControl {
     } else {
       quat.copy(this.pointerRotation, this.IDENTITY_QUAT);
 
-      if (this.snapTargetDirection) {
-        const SNAPPING_INTENSITY = 0.2;
-        const a = this.snapTargetDirection;
+      if (this.snapTargetVertex) {
+        const SNAPPING_INTENSITY = 0.5;
+        const currentWorldPos = vec3.negate(vec3.create(), vec3.transformQuat(vec3.create(), this.snapTargetVertex, this.orientation));
+        const a = vec3.normalize(vec3.create(), currentWorldPos);
         const b = this.snapDirection;
         const sqrDist = vec3.squaredDistance(a, b);
         if (sqrDist < 0.0001) {
-          this.snapTargetDirection = null;
+          this.snapTargetVertex = null;
         } else {
           const distanceFactor = Math.max(0.1, 1 - sqrDist * 10);
           angleFactor *= SNAPPING_INTENSITY * distanceFactor;
@@ -783,10 +784,7 @@ class InfiniteGridMenu {
       this.onActiveItemChange(itemIndex);
       
       const nearestVertexPos = this.instancePositions[nearestIndex];
-      const vertexWorldPos = vec3.transformQuat(vec3.create(), nearestVertexPos, this.control.orientation);
-      const snapDirection = vec3.normalize(vec3.create(), vertexWorldPos);
-      vec3.negate(snapDirection, snapDirection);
-      this.control.snapTargetDirection = snapDirection;
+      this.control.snapTargetVertex = nearestVertexPos;
       this.manualSnapping = true;
       // Force movement state to stopped so overlay shows immediately
       this.movementActive = false;
@@ -1110,13 +1108,12 @@ class InfiniteGridMenu {
         const nearestVertexIndex = this.#findNearestVertexIndex();
         const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
         this.onActiveItemChange(itemIndex);
-        const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
-        this.control.snapTargetDirection = snapDirection;
+        this.control.snapTargetVertex = this.instancePositions[nearestVertexIndex];
         this.manualSnapping = true;
       }
     } else {
       this.manualSnapping = false;
-      this.control.snapTargetDirection = null;
+      this.control.snapTargetVertex = null;
       cameraTargetZ += this.control.rotationVelocity * 80 + (this.isZoomed ? 1.4 : 0.2) * this.scaleFactor;
       damping = 7 / timeScale;
     }
