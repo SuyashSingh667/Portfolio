@@ -19,6 +19,34 @@ import { CinematicFooter } from "@/components/CinematicFooter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import ImageTrail from "@/components/ImageTrail";
 
+let globalLogs: string[] = [];
+let onLogChange: ((logs: string[]) => void) | null = null;
+
+if (typeof window !== "undefined") {
+  const handleLog = (msg: string) => {
+    globalLogs.push(msg);
+    if (globalLogs.length > 20) globalLogs.shift();
+    if (onLogChange) onLogChange([...globalLogs]);
+  };
+
+  const originalLog = console.log;
+  const originalError = console.error;
+
+  console.log = (...args) => {
+    originalLog(...args);
+    handleLog(`[LOG] ${args.map(a => typeof a === "object" ? JSON.stringify(a) : String(a)).join(" ")}`);
+  };
+
+  console.error = (...args) => {
+    originalError(...args);
+    handleLog(`[ERR] ${args.map(a => typeof a === "object" ? JSON.stringify(a) : String(a)).join(" ")}`);
+  };
+
+  window.addEventListener("error", (e) => {
+    handleLog(`[WIN_ERR] ${e.message}`);
+  });
+}
+
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
@@ -185,35 +213,14 @@ function Chapter({ num, eyebrow, title, children }: { num: string; eyebrow: stri
 }
 
 const ConsoleLogger = () => {
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<string[]>(globalLogs);
 
   useEffect(() => {
-    const handleLog = (msg: string) => {
-      setLogs(prev => [...prev.slice(-15), msg]);
+    onLogChange = (newLogs) => {
+      setLogs(newLogs);
     };
-
-    const originalLog = console.log;
-    const originalError = console.error;
-
-    console.log = (...args) => {
-      originalLog(...args);
-      handleLog(`[LOG] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')}`);
-    };
-
-    console.error = (...args) => {
-      originalError(...args);
-      handleLog(`[ERR] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')}`);
-    };
-
-    const handleError = (e: ErrorEvent) => {
-      handleLog(`[WIN_ERR] ${e.message}`);
-    };
-    window.addEventListener('error', handleError);
-
     return () => {
-      console.log = originalLog;
-      console.error = originalError;
-      window.removeEventListener('error', handleError);
+      onLogChange = null;
     };
   }, []);
 
