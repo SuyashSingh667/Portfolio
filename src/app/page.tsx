@@ -184,6 +184,51 @@ function Chapter({ num, eyebrow, title, children }: { num: string; eyebrow: stri
   );
 }
 
+const ConsoleLogger = () => {
+  const [logs, setLogs] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handleLog = (msg: string) => {
+      setLogs(prev => [...prev.slice(-15), msg]);
+    };
+
+    const originalLog = console.log;
+    const originalError = console.error;
+
+    console.log = (...args) => {
+      originalLog(...args);
+      handleLog(`[LOG] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')}`);
+    };
+
+    console.error = (...args) => {
+      originalError(...args);
+      handleLog(`[ERR] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')}`);
+    };
+
+    const handleError = (e: ErrorEvent) => {
+      handleLog(`[WIN_ERR] ${e.message}`);
+    };
+    window.addEventListener('error', handleError);
+
+    return () => {
+      console.log = originalLog;
+      console.error = originalError;
+      window.removeEventListener('error', handleError);
+    };
+  }, []);
+
+  return (
+    <div className="fixed bottom-4 left-4 z-[9999] max-w-[90vw] bg-black/90 text-green-400 font-mono text-[10px] p-3 rounded border border-green-500/30 overflow-y-auto max-h-[30vh] pointer-events-none">
+      <div className="font-bold border-b border-green-500/20 pb-1 mb-1">On-Screen Console:</div>
+      {logs.map((log, i) => (
+        <div key={i} className={log.includes('[ERR]') || log.includes('[WIN_ERR]') ? 'text-red-400' : ''}>
+          {log}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const RadarChart = ({ 
   onHoverCategory 
 }: { 
@@ -1355,6 +1400,7 @@ export default function Home() {
           05 — CONTACT / CINEMATIC FOOTER
       ════════════════════════════════════════════════════════════════════════ */}
       <CinematicFooter />
+      <ConsoleLogger />
     </main>
   );
 }
