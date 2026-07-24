@@ -17,10 +17,11 @@ in vec3 aModelPosition;
 in vec3 aModelNormal;
 in vec2 aModelUvs;
 in mat4 aInstanceMatrix;
+in float aItemIndex;
 
 out vec2 vUvs;
 out float vAlpha;
-flat out int vInstanceId;
+out float vItemIndex;
 
 #define PI 3.141593
 
@@ -47,7 +48,7 @@ void main() {
 
     vAlpha = smoothstep(0.5, 1., normalize(worldPosition.xyz).z) * .9 + .1;
     vUvs = aModelUvs;
-    vInstanceId = gl_InstanceID;
+    vItemIndex = aItemIndex;
 }
 `;
 
@@ -62,7 +63,7 @@ out vec4 outColor;
 
 in vec2 vUvs;
 in float vAlpha;
-flat in int vInstanceId;
+in float vItemIndex;
 
 void main() {
     vec2 uv = vUvs - 0.5;
@@ -73,7 +74,7 @@ void main() {
         // Map texture inside the inner circle, scaling it from [0, 0.40] to [0, 0.50]
         vec2 imageUv = uv * (0.50 / 0.40) + 0.5;
 
-        int itemIndex = vInstanceId % uItemCount;
+        int itemIndex = int(vItemIndex + 0.1) % uItemCount;
         int cellsPerRow = uAtlasSize;
         int cellX = itemIndex % cellsPerRow;
         int cellY = itemIndex / cellsPerRow;
@@ -836,6 +837,7 @@ class InfiniteGridMenu {
       aModelPosition: gl.getAttribLocation(this.discProgram, 'aModelPosition'),
       aModelUvs: gl.getAttribLocation(this.discProgram, 'aModelUvs'),
       aInstanceMatrix: gl.getAttribLocation(this.discProgram, 'aInstanceMatrix'),
+      aItemIndex: gl.getAttribLocation(this.discProgram, 'aItemIndex'),
       uWorldMatrix: gl.getUniformLocation(this.discProgram, 'uWorldMatrix'),
       uViewMatrix: gl.getUniformLocation(this.discProgram, 'uViewMatrix'),
       uProjectionMatrix: gl.getUniformLocation(this.discProgram, 'uProjectionMatrix'),
@@ -972,6 +974,19 @@ class InfiniteGridMenu {
       gl.vertexAttribPointer(loc, 4, gl.FLOAT, false, bytesPerMatrix, j * 4 * 4);
       gl.vertexAttribDivisor(loc, 1);
     }
+
+    // Set up instanced attribute buffer for item indices
+    const itemIndices = new Float32Array(count);
+    for (let i = 0; i < count; ++i) {
+      itemIndices[i] = i % Math.max(1, this.items.length);
+    }
+    const itemIndexBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, itemIndexBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, itemIndices, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(this.discLocations.aItemIndex);
+    gl.vertexAttribPointer(this.discLocations.aItemIndex, 1, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribDivisor(this.discLocations.aItemIndex, 1);
+
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     gl.bindVertexArray(null);
   }
