@@ -519,25 +519,62 @@ export default function Home() {
           return dist > 0 ? -dist : 0;
         };
 
-        const anim = gsap.to(container, {
-          x: getXTranslation,
-          ease: "none"
+        const cards = container.querySelectorAll(".experience-card");
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#experiences",
+            start: "top top",
+            end: () => {
+              const sWidth = container.scrollWidth;
+              const cWidth = window.innerWidth;
+              const pad = window.innerWidth >= 768 ? 64 : 24;
+              const dist = sWidth - cWidth + pad * 2;
+              return `+=${dist > 0 ? dist : 0}`;
+            },
+            pin: true,
+            scrub: 1.2,
+            invalidateOnRefresh: true,
+          }
         });
 
-        ScrollTrigger.create({
-          trigger: "#experiences",
-          start: "top top",
-          end: () => {
-            const sWidth = container.scrollWidth;
-            const cWidth = window.innerWidth;
-            const pad = window.innerWidth >= 768 ? 64 : 24;
-            const dist = sWidth - cWidth + pad * 2;
-            return `+=${dist > 0 ? dist : 0}`;
-          },
-          pin: true,
-          scrub: 1.2,
-          animation: anim,
-          invalidateOnRefresh: true,
+        tl.to(container, {
+          x: getXTranslation,
+          ease: "none"
+        }, 0);
+
+        cards.forEach((card, idx) => {
+          const num = card.querySelector(".card-num");
+          const role = card.querySelector(".card-role");
+          const org = card.querySelector(".card-org");
+          const desc = card.querySelector(".card-desc");
+          const tags = card.querySelectorAll(".card-tag");
+
+          const startTime = idx * 0.25;
+
+          tl.fromTo(card,
+            { opacity: idx === 0 ? 1 : 0.15, scale: idx === 0 ? 1 : 0.96 },
+            { opacity: 1, scale: 1, ease: "power1.inOut", duration: 0.35 },
+            startTime
+          );
+
+          tl.fromTo(num,
+            { scale: idx === 0 ? 1 : 0.7, opacity: idx === 0 ? 1 : 0, y: idx === 0 ? 0 : -20 },
+            { scale: 1, opacity: 0.8, y: 0, ease: "back.out(1.4)", duration: 0.3 },
+            startTime
+          );
+
+          tl.fromTo([role, org, desc],
+            { y: idx === 0 ? 0 : 25, opacity: idx === 0 ? 1 : 0 },
+            { y: 0, opacity: 1, stagger: idx === 0 ? 0 : 0.06, ease: "power2.out", duration: 0.3 },
+            startTime + 0.05
+          );
+
+          tl.fromTo(tags,
+            { scale: idx === 0 ? 1 : 0.85, opacity: idx === 0 ? 1 : 0 },
+            { scale: 1, opacity: 1, stagger: idx === 0 ? 0 : 0.03, ease: "power2.out", duration: 0.25 },
+            startTime + 0.12
+          );
         });
       });
     };
@@ -747,26 +784,22 @@ export default function Home() {
             style={{ willChange: "transform" }}
           >
             {experiences.map((item, idx) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: idx * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                viewport={{ once: true }}
-                className="w-[88vw] sm:w-[55vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 last:border-r-0 pr-12 md:pr-16 mr-12 md:mr-16 last:pr-0 last:mr-0 min-h-[50vh]"
+                className="experience-card w-[88vw] sm:w-[55vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 last:border-r-0 pr-12 md:pr-16 mr-12 md:mr-16 last:pr-0 last:mr-0 min-h-[50vh]"
               >
                 {/* Top */}
                 <div>
-                  <span className="text-[clamp(5rem,12vw,9rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-4">
+                  <span className="card-num text-[clamp(5rem,12vw,9rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-4">
                     {item.num}
                   </span>
-                  <span className="text-[9px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-3 font-semibold">
+                  <span className="card-role text-[9px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-3 font-semibold">
                     {item.role}
                   </span>
-                  <h3 className="text-3xl md:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-5 leading-tight">
+                  <h3 className="card-org text-3xl md:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-5 leading-tight">
                     {item.org}
                   </h3>
-                  <p className="text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
+                  <p className="card-desc text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
                     {item.desc}
                   </p>
                 </div>
@@ -774,12 +807,12 @@ export default function Home() {
                 {/* Bottom — tags */}
                 <div className="flex flex-wrap gap-2 mt-8">
                   {item.tags.map((tag) => (
-                    <span key={tag} className="px-3 py-1 border border-black/10 dark:border-zinc-800 rounded-full text-[8px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
+                    <span key={tag} className="card-tag px-3 py-1 border border-black/10 dark:border-zinc-800 rounded-full text-[8px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
                       {tag}
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
