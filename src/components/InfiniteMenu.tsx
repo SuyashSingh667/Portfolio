@@ -911,6 +911,9 @@ class InfiniteGridMenu {
             img.onload = () => resolve(img);
             img.onerror = (e) => {
               console.error('InfiniteMenu: Failed to load image:', item.image, e);
+              if (typeof window !== 'undefined') {
+                window.alert('InfiniteMenu failed to load: ' + item.image);
+              }
               resolve(img);
             };
             img.src = item.image;
