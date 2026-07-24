@@ -1124,6 +1124,8 @@ export default function InfiniteMenu({
     }
   }, [hasClickedProject]);
 
+  const itemsKey = items.map(i => i.title).join(',');
+
   useEffect(() => {
     const canvas = canvasRef.current;
     let sketch: InfiniteGridMenu | null = null;
@@ -1196,7 +1198,7 @@ export default function InfiniteMenu({
       }
       sketchRef.current = null;
     };
-  }, [items, scale]);
+  }, [itemsKey, scale]);
 
   const handleButtonClick = () => {
     if (!activeItem?.link) return;

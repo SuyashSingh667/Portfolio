@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -597,9 +597,9 @@ export default function Home() {
     };
   }, []);
 
-  const menuItems = projects.map((p) => ({
+  const menuItems = useMemo(() => projects.map((p) => ({
     image: p.image, link: p.link, title: p.title, description: p.description,
-  }));
+  })), []);
 
   const CATEGORIES: Record<string, string[]> = {
     "Creative/3D": ["WebGL", "Three.js", "Shaders"],
