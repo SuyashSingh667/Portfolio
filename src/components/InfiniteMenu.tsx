@@ -617,6 +617,7 @@ class InfiniteGridMenu {
   movementActive = false;
   onProjectSelect?: (index: number) => void;
   isZoomed = false;
+  manualSnapping = false;
 
   constructor(canvas: HTMLCanvasElement, items: any[], onActiveItemChange: (index: number) => void, onMovementChange: (isMoving: boolean) => void, onInit: ((sk: InfiniteGridMenu) => void) | null = null, scale = 1.0) {
     this.canvas = canvas;
@@ -676,6 +677,10 @@ class InfiniteGridMenu {
       const itemIndex = nearestIndex % Math.max(1, this.items.length);
       this.onActiveItemChange(itemIndex);
       
+      const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestIndex));
+      this.control.snapTargetDirection = snapDirection;
+      this.manualSnapping = true;
+
       // Force movement state to stopped so overlay shows immediately
       this.movementActive = false;
       this.onMovementChange(false);
@@ -685,6 +690,7 @@ class InfiniteGridMenu {
       }
       return true;
     } else {
+      this.manualSnapping = false;
       return false;
     }
   }
@@ -992,12 +998,15 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
-      const nearestVertexIndex = this.#findNearestVertexIndex();
-      const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
-      this.onActiveItemChange(itemIndex);
-      const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
-      this.control.snapTargetDirection = snapDirection;
+      if (!this.manualSnapping) {
+        const nearestVertexIndex = this.#findNearestVertexIndex();
+        const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
+        this.onActiveItemChange(itemIndex);
+        const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
+        this.control.snapTargetDirection = snapDirection;
+      }
     } else {
+      this.manualSnapping = false;
       cameraTargetZ += this.control.rotationVelocity * 80 + (this.isZoomed ? 1.4 : 0.2) * this.scaleFactor;
       damping = 7 / timeScale;
     }
