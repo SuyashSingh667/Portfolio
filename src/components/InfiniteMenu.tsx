@@ -788,8 +788,16 @@ class InfiniteGridMenu {
 
   isIntersectingRef?: React.RefObject<boolean>;
 
+  reqId: number | null = null;
+
+  destroy() {
+    if (this.reqId) {
+      cancelAnimationFrame(this.reqId);
+    }
+  }
+
   run(time = 0) {
-    requestAnimationFrame(t => this.run(t));
+    this.reqId = requestAnimationFrame(t => this.run(t));
     if (this.isIntersectingRef && !this.isIntersectingRef.current) return;
 
     this.#deltaTime = Math.min(32, time - this.#time);
@@ -1194,10 +1202,10 @@ export default function InfiniteMenu({
       }
     };
 
-    if (canvas) {
+    if (canvas && items.length > 0) {
       sketch = new InfiniteGridMenu(
         canvas,
-        items.length ? items : defaultItems,
+        items,
         handleActiveItem,
         setIsMoving,
         sk => sk.run(),
@@ -1228,6 +1236,9 @@ export default function InfiniteMenu({
       if (canvas) {
         canvas.removeEventListener('pointerdown', onPointerDown);
         canvas.removeEventListener('pointerup', onPointerUp);
+      }
+      if (sketch) {
+        sketch.destroy();
       }
       sketchRef.current = null;
     };
