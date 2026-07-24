@@ -926,6 +926,21 @@ class InfiniteGridMenu {
         ctx.drawImage(img, x, y, cellSize, cellSize);
       });
 
+      if (typeof document !== 'undefined') {
+        const existing = document.getElementById('debug-canvas');
+        if (existing) existing.remove();
+        canvas.style.position = 'fixed';
+        canvas.style.top = '20px';
+        canvas.style.left = '20px';
+        canvas.style.zIndex = '99999';
+        canvas.style.width = '256px';
+        canvas.style.height = '256px';
+        canvas.style.border = '2px solid red';
+        canvas.style.background = 'blue';
+        canvas.id = 'debug-canvas';
+        document.body.appendChild(canvas);
+      }
+
       gl.bindTexture(gl.TEXTURE_2D, this.tex);
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
