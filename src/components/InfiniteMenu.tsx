@@ -738,7 +738,7 @@ class InfiniteGridMenu {
     this.#updateProjectionMatrix(gl);
   }
 
-  handleCanvasClick(clientX: number, clientY: number) {
+  handleCanvasClick(clientX: number, clientY: number): boolean {
     const rect = this.canvas.getBoundingClientRect();
     const x = ((clientX - rect.left) / rect.width) * 2 - 1;
     const y = -(((clientY - rect.top) / rect.height) * 2 - 1);
@@ -783,12 +783,17 @@ class InfiniteGridMenu {
       const snapDirection = vec3.normalize(vec3.create(), vertexWorldPos);
       this.control.snapTargetDirection = snapDirection;
       this.manualSnapping = true;
+      // Force movement state to stopped so overlay shows immediately
+      this.movementActive = false;
+      this.onMovementChange(false);
 
       if (this.onProjectSelect) {
         this.onProjectSelect(itemIndex);
       }
+      return true;
     } else {
       this.manualSnapping = false;
+      return false;
     }
   }
 
@@ -1225,12 +1230,14 @@ export default function InfiniteMenu({
 
       if (Math.sqrt(diffX * diffX + diffY * diffY) < 8 && elapsed < 350) {
         if (sketch) {
-          sketch.handleCanvasClick(e.clientX, e.clientY);
-          // Set hasClickedProject directly from the event handler
-          // to avoid stale closure issues through the class callback chain
-          setLocalHasClickedProject(true);
-          if (propsOnProjectSelect) {
-            propsOnProjectSelect(0);
+          const hit = sketch.handleCanvasClick(e.clientX, e.clientY);
+          if (hit) {
+            // Set hasClickedProject directly — no stale closure issue
+            // since setLocalHasClickedProject is a stable useState setter
+            setLocalHasClickedProject(true);
+            if (propsOnProjectSelect) {
+              propsOnProjectSelect(0);
+            }
           }
         }
       }
