@@ -681,7 +681,7 @@ class InfiniteGridMenu {
       }
     }
 
-    if (nearestIndex !== -1 && minNDCDist < 0.35) {
+    if (nearestIndex !== -1) {
       const itemIndex = this.getItemIndex(nearestIndex);
       this.onActiveItemChange(itemIndex);
       
