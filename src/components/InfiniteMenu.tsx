@@ -593,8 +593,7 @@ class ArcballControl {
         quat.slerp(this.pointerRotation, this.pointerRotation, this.IDENTITY_QUAT, INTENSITY);
       }
     } else {
-      const INTENSITY = 0.1 * timeScale;
-      quat.slerp(this.pointerRotation, this.pointerRotation, this.IDENTITY_QUAT, INTENSITY);
+      quat.copy(this.pointerRotation, this.IDENTITY_QUAT);
 
       if (this.snapTargetDirection) {
         const SNAPPING_INTENSITY = 0.2;
