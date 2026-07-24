@@ -1087,7 +1087,7 @@ class InfiniteGridMenu {
     let baseZ = (this.isZoomed ? 3.1 : 4.5) * this.scaleFactor;
     let cameraTargetZ = baseZ;
 
-    const isMoving = this.control.isPointerDown || Math.abs(this.smoothRotationVelocity) > 0.01;
+    const isMoving = this.control.isPointerDown;
 
     if (isMoving !== this.movementActive) {
       this.movementActive = isMoving;
