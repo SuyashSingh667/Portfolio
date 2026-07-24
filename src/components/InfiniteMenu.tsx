@@ -786,6 +786,7 @@ class InfiniteGridMenu {
       const nearestVertexPos = this.instancePositions[nearestIndex];
       const vertexWorldPos = vec3.transformQuat(vec3.create(), nearestVertexPos, this.control.orientation);
       const snapDirection = vec3.normalize(vec3.create(), vertexWorldPos);
+      vec3.negate(snapDirection, snapDirection);
       this.control.snapTargetDirection = snapDirection;
       this.manualSnapping = true;
       // Force movement state to stopped so overlay shows immediately
@@ -1111,6 +1112,7 @@ class InfiniteGridMenu {
         const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
         this.onActiveItemChange(itemIndex);
         const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
+        vec3.negate(snapDirection, snapDirection);
         this.control.snapTargetDirection = snapDirection;
       }
     } else {
