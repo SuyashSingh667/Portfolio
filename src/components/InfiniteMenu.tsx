@@ -778,6 +778,7 @@ class InfiniteGridMenu {
       const nearestVertexPos = this.instancePositions[nearestIndex];
       const vertexWorldPos = vec3.transformQuat(vec3.create(), nearestVertexPos, this.control.orientation);
       const snapDirection = vec3.normalize(vec3.create(), vertexWorldPos);
+      vec3.negate(snapDirection, snapDirection); // Negate because discs are drawn at -p
       this.control.snapTargetDirection = snapDirection;
 
       if (this.onProjectSelect) {
@@ -1090,6 +1091,7 @@ class InfiniteGridMenu {
     const n = this.control.snapDirection;
     const inversOrientation = quat.conjugate(quat.create(), this.control.orientation);
     const nt = vec3.transformQuat(vec3.create(), n, inversOrientation);
+    vec3.negate(nt, nt); // Negate because discs are drawn at -p
 
     let maxD = -1;
     let nearestVertexIndex = 0;
@@ -1105,7 +1107,8 @@ class InfiniteGridMenu {
 
   #getVertexWorldPosition(index: number) {
     const nearestVertexPos = this.instancePositions[index];
-    return vec3.transformQuat(vec3.create(), nearestVertexPos, this.control.orientation);
+    const rotated = vec3.transformQuat(vec3.create(), nearestVertexPos, this.control.orientation);
+    return vec3.negate(rotated, rotated); // Negate because discs are drawn at -p
   }
 }
 
