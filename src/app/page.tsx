@@ -28,7 +28,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Each crumpled paper ball inside the bin represents a skill I use in production.",
     color: "yellow",
     rotation: -4,
-    positionClass: "top-4 left-4 md:left-12 lg:left-16",
+    positionClass: "top-14 left-8 md:left-24 lg:left-36",
   },
   {
     id: "note-2",
@@ -36,15 +36,15 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Click, drag & toss paper balls out of the bin to test 2D + 3D collision physics!",
     color: "mint",
     rotation: 5,
-    positionClass: "top-8 right-4 md:right-12 lg:right-16",
+    positionClass: "top-16 right-8 md:right-24 lg:right-36",
   },
   {
     id: "note-3",
     title: "🚀 Production Stack",
     content: "React, Next.js, WebGL, Three.js, GLSL Shaders, Node, Python, Docker & PostgreSQL.",
     color: "pink",
-    rotation: -6,
-    positionClass: "top-1/3 left-2 md:left-8 hidden sm:block",
+    rotation: -5,
+    positionClass: "top-[40%] left-6 md:left-20 lg:left-28 hidden sm:block",
   },
   {
     id: "note-4",
@@ -52,7 +52,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Real-time WebGL depth z-splitting clip planes for true 3D mesh immersion.",
     color: "purple",
     rotation: 4,
-    positionClass: "top-1/3 right-2 md:right-8 hidden sm:block",
+    positionClass: "top-[40%] right-6 md:right-20 lg:right-28 hidden sm:block",
   },
   {
     id: "note-5",
@@ -60,7 +60,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Tossed paper balls land smoothly on the floor with fixed margin page bounds.",
     color: "orange",
     rotation: -3,
-    positionClass: "bottom-16 left-6 md:left-16 hidden md:block",
+    positionClass: "bottom-20 left-12 md:left-28 lg:left-40 hidden md:block",
   },
 ];
 
