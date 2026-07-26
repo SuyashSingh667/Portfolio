@@ -187,12 +187,14 @@ function initBin(
   group.add(body, rimTop, rimBot);
   group.scale.setScalar(SC);
   group.position.y = -0.2;
+  group.position.x = 2.0; // Shift dustbin to the right side of the canvas
   scene.add(group);
 
   // Project bin positions → canvas pixels for physics calibration
   // We accept wz (depth) to account for perspective scaling of the tilted mouth/base
+  const gx = group.position.x;
   const proj = (wx: number, wy: number, wz: number = 0) => {
-    const v = new THREE.Vector3(wx, wy, wz).project(cam);
+    const v = new THREE.Vector3(wx + gx, wy, wz).project(cam);
     return { x:(v.x*.5+.5)*cW, y:(-v.y*.5+.5)*cH };
   };
   const gy    = group.position.y;
@@ -420,12 +422,12 @@ export default function PaperBinSkillset({
     } as any);
     engineRef.current = engine;
 
-    // World bounds
+    // World bounds — expanded wide so paper balls can fly anywhere across the page
     const wo = { isStatic:true, friction:.7, restitution:.25 };
     M.Composite.add(engine.world, [
-      M.Bodies.rectangle(W/2,  H+30,  W+300, 60, wo),
-      M.Bodies.rectangle(-30,  H/2,   60, H*4,  wo),
-      M.Bodies.rectangle(W+30, H/2,   60, H*4,  wo),
+      M.Bodies.rectangle(W/2,  H+120, W + 6000, 200, wo),     // Floor
+      M.Bodies.rectangle(-3000, H/2,   100,    H * 20, wo),    // Left boundary far out
+      M.Bodies.rectangle(W+3000, H/2, 100,   H * 20, wo),    // Right boundary far out
     ]);
 
     // ── Bin physics walls — tapered trapezoid ──────────────────────────────
@@ -678,7 +680,7 @@ export default function PaperBinSkillset({
   return (
     <div
       ref={outerRef}
-      style={{ position:"relative", width:"100%", height:"100%", overflow:"hidden", userSelect:"none" }}
+      style={{ position:"relative", width:"100%", height:"100%", overflow:"visible", userSelect:"none" }}
       className="bg-transparent rounded-2xl"
     >
       {/* z:2 — bin BACK hemisphere (z≤0 clipped) — behind balls */}
@@ -688,7 +690,7 @@ export default function PaperBinSkillset({
 
       {/* z:10 — physics DOM balls */}
       <div ref={physRef}
-        style={{ position:"absolute", inset:0, overflow:"hidden", zIndex:10 }}
+        style={{ position:"absolute", inset:0, overflow:"visible", zIndex:10 }}
       >
         {ballUrls.map((src,i) => (
           <div key={i} ref={el=>{ elRefs.current[i]=el; }}
