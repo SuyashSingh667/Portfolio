@@ -530,7 +530,7 @@ export default function Home() {
               const cWidth = window.innerWidth;
               const pad = window.innerWidth >= 768 ? 64 : 24;
               const dist = sWidth - cWidth + pad * 2;
-              return `+=${dist > 0 ? dist : 0}`;
+              return `+=${dist > 0 ? dist : 500}`;
             },
             pin: true,
             scrub: 1.2,
@@ -576,19 +576,31 @@ export default function Home() {
             startTime + 0.12
           );
         });
+
+        setTimeout(() => ScrollTrigger.refresh(), 100);
       });
     };
 
-    const timer = setTimeout(initGSAP, 200);
+    const timer1 = setTimeout(initGSAP, 100);
+    const timer2 = setTimeout(initGSAP, 500);
+    const timer3 = setTimeout(initGSAP, 1200);
 
     const handleResize = () => {
       initGSAP();
     };
     window.addEventListener("resize", handleResize);
+    window.addEventListener("load", handleResize);
+
+    if (document.fonts) {
+      document.fonts.ready.then(initGSAP);
+    }
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("load", handleResize);
       if (ctx) ctx.revert();
       const triggerEl = document.getElementById("experiences");
       ScrollTrigger.getAll().forEach(t => {
