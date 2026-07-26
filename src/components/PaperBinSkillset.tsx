@@ -876,193 +876,200 @@ export default function PaperBinSkillset({
   return (
     <div
       ref={outerRef}
-      style={{ position:"relative", width:"100%", height:"100%", overflow:"hidden", userSelect:"none" }}
-      className="bg-transparent rounded-2xl"
+      style={{ position:"relative", width:"100%", height:"100%", userSelect:"none" }}
+      className="bg-transparent rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8"
     >
-      {/* z:2 — bin BACK hemisphere (z≤0 clipped) — behind balls */}
-      <canvas ref={backCanvasR}
-        style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:2 }}
-      />
+      {/* LEFT COLUMN: Dustbin Physics Arena */}
+      <div className="w-full lg:w-[48%] h-[55vh] lg:h-[75vh] relative overflow-hidden rounded-2xl border border-black/5 dark:border-white/5 bg-black/[0.015] dark:bg-white/[0.015]">
+        {/* z:2 — bin BACK hemisphere (z≤0 clipped) — behind balls */}
+        <canvas ref={backCanvasR}
+          style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:2 }}
+        />
 
-      {/* z:10 — physics DOM balls */}
-      <div ref={physRef}
-        style={{ position:"absolute", inset:0, overflow:"hidden", zIndex:10 }}
-      >
-        {ballUrls.map((src,i) => {
-          const label = SKILL_ITEMS[i];
-          return (
-            <div key={i} ref={el=>{ elRefs.current[i]=el; }}
-              onClick={() => handleSelectSkill(label)}
-              style={{
-                position:"absolute", visibility:"hidden",
-                width:BALL_D, height:BALL_D, borderRadius:"50%",
-                backgroundImage:`url(${src})`, backgroundSize:"cover",
-                cursor:"grab", userSelect:"none", willChange:"transform",
-                filter: dark ? "brightness(.82)" : "none",
-                transition: "box-shadow 0.2s ease, filter 0.2s ease",
-              }}
-              className="hover:scale-110 active:cursor-grabbing hover:drop-shadow-lg"
-              title={`Click or drag to unfold ${label}`}
-              draggable={false}
-            />
-          );
-        })}
-      </div>
+        {/* z:10 — physics DOM balls */}
+        <div ref={physRef}
+          style={{ position:"absolute", inset:0, overflow:"hidden", zIndex:10 }}
+        >
+          {ballUrls.map((src,i) => {
+            const label = SKILL_ITEMS[i];
+            return (
+              <div key={i} ref={el=>{ elRefs.current[i]=el; }}
+                onClick={() => handleSelectSkill(label)}
+                style={{
+                  position:"absolute", visibility:"hidden",
+                  width:BALL_D, height:BALL_D, borderRadius:"50%",
+                  backgroundImage:`url(${src})`, backgroundSize:"cover",
+                  cursor:"grab", userSelect:"none", willChange:"transform",
+                  filter: dark ? "brightness(.82)" : "none",
+                  transition: "box-shadow 0.2s ease, filter 0.2s ease",
+                }}
+                className="hover:scale-110 active:cursor-grabbing hover:drop-shadow-lg"
+                title={`Click or drag to unfold ${label}`}
+                draggable={false}
+              />
+            );
+          })}
+        </div>
 
-      {/* z:15 — bin FRONT hemisphere (z≥0 clipped) — in front of balls */}
-      <canvas ref={frontCanvasR}
-        style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:15 }}
-      />
+        {/* z:15 — bin FRONT hemisphere (z≥0 clipped) — in front of balls */}
+        <canvas ref={frontCanvasR}
+          style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:15 }}
+        />
 
-      {/* Modern Instruction Badge */}
-      <div style={{
-        position:"absolute", top:16, left:"50%", transform:"translateX(-50%)",
-        pointerEvents:"none", zIndex:30,
-      }}>
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-black/10 dark:border-white/12 bg-white/80 dark:bg-black/80 backdrop-blur-md shadow-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-650 dark:bg-zinc-250"></span>
-          </span>
-          <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.24em] font-semibold text-zinc-600 dark:text-zinc-300">
-            Every crumpled paper hides a skill. Click or drag to unfold.
-          </span>
+        {/* Hint */}
+        <div style={{
+          position:"absolute", top:14, left:"50%", transform:"translateX(-50%)",
+          pointerEvents:"none", zIndex:30,
+        }}>
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-white/80 dark:bg-black/80 backdrop-blur-md shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-650 dark:bg-zinc-250"></span>
+            </span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] font-semibold text-zinc-600 dark:text-zinc-300">
+              Dustbin Arena // Click paper ball
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Unfolding Skill Card Sheet Modal Overlay */}
-      <AnimatePresence>
-        {activeSkill && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
-            {/* Backdrop */}
+      {/* RIGHT COLUMN: Unfolded Paper Skill Sheet */}
+      <div className="w-full lg:w-[48%] h-[55vh] lg:h-[75vh] relative flex items-center justify-center">
+        <AnimatePresence mode="wait">
+          {activeSkill ? (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={handleCloseSkill}
-              className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-md"
-            />
-
-            {/* Unfolded Paper Card Container */}
-            <motion.div
-              initial={{ scale: 0.15, rotate: -18, opacity: 0, y: 120, skewX: 12 }}
-              animate={{ scale: 1, rotate: 0, opacity: 1, y: 0, skewX: 0 }}
-              exit={{ scale: 0.12, rotate: 22, opacity: 0, y: 140, skewX: -14 }}
-              transition={{ type: "spring", stiffness: 320, damping: 26 }}
-              className="relative w-full max-w-[540px] bg-[#fcfbfa] dark:bg-[#151516] text-[#171717] dark:text-[#ededed] border border-black/12 dark:border-white/15 rounded-2xl shadow-2xl p-6 sm:p-8 overflow-hidden z-10"
+              key={activeSkill.name}
+              initial={{ scale: 0.2, rotate: -15, opacity: 0, x: -80 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1, x: 0 }}
+              exit={{ scale: 0.15, rotate: 18, opacity: 0, x: -80 }}
+              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              className="relative w-full max-w-[480px] h-full flex flex-col justify-between p-6 sm:p-8 rounded-2xl overflow-hidden shadow-2xl text-[#111111]"
               style={{
-                boxShadow: dark
-                  ? "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1)"
-                  : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08)",
+                backgroundImage: "url('/unfolded_paper.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
               }}
             >
-              {/* Subtle Paper Wrinkle Crease Overlays */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 dark:opacity-10" width="100%" height="100%">
-                <line x1="0" y1="0" x2="100%" y2="100%" stroke="currentColor" strokeWidth="0.75" strokeDasharray="4,4" />
-                <line x1="100%" y1="0" x2="0" y2="100%" stroke="currentColor" strokeWidth="0.75" strokeDasharray="4,4" />
-                <line x1="30%" y1="0" x2="70%" y2="100%" stroke="currentColor" strokeWidth="0.5" />
-              </svg>
-
-              {/* Folded Corner Accent */}
-              <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-bl from-black/10 to-transparent dark:from-white/10 rounded-bl-xl border-l border-b border-black/10 dark:border-white/10 pointer-events-none" />
+              {/* Light overlay for contrast */}
+              <div className="absolute inset-0 bg-white/10 pointer-events-none" />
 
               {/* Header */}
-              <div className="flex justify-between items-start mb-5 relative z-10">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl sm:text-4xl p-2 rounded-xl bg-black/5 dark:bg-white/5 border border-black/8 dark:border-white/10 flex items-center justify-center">
-                    {activeSkill.icon}
-                  </span>
-                  <div>
-                    <div className="font-mono text-[9px] uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400 font-bold mb-0.5">
-                      // {activeSkill.category}
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl p-2 rounded-xl bg-black/10 border border-black/15 flex items-center justify-center shadow-inner">
+                      {activeSkill.icon}
+                    </span>
+                    <div>
+                      <div className="font-mono text-[9px] uppercase tracking-[0.28em] text-zinc-700 font-extrabold mb-0.5">
+                        // {activeSkill.category}
+                      </div>
+                      <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[#0a0a0a]">
+                        {activeSkill.name}
+                      </h2>
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[#171717] dark:text-white">
-                      {activeSkill.name}
-                    </h2>
+                  </div>
+
+                  <button
+                    onClick={handleCloseSkill}
+                    className="p-1.5 text-zinc-700 hover:text-black hover:bg-black/10 rounded-full transition-colors cursor-pointer"
+                    title="Close & Refold"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </button>
+                </div>
+
+                {/* Stats Row */}
+                <div className="flex items-center gap-4 mb-4 py-2 px-3.5 rounded-lg bg-black/5 border border-black/10 font-mono text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-zinc-600 uppercase text-[9px] tracking-wider font-bold">Proficiency:</span>
+                    <span className="text-amber-700 font-bold tracking-widest">{activeSkill.rating}</span>
+                  </div>
+                  <div className="h-3 w-[1px] bg-black/20" />
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-zinc-600 uppercase text-[9px] tracking-wider font-bold">Experience:</span>
+                    <span className="font-black text-[#0a0a0a]">{activeSkill.experience}</span>
                   </div>
                 </div>
 
+                {/* Summary */}
+                <div className="mb-4">
+                  <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-600 font-bold mb-1">
+                    Summary
+                  </div>
+                  <p className="text-xs sm:text-sm leading-relaxed text-zinc-900 font-semibold">
+                    {activeSkill.description}
+                  </p>
+                </div>
+
+                {/* Featured Projects */}
+                <div className="mb-4">
+                  <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-600 font-bold mb-1.5">
+                    Featured Projects
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeSkill.usedIn.map((proj, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-black/10 text-zinc-900 border border-black/15"
+                      >
+                        • {proj}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Ecosystem Tools */}
+                <div>
+                  <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-600 font-bold mb-1.5">
+                    Ecosystem &amp; Tools
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeSkill.tools.map((tool, idx) => (
+                      <span
+                        key={idx}
+                        className="px-2 py-0.5 rounded text-[10px] font-mono text-zinc-800 bg-black/5 border border-black/10 font-bold"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Refold Action */}
+              <div className="pt-3 flex justify-end relative z-10">
                 <button
                   onClick={handleCloseSkill}
-                  className="p-2 text-zinc-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors cursor-pointer"
-                  title="Close & Refold"
+                  className="px-5 py-2.5 bg-[#111111] text-white font-mono text-xs uppercase tracking-widest font-bold rounded-xl hover:bg-black transition-all cursor-pointer shadow-md flex items-center gap-2"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-
-              {/* Stats Row */}
-              <div className="flex items-center gap-4 mb-6 py-2.5 px-4 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/5 dark:border-white/8 relative z-10">
-                <div className="flex items-center gap-1.5 font-mono text-xs">
-                  <span className="text-zinc-400 dark:text-zinc-500 uppercase text-[9px] tracking-wider">Proficiency:</span>
-                  <span className="text-amber-500 dark:text-amber-400 font-bold tracking-widest">{activeSkill.rating}</span>
-                </div>
-                <div className="h-3 w-[1px] bg-black/10 dark:bg-white/10" />
-                <div className="flex items-center gap-1.5 font-mono text-xs">
-                  <span className="text-zinc-400 dark:text-zinc-500 uppercase text-[9px] tracking-wider">Experience:</span>
-                  <span className="font-bold text-[#171717] dark:text-white">{activeSkill.experience}</span>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="mb-6 relative z-10">
-                <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-500 font-bold mb-2">
-                  Summary
-                </div>
-                <p className="text-sm sm:text-base leading-relaxed text-zinc-700 dark:text-zinc-300 font-medium">
-                  {activeSkill.description}
-                </p>
-              </div>
-
-              {/* Used In Projects */}
-              <div className="mb-6 relative z-10">
-                <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-500 font-bold mb-2.5">
-                  Featured In Projects
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {activeSkill.usedIn.map((proj, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/8 dark:border-white/10"
-                    >
-                      • {proj}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Technologies Used With It */}
-              <div className="mb-7 relative z-10">
-                <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-500 font-bold mb-2.5">
-                  Ecosystem &amp; Tools
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {activeSkill.tools.map((tool, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2.5 py-1 rounded-md text-[11px] font-mono text-zinc-600 dark:text-zinc-400 bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5"
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Footer Refold Action Button */}
-              <div className="pt-2 flex justify-end relative z-10">
-                <button
-                  onClick={handleCloseSkill}
-                  className="w-full sm:w-auto px-6 py-3 bg-[#171717] dark:bg-white text-white dark:text-black font-mono text-xs uppercase tracking-widest font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md flex items-center justify-center gap-2"
-                >
-                  <span>Fold &amp; Return to Dustbin</span>
+                  <span>Fold &amp; Return</span>
                   <span className="text-sm">↩</span>
                 </button>
               </div>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          ) : (
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              className="w-full max-w-[480px] h-full rounded-2xl border border-dashed border-black/15 dark:border-white/15 bg-black/[0.01] dark:bg-white/[0.01] flex flex-col items-center justify-center p-8 text-center"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-black/5 dark:bg-white/5 border border-black/8 dark:border-white/10 flex items-center justify-center mb-4 text-2xl">
+                📄
+              </div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400 font-bold mb-2">
+                Unfolded Skill Sheet
+              </div>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400 max-w-[280px] font-medium leading-relaxed">
+                Click or drag any paper ball from the dustbin to unfold its skill details sheet.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
