@@ -519,62 +519,25 @@ export default function Home() {
           return dist > 0 ? -dist : 0;
         };
 
-        const cards = container.querySelectorAll(".experience-card");
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: "#experiences",
-            start: "top top",
-            end: () => {
-              const sWidth = container.scrollWidth;
-              const cWidth = window.innerWidth;
-              const pad = window.innerWidth >= 768 ? 64 : 24;
-              const dist = sWidth - cWidth + pad * 2;
-              return `+=${dist > 0 ? dist : 500}`;
-            },
-            pin: true,
-            scrub: 1.2,
-            invalidateOnRefresh: true,
-          }
-        });
-
-        tl.to(container, {
+        const anim = gsap.to(container, {
           x: getXTranslation,
           ease: "none"
-        }, 0);
+        });
 
-        cards.forEach((card, idx) => {
-          const num = card.querySelector(".card-num");
-          const role = card.querySelector(".card-role");
-          const org = card.querySelector(".card-org");
-          const desc = card.querySelector(".card-desc");
-          const tags = card.querySelectorAll(".card-tag");
-
-          const startTime = idx * 0.25;
-
-          tl.fromTo(card,
-            { opacity: idx === 0 ? 1 : 0.15, scale: idx === 0 ? 1 : 0.96 },
-            { opacity: 1, scale: 1, ease: "power1.inOut", duration: 0.35 },
-            startTime
-          );
-
-          tl.fromTo(num,
-            { scale: idx === 0 ? 1 : 0.7, opacity: idx === 0 ? 1 : 0, y: idx === 0 ? 0 : -20 },
-            { scale: 1, opacity: 0.8, y: 0, ease: "back.out(1.4)", duration: 0.3 },
-            startTime
-          );
-
-          tl.fromTo([role, org, desc],
-            { y: idx === 0 ? 0 : 25, opacity: idx === 0 ? 1 : 0 },
-            { y: 0, opacity: 1, stagger: idx === 0 ? 0 : 0.06, ease: "power2.out", duration: 0.3 },
-            startTime + 0.05
-          );
-
-          tl.fromTo(tags,
-            { scale: idx === 0 ? 1 : 0.85, opacity: idx === 0 ? 1 : 0 },
-            { scale: 1, opacity: 1, stagger: idx === 0 ? 0 : 0.03, ease: "power2.out", duration: 0.25 },
-            startTime + 0.12
-          );
+        ScrollTrigger.create({
+          trigger: "#experiences",
+          start: "top top",
+          end: () => {
+            const sWidth = container.scrollWidth;
+            const cWidth = window.innerWidth;
+            const pad = window.innerWidth >= 768 ? 64 : 24;
+            const dist = sWidth - cWidth + pad * 2;
+            return `+=${dist > 0 ? dist : 0}`;
+          },
+          pin: true,
+          scrub: 1.2,
+          animation: anim,
+          invalidateOnRefresh: true,
         });
 
         setTimeout(() => ScrollTrigger.refresh(), 100);
