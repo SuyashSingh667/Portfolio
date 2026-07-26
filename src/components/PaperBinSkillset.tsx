@@ -137,21 +137,21 @@ function initBin(
   // Shared scene & camera (rendered twice, different clip)
   const scene = new THREE.Scene();
 
-  const gx = 5.2; // Shift dustbin even further right to the far right side of the page
+  const gx = 0;
   const cam = new THREE.PerspectiveCamera(38, cW/cH, 0.1, 200);
-  cam.position.set(gx, 2.6, 10);
-  cam.lookAt(gx, -0.2, 0);
+  cam.position.set(0, 2.6, 10);
+  cam.lookAt(0, -0.2, 0);
   cam.updateProjectionMatrix();
   cam.updateMatrixWorld(true);
 
   // Lights
   scene.add(new THREE.AmbientLight(0xffffff, dark?.48:.72));
   const key = new THREE.DirectionalLight(dark?0xfff0e0:0xfff8f0, dark?2.1:2.5);
-  key.position.set(gx + 3, 7, 9); scene.add(key);
+  key.position.set(3, 7, 9); scene.add(key);
   const fill = new THREE.DirectionalLight(0x8899cc, .48);
-  fill.position.set(gx - 5, 2, -4); scene.add(fill);
+  fill.position.set(-5, 2, -4); scene.add(fill);
   const top = new THREE.PointLight(0xffffff, dark?1.4:1.8, 28);
-  top.position.set(gx, 6, 5); scene.add(top);
+  top.position.set(0, 6, 5); scene.add(top);
 
   // Materials
   const meshTex = makeMeshTex();
@@ -191,7 +191,7 @@ function initBin(
   group.add(body, rimTop, rimBot);
   group.scale.setScalar(SC);
   group.position.y = -0.2;
-  group.position.x = gx;
+  group.position.x = 0;
   scene.add(group);
 
   // Project bin positions → canvas pixels for physics calibration
