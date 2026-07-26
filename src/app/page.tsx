@@ -27,16 +27,16 @@ const STICKY_NOTES: StickyNoteItem[] = [
     title: "📌 Quick Note",
     content: "Each crumpled paper ball inside the bin represents a skill I use in production.",
     color: "yellow",
-    rotation: -4,
-    positionClass: "top-14 left-8 md:left-24 lg:left-36",
+    rotation: -7,
+    positionClass: "top-4 left-[2%] sm:left-[6%] md:left-[10%]",
   },
   {
     id: "note-2",
     title: "💡 Interactive Physics",
     content: "Click, drag & toss paper balls out of the bin to test 2D + 3D collision physics!",
     color: "mint",
-    rotation: 5,
-    positionClass: "top-16 right-8 md:right-24 lg:right-36",
+    rotation: 6,
+    positionClass: "top-6 right-[2%] sm:right-[6%] md:right-[10%]",
   },
   {
     id: "note-3",
@@ -44,23 +44,23 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "React, Next.js, WebGL, Three.js, GLSL Shaders, Node, Python, Docker & PostgreSQL.",
     color: "pink",
     rotation: -5,
-    positionClass: "top-[40%] left-6 md:left-20 lg:left-28 hidden sm:block",
+    positionClass: "top-[38%] left-[-1%] sm:left-[3%] md:left-[6%] hidden sm:block",
   },
   {
     id: "note-4",
     title: "✨ Depth Rendering",
     content: "Real-time WebGL depth z-splitting clip planes for true 3D mesh immersion.",
     color: "purple",
-    rotation: 4,
-    positionClass: "top-[40%] right-6 md:right-20 lg:right-28 hidden sm:block",
+    rotation: 8,
+    positionClass: "top-[42%] right-[-1%] sm:right-[3%] md:right-[6%] hidden sm:block",
   },
   {
     id: "note-5",
     title: "📄 Pro Tip",
     content: "Tossed paper balls land smoothly on the floor with fixed margin page bounds.",
     color: "orange",
-    rotation: -3,
-    positionClass: "bottom-20 left-12 md:left-28 lg:left-40 hidden md:block",
+    rotation: -4,
+    positionClass: "bottom-12 left-[12%] md:left-[18%] hidden md:block",
   },
 ];
 
@@ -850,11 +850,6 @@ export default function Home() {
         {/* Warm glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
 
-        {/* Sticky Notes Around the Dustbin */}
-        {STICKY_NOTES.map((note) => (
-          <StickyNote key={note.id} item={note} />
-        ))}
-
         <div className="w-full max-w-[1380px] mx-auto px-6 md:px-16 flex justify-center items-end relative z-10">
           {/* Centered 3D Paper Bin / Dustbin Skillset Canvas — shifted lower */}
           <motion.div
@@ -864,6 +859,11 @@ export default function Home() {
             viewport={{ once: true, margin: "-60px" }}
             className="w-full max-w-[1000px] h-[72vh] md:h-[80vh] relative translate-y-4 md:translate-y-8"
           >
+            {/* Sticky Notes Snug & Random Around the Dustbin */}
+            {STICKY_NOTES.map((note) => (
+              <StickyNote key={note.id} item={note} />
+            ))}
+
             <PaperBinSkillset 
               theme={resolvedTheme} 
               gravityY={gravityY}
