@@ -800,123 +800,19 @@ export default function Home() {
 
       <section
         id="skillset"
-        className="relative bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden"
+        className="relative bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden py-12 md:py-20"
       >
         {/* Warm glow */}
-        <div className="absolute top-1/3 left-[5%] w-[400px] h-[400px] bg-zinc-500/8 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
 
-        <div className="max-w-[1380px] mx-auto px-6 md:px-16 py-16 flex flex-col md:flex-row justify-between items-center gap-16 lg:gap-24 relative z-10">
-          {/* Left Panel: Physics Sandbox Controls */}
+        <div className="max-w-[1380px] mx-auto px-6 md:px-16 flex justify-center items-center relative z-10">
+          {/* Paper Bin / Dustbin Skillset Canvas */}
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full md:w-[38%] shrink-0"
-          >
-            <div className="w-full bg-black/[0.015] dark:bg-white/[0.015] border border-black/5 dark:border-white/5 rounded-3xl p-8 flex flex-col justify-between min-h-[580px]">
-              <div>
-                <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 font-bold mb-4">
-                  // skillset sandbox
-                </div>
-                <h3
-                  className="font-black uppercase tracking-tighter leading-[0.88] text-[#171717] dark:text-white mb-8"
-                  style={{ fontSize: "clamp(2.3rem, 4.5vw, 3.2rem)" }}
-                >
-                  Physics<br />
-                  <span className="text-zinc-400 dark:text-zinc-650">Sandbox.</span>
-                </h3>
-
-                {/* Sliders container */}
-                <div className="space-y-5">
-                  {/* Gravity Y Slider */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      <span>Gravity (Y-Axis)</span>
-                      <span className="font-bold text-[#171717] dark:text-white">{gravityY.toFixed(1)}g</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="0.0"
-                      max="8.0"
-                      step="0.2"
-                      value={gravityY}
-                      onChange={(e) => setGravityY(parseFloat(e.target.value))}
-                      className="w-full h-1.5 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
-                    />
-                  </div>
-
-                  {/* Gravity X (Wind) Slider */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      <span>Wind Force (X-Axis)</span>
-                      <span className="font-bold text-[#171717] dark:text-white">
-                        {gravityX === 0 ? "None" : `${gravityX > 0 ? "→ " : "← "}${Math.abs(gravityX).toFixed(1)}`}
-                      </span>
-                    </div>
-                    <input
-                      type="range"
-                      min="-4.0"
-                      max="4.0"
-                      step="0.2"
-                      value={gravityX}
-                      onChange={(e) => setGravityX(parseFloat(e.target.value))}
-                      className="w-full h-1.5 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
-                    />
-                  </div>
-
-                  {/* Bounciness Slider */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      <span>Bounciness</span>
-                      <span className="font-bold text-[#171717] dark:text-white">{Math.round(bounciness * 100)}%</span>
-                    </div>
-                    <input
-                      type="range"
-                      min="0.10"
-                      max="0.90"
-                      step="0.05"
-                      value={bounciness}
-                      onChange={(e) => setBounciness(parseFloat(e.target.value))}
-                      className="w-full h-1.5 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Action Buttons */}
-              <div className="space-y-2.5 pt-6">
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    onClick={() => setExplodeTrigger(prev => prev + 1)}
-                    className="px-4 py-2.5 border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] active:scale-95 transition-all text-[9px] font-mono uppercase tracking-widest text-[#171717] dark:text-white rounded-xl cursor-pointer font-bold"
-                  >
-                    💥 Explode
-                  </button>
-                  <button
-                    onClick={() => setVacuumTrigger(prev => prev + 1)}
-                    className="px-4 py-2.5 border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] active:scale-95 transition-all text-[9px] font-mono uppercase tracking-widest text-[#171717] dark:text-white rounded-xl cursor-pointer font-bold"
-                  >
-                    🧹 Vacuum
-                  </button>
-                </div>
-                <button
-                  onClick={() => setResetKey(prev => prev + 1)}
-                  className="w-full py-3 bg-[#171717] dark:bg-white text-white dark:text-black hover:opacity-90 active:scale-[0.98] transition-all text-[9px] font-mono uppercase tracking-widest rounded-xl cursor-pointer font-bold shadow-sm"
-                >
-                  🔄 Reset Arena
-                </button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right: physics canvas */}
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-            viewport={{ once: true, margin: "-60px" }}
-            className="w-full md:w-[46%] h-[65vh] md:h-[72vh] relative"
+            className="w-full max-w-[1000px] h-[70vh] md:h-[78vh] relative"
           >
             <PaperBinSkillset 
               theme={resolvedTheme} 
