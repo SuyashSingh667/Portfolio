@@ -805,14 +805,14 @@ export default function Home() {
         {/* Warm glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
 
-        <div className="max-w-[1380px] mx-auto px-6 md:px-16 flex justify-center items-center relative z-10">
-          {/* Paper Bin / Dustbin Skillset Canvas */}
+        <div className="max-w-[1380px] mx-auto px-6 md:px-16 flex justify-end items-center relative z-10">
+          {/* Paper Bin / Dustbin Skillset Canvas — shifted to the right */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[1000px] h-[70vh] md:h-[78vh] relative"
+            className="w-full max-w-[750px] h-[70vh] md:h-[78vh] relative ml-auto"
           >
             <PaperBinSkillset 
               theme={resolvedTheme} 
