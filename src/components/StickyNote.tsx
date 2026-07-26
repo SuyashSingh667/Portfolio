@@ -16,31 +16,31 @@ export interface StickyNoteItem {
 export function StickyNote({ item }: { item: StickyNoteItem }) {
   const noteSrc = `/notes/paper_note_${item.paperType}.png`;
 
-  // Custom padding & sizing per paper texture type to align text perfectly inside paper boundaries
+  // Custom padding & sizing per paper texture type to align text perfectly inside white paper boundaries
   const layoutConfigs = {
     1: {
-      width: "w-48 sm:w-56 md:w-60",
-      padding: "px-5 py-4",
-      titleColor: "text-amber-900 font-extrabold tracking-wider",
-      textColor: "text-zinc-800 font-mono text-xs sm:text-sm font-semibold leading-snug",
+      width: "w-56 sm:w-72 md:w-84",
+      padding: "px-10 py-7 sm:px-12 sm:py-9",
+      titleColor: "text-amber-950 font-black text-xs sm:text-sm tracking-wider",
+      textColor: "text-zinc-950 font-mono text-xs sm:text-sm md:text-base font-bold leading-snug",
     },
     2: {
-      width: "w-44 sm:w-52 md:w-56",
-      padding: "pt-7 pb-5 px-5",
-      titleColor: "text-amber-950 font-black tracking-widest",
-      textColor: "text-neutral-950 font-mono text-xs sm:text-sm font-bold leading-tight drop-shadow-xs",
+      width: "w-52 sm:w-64 md:w-76",
+      padding: "pt-12 pb-8 px-8 sm:pt-14 sm:pb-10 sm:px-10",
+      titleColor: "text-stone-950 font-black text-xs sm:text-sm tracking-wider",
+      textColor: "text-zinc-950 font-mono text-xs sm:text-sm md:text-base font-black leading-snug",
     },
     3: {
-      width: "w-48 sm:w-56 md:w-60",
-      padding: "pt-6 pb-4 px-6",
-      titleColor: "text-rose-900 font-extrabold tracking-wider",
-      textColor: "text-slate-900 font-sans text-xs sm:text-sm font-semibold leading-snug",
+      width: "w-56 sm:w-72 md:w-84",
+      padding: "pt-10 pb-6 px-10 sm:pt-12 sm:pb-8 sm:px-12",
+      titleColor: "text-rose-950 font-black text-xs sm:text-sm tracking-wider",
+      textColor: "text-slate-950 font-sans text-xs sm:text-sm md:text-base font-bold leading-snug",
     },
     4: {
-      width: "w-44 sm:w-52 md:w-56",
-      padding: "pt-8 pb-5 px-5",
-      titleColor: "text-amber-950 font-extrabold tracking-wider",
-      textColor: "text-zinc-900 font-mono text-xs sm:text-sm font-semibold leading-snug",
+      width: "w-52 sm:w-64 md:w-72",
+      padding: "pt-14 pb-8 px-8 sm:pt-16 sm:pb-10 sm:px-10",
+      titleColor: "text-amber-950 font-black text-xs sm:text-sm tracking-wider",
+      textColor: "text-zinc-950 font-mono text-xs sm:text-sm md:text-base font-bold leading-snug",
     },
   };
 
