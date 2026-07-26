@@ -449,9 +449,11 @@ class ArcballControl {
     });
     canvas.addEventListener('pointerup', () => {
       this.isPointerDown = false;
+      quat.identity(this.pointerRotation);
     });
     canvas.addEventListener('pointerleave', () => {
       this.isPointerDown = false;
+      quat.identity(this.pointerRotation);
     });
     canvas.addEventListener('pointermove', e => {
       if (this.isPointerDown) {
@@ -1032,7 +1034,13 @@ class InfiniteGridMenu {
         const nearestVertexIndex = this.#findNearestVertexIndex();
         const itemIndex = this.getItemIndex(nearestVertexIndex);
         this.onActiveItemChange(itemIndex);
-        this.control.snapTargetVertex = this.instancePositions[nearestVertexIndex];
+        const currentWorldPos = vec3.transformQuat(vec3.create(), this.instancePositions[nearestVertexIndex], this.control.orientation);
+        const sqrDist = vec3.squaredDistance(vec3.normalize(vec3.create(), currentWorldPos), this.control.snapDirection);
+        if (sqrDist > 0.0005) {
+          this.control.snapTargetVertex = this.instancePositions[nearestVertexIndex];
+        } else {
+          this.control.snapTargetVertex = null;
+        }
       }
     } else {
       this.control.snapTargetVertex = null;
