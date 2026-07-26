@@ -71,7 +71,7 @@ class ImageTrailVariant1 implements TrailVariant {
   zIndexVal = 1;
   activeImagesCount = 0;
   isIdle = true;
-  threshold = 80;
+  threshold = 220;
 
   mousePos = { x: 0, y: 0 };
   lastMousePos = { x: 0, y: 0 };
@@ -124,7 +124,7 @@ class ImageTrailVariant1 implements TrailVariant {
     this.cacheMousePos.x = lerp(this.cacheMousePos.x, this.mousePos.x, 0.1);
     this.cacheMousePos.y = lerp(this.cacheMousePos.y, this.mousePos.y, 0.1);
 
-    if (distance > this.threshold) {
+    if (distance > this.threshold && this.activeImagesCount < 1) {
       this.showNextImage();
       this.lastMousePos = { ...this.mousePos };
     }
