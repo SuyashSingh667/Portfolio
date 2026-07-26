@@ -13,12 +13,56 @@ import { ThemeToggleButton } from "@/components/ThemeToggle";
 import { MusicToggleButton } from "@/components/MusicToggle";
 import { Spotlight } from "@/components/ui/spotlight";
 import PaperBinSkillset from "@/components/PaperBinSkillset";
+import { StickyNote, StickyNoteItem } from "@/components/StickyNote";
 import TerminalWindow from "@/components/TerminalWindow";
 import MeshText from "@/components/MeshText";
 import InteractiveAvatar3D from "@/components/InteractiveAvatar3D";
 import { CinematicFooter } from "@/components/CinematicFooter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import ImageTrail from "@/components/ImageTrail";
+
+const STICKY_NOTES: StickyNoteItem[] = [
+  {
+    id: "note-1",
+    title: "📌 Quick Note",
+    content: "Each crumpled paper ball inside the bin represents a skill I use in production.",
+    color: "yellow",
+    rotation: -4,
+    positionClass: "top-4 left-4 md:left-12 lg:left-16",
+  },
+  {
+    id: "note-2",
+    title: "💡 Interactive Physics",
+    content: "Click, drag & toss paper balls out of the bin to test 2D + 3D collision physics!",
+    color: "mint",
+    rotation: 5,
+    positionClass: "top-8 right-4 md:right-12 lg:right-16",
+  },
+  {
+    id: "note-3",
+    title: "🚀 Production Stack",
+    content: "React, Next.js, WebGL, Three.js, GLSL Shaders, Node, Python, Docker & PostgreSQL.",
+    color: "pink",
+    rotation: -6,
+    positionClass: "top-1/3 left-2 md:left-8 hidden sm:block",
+  },
+  {
+    id: "note-4",
+    title: "✨ Depth Rendering",
+    content: "Real-time WebGL depth z-splitting clip planes for true 3D mesh immersion.",
+    color: "purple",
+    rotation: 4,
+    positionClass: "top-1/3 right-2 md:right-8 hidden sm:block",
+  },
+  {
+    id: "note-5",
+    title: "📄 Pro Tip",
+    content: "Tossed paper balls land smoothly on the floor with fixed margin page bounds.",
+    color: "orange",
+    rotation: -3,
+    positionClass: "bottom-16 left-6 md:left-16 hidden md:block",
+  },
+];
 
 
 if (typeof window !== "undefined") {
@@ -805,6 +849,11 @@ export default function Home() {
       >
         {/* Warm glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
+
+        {/* Sticky Notes Around the Dustbin */}
+        {STICKY_NOTES.map((note) => (
+          <StickyNote key={note.id} item={note} />
+        ))}
 
         <div className="w-full max-w-[1380px] mx-auto px-6 md:px-16 flex justify-center items-end relative z-10">
           {/* Centered 3D Paper Bin / Dustbin Skillset Canvas — shifted lower */}
