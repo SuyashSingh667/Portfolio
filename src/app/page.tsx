@@ -806,7 +806,7 @@ export default function Home() {
         <div className="absolute top-1/3 left-[5%] w-[400px] h-[400px] bg-zinc-500/8 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="max-w-[1380px] mx-auto px-6 md:px-16 py-16 flex flex-col md:flex-row justify-between items-center gap-16 lg:gap-24 relative z-10">
-          {/* Left Panel: 3D Flip Card Container */}
+          {/* Left Panel: Physics Sandbox Controls */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -814,198 +814,98 @@ export default function Home() {
             viewport={{ once: true, margin: "-60px" }}
             className="w-full md:w-[38%] shrink-0"
           >
-            <div style={{ perspective: "1000px" }} className="w-full relative h-[650px]">
-              <div
-                style={{
-                  transformStyle: "preserve-3d",
-                  transition: "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-                  transform: showSettings ? "rotateY(180deg)" : "rotateY(0deg)",
-                }}
-                className="w-full h-full relative"
-              >
-                {/* Front Side: Radar Chart */}
-                <div
-                  style={{
-                    backfaceVisibility: "hidden",
-                  }}
-                  className="absolute inset-0 w-full h-full p-2 flex flex-col justify-between bg-transparent border-none"
+            <div className="w-full bg-black/[0.015] dark:bg-white/[0.015] border border-black/5 dark:border-white/5 rounded-3xl p-8 flex flex-col justify-between min-h-[580px]">
+              <div>
+                <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 font-bold mb-4">
+                  // skillset sandbox
+                </div>
+                <h3
+                  className="font-black uppercase tracking-tighter leading-[0.88] text-[#171717] dark:text-white mb-8"
+                  style={{ fontSize: "clamp(2.3rem, 4.5vw, 3.2rem)" }}
                 >
-                  <div className="flex justify-between items-start w-full relative">
-                    <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 font-bold">
-                      // skillset analysis
+                  Physics<br />
+                  <span className="text-zinc-400 dark:text-zinc-650">Sandbox.</span>
+                </h3>
+
+                {/* Sliders container */}
+                <div className="space-y-5">
+                  {/* Gravity Y Slider */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      <span>Gravity (Y-Axis)</span>
+                      <span className="font-bold text-[#171717] dark:text-white">{gravityY.toFixed(1)}g</span>
                     </div>
-                    <div className="relative">
-                      <button
-                        onClick={() => setShowDropdown(!showDropdown)}
-                        className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors text-zinc-500 hover:text-[#171717] dark:hover:text-white cursor-pointer"
-                        title="Options"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
-                      </button>
-                      
-                      {showDropdown && (
-                        <>
-                          <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
-                          <div className="absolute right-0 mt-1 w-40 bg-white dark:bg-[#1a1a1a] border border-black/8 dark:border-white/8 rounded-lg shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
-                            <button
-                              onClick={() => {
-                                setShowSettings(true);
-                                setShowDropdown(false);
-                              }}
-                              className="w-full px-3 py-1.5 text-left text-[10px] font-mono uppercase tracking-wider text-zinc-600 dark:text-zinc-300 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] flex items-center gap-2 cursor-pointer font-bold"
-                            >
-                              ⚙️ Configure
-                            </button>
-                            <button
-                              onClick={() => {
-                                setExplodeTrigger(prev => prev + 1);
-                                setShowDropdown(false);
-                              }}
-                              className="w-full px-3 py-1.5 text-left text-[10px] font-mono uppercase tracking-wider text-zinc-600 dark:text-zinc-300 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] flex items-center gap-2 cursor-pointer font-bold"
-                            >
-                              💥 Explode
-                            </button>
-                            <button
-                              onClick={() => {
-                                setResetKey(prev => prev + 1);
-                                setShowDropdown(false);
-                              }}
-                              className="w-full px-3 py-1.5 text-left text-[10px] font-mono uppercase tracking-wider text-zinc-600 dark:text-zinc-300 hover:bg-black/[0.03] dark:hover:bg-white/[0.03] flex items-center gap-2 cursor-pointer font-bold"
-                            >
-                              🔄 Respawn
-                            </button>
-                          </div>
-                        </>
-                      )}
-                    </div>
+                    <input
+                      type="range"
+                      min="0.0"
+                      max="8.0"
+                      step="0.2"
+                      value={gravityY}
+                      onChange={(e) => setGravityY(parseFloat(e.target.value))}
+                      className="w-full h-1.5 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
+                    />
                   </div>
 
-                  <div>
-                    <h3
-                      className="font-black uppercase tracking-tighter leading-[0.88] text-[#171717] dark:text-white"
-                      style={{ fontSize: "clamp(2.3rem, 4.5vw, 3.2rem)" }}
-                    >
-                      Skill<br />
-                      <span className="text-zinc-400 dark:text-zinc-650">Radar.</span>
-                    </h3>
+                  {/* Gravity X (Wind) Slider */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      <span>Wind Force (X-Axis)</span>
+                      <span className="font-bold text-[#171717] dark:text-white">
+                        {gravityX === 0 ? "None" : `${gravityX > 0 ? "→ " : "← "}${Math.abs(gravityX).toFixed(1)}`}
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min="-4.0"
+                      max="4.0"
+                      step="0.2"
+                      value={gravityX}
+                      onChange={(e) => setGravityX(parseFloat(e.target.value))}
+                      className="w-full h-1.5 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
+                    />
                   </div>
 
-                  <div className="py-2 flex justify-center items-center">
-                    <RadarChart onHoverCategory={setHoveredCategory} />
+                  {/* Bounciness Slider */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between font-mono text-[9px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      <span>Bounciness</span>
+                      <span className="font-bold text-[#171717] dark:text-white">{Math.round(bounciness * 100)}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0.10"
+                      max="0.90"
+                      step="0.05"
+                      value={bounciness}
+                      onChange={(e) => setBounciness(parseFloat(e.target.value))}
+                      className="w-full h-1.5 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
+                    />
                   </div>
                 </div>
+              </div>
 
-                {/* Back Side: Physics Controls */}
-                <div
-                  style={{
-                    backfaceVisibility: "hidden",
-                    transform: "rotateY(180deg)",
-                  }}
-                  className="absolute inset-0 w-full h-full bg-black/[0.015] dark:bg-white/[0.015] border border-black/5 dark:border-white/5 rounded-2xl p-6 flex flex-col justify-between"
-                >
-                  <div className="flex justify-between items-start w-full relative">
-                    <div className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 font-bold">
-                      // sandbox configuration
-                    </div>
-                    <button
-                      onClick={() => setShowSettings(false)}
-                      className="p-1.5 hover:bg-black/5 dark:hover:bg-white/5 rounded-full transition-colors text-zinc-500 hover:text-[#171717] dark:hover:text-white cursor-pointer"
-                      title="Back to Radar Chart"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                    </button>
-                  </div>
-
-                  <div>
-                    <h3
-                      className="font-black uppercase tracking-tighter leading-[0.88] text-[#171717] dark:text-white"
-                      style={{ fontSize: "clamp(2.3rem, 4.5vw, 3.2rem)" }}
-                    >
-                      Sandbox<br />
-                      <span className="text-zinc-400 dark:text-zinc-650">Settings.</span>
-                    </h3>
-                  </div>
-
-                  {/* Sliders container */}
-                  <div className="space-y-4 pt-1">
-                    {/* Gravity Y Slider */}
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between font-mono text-[8px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        <span>Gravity (Y-Axis)</span>
-                        <span className="font-bold text-[#171717] dark:text-white">{gravityY.toFixed(1)}g</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0.0"
-                        max="8.0"
-                        step="0.2"
-                        value={gravityY}
-                        onChange={(e) => setGravityY(parseFloat(e.target.value))}
-                        className="w-full h-1 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
-                      />
-                    </div>
-
-                    {/* Gravity X (Wind) Slider */}
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between font-mono text-[8px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        <span>Wind Force (X-Axis)</span>
-                        <span className="font-bold text-[#171717] dark:text-white">
-                          {gravityX === 0 ? "None" : `${gravityX > 0 ? "→ " : "← "}${Math.abs(gravityX).toFixed(1)}`}
-                        </span>
-                      </div>
-                      <input
-                        type="range"
-                        min="-4.0"
-                        max="4.0"
-                        step="0.2"
-                        value={gravityX}
-                        onChange={(e) => setGravityX(parseFloat(e.target.value))}
-                        className="w-full h-1 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
-                      />
-                    </div>
-
-                    {/* Bounciness Slider */}
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between font-mono text-[8px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        <span>Bounciness</span>
-                        <span className="font-bold text-[#171717] dark:text-white">{Math.round(bounciness * 100)}%</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0.10"
-                        max="0.90"
-                        step="0.05"
-                        value={bounciness}
-                        onChange={(e) => setBounciness(parseFloat(e.target.value))}
-                        className="w-full h-1 bg-black/8 dark:bg-white/8 rounded-lg appearance-none cursor-pointer accent-[#171717] dark:accent-white"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Quick Action Buttons */}
-                  <div className="space-y-2 pt-2">
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        onClick={() => setExplodeTrigger(prev => prev + 1)}
-                        className="px-3 py-1.5 border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.05] dark:hover:bg-white/[0.05] active:scale-95 transition-all text-[8px] font-mono uppercase tracking-widest text-[#171717] dark:text-white rounded-lg cursor-pointer font-bold"
-                      >
-                        💥 Explode
-                      </button>
-                      <button
-                        onClick={() => setVacuumTrigger(prev => prev + 1)}
-                        className="px-3 py-1.5 border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.05] dark:hover:bg-white/[0.05] active:scale-95 transition-all text-[8px] font-mono uppercase tracking-widest text-[#171717] dark:text-white rounded-lg cursor-pointer font-bold"
-                      >
-                        🧹 Vacuum
-                      </button>
-                    </div>
-                    <button
-                      onClick={() => setResetKey(prev => prev + 1)}
-                      className="w-full py-2 bg-[#171717] dark:bg-white text-white dark:text-black hover:opacity-90 active:scale-[0.98] transition-all text-[8px] font-mono uppercase tracking-widest rounded-lg cursor-pointer font-bold"
-                    >
-                      🔄 Reset Arena
-                    </button>
-                  </div>
+              {/* Quick Action Buttons */}
+              <div className="space-y-2.5 pt-6">
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    onClick={() => setExplodeTrigger(prev => prev + 1)}
+                    className="px-4 py-2.5 border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] active:scale-95 transition-all text-[9px] font-mono uppercase tracking-widest text-[#171717] dark:text-white rounded-xl cursor-pointer font-bold"
+                  >
+                    💥 Explode
+                  </button>
+                  <button
+                    onClick={() => setVacuumTrigger(prev => prev + 1)}
+                    className="px-4 py-2.5 border border-black/8 dark:border-white/8 bg-black/[0.02] dark:bg-white/[0.02] hover:bg-black/[0.06] dark:hover:bg-white/[0.06] active:scale-95 transition-all text-[9px] font-mono uppercase tracking-widest text-[#171717] dark:text-white rounded-xl cursor-pointer font-bold"
+                  >
+                    🧹 Vacuum
+                  </button>
                 </div>
+                <button
+                  onClick={() => setResetKey(prev => prev + 1)}
+                  className="w-full py-3 bg-[#171717] dark:bg-white text-white dark:text-black hover:opacity-90 active:scale-[0.98] transition-all text-[9px] font-mono uppercase tracking-widest rounded-xl cursor-pointer font-bold shadow-sm"
+                >
+                  🔄 Reset Arena
+                </button>
               </div>
             </div>
           </motion.div>
