@@ -91,6 +91,7 @@ class ImageTrailVariant1 implements TrailVariant {
       const rect = this.container.getBoundingClientRect();
       this.mousePos = getLocalPointerPos(ev, rect);
     };
+    window.addEventListener('mousemove', this.handlePointerMove);
     container.addEventListener('mousemove', this.handlePointerMove);
     container.addEventListener('touchmove', this.handlePointerMove);
 
@@ -111,6 +112,7 @@ class ImageTrailVariant1 implements TrailVariant {
 
   cleanup() {
     this.destroyed = true;
+    window.removeEventListener('mousemove', this.handlePointerMove);
     this.container.removeEventListener('mousemove', this.handlePointerMove);
     this.container.removeEventListener('touchmove', this.handlePointerMove);
     this.container.removeEventListener('mousemove', this.initRender);
@@ -137,11 +139,17 @@ class ImageTrailVariant1 implements TrailVariant {
   triggerSample() {
     if (this.destroyed || this.imagesTotal === 0) return;
     const rect = this.container.getBoundingClientRect();
-    const targetX = rect.width * 0.5;
-    const targetY = rect.height * 0.45;
+
+    let targetX = this.mousePos.x;
+    let targetY = this.mousePos.y;
+
+    if (targetX === 0 && targetY === 0) {
+      targetX = rect.width * 0.5;
+      targetY = rect.height * 0.45;
+    }
 
     this.mousePos = { x: targetX, y: targetY };
-    this.cacheMousePos = { x: targetX - 60, y: targetY + 40 };
+    this.cacheMousePos = { x: targetX - 40, y: targetY + 30 };
     this.lastMousePos = { x: targetX, y: targetY };
 
     this.showNextImage();
