@@ -24,6 +24,16 @@ function getLocalPointerPos(e: MouseEvent | TouchEvent, rect: DOMRect) {
   };
 }
 
+let globalClientX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
+let globalClientY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('mousemove', (e) => {
+    globalClientX = e.clientX;
+    globalClientY = e.clientY;
+  }, { passive: true });
+}
+
 function getMouseDistance(p1: { x: number; y: number }, p2: { x: number; y: number }) {
   const dx = p1.x - p2.x;
   const dy = p1.y - p2.y;
@@ -125,13 +135,8 @@ class ImageTrailVariant1 implements TrailVariant {
     if (this.destroyed || this.imagesTotal === 0) return;
     const rect = this.container.getBoundingClientRect();
 
-    let targetX = this.mousePos.x;
-    let targetY = this.mousePos.y;
-
-    if (targetX <= 0 || targetY <= 0 || targetX >= rect.width || targetY >= rect.height) {
-      targetX = rect.width * 0.5;
-      targetY = rect.height * 0.45;
-    }
+    const targetX = globalClientX - rect.left;
+    const targetY = globalClientY - rect.top;
 
     this.mousePos = { x: targetX, y: targetY };
     this.cacheMousePos = { x: targetX - 40, y: targetY + 30 };
