@@ -18,7 +18,6 @@ import InteractiveAvatar3D from "@/components/InteractiveAvatar3D";
 import { CinematicFooter } from "@/components/CinematicFooter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import ImageTrail from "@/components/ImageTrail";
-import Galaxy from "@/components/Galaxy";
 
 
 if (typeof window !== "undefined") {
@@ -625,26 +624,8 @@ export default function Home() {
         id="hero"
         className="relative min-h-screen w-full flex flex-col bg-[#fafafa] dark:bg-[#080808] text-[#171717] dark:text-white overflow-hidden transition-colors duration-500"
       >
-        {/* Galaxy Background */}
-        <div className="absolute inset-0 z-0 pointer-events-auto opacity-70 dark:opacity-80">
-          <Galaxy 
-            mouseRepulsion={true}
-            mouseInteraction={true}
-            density={1.2}
-            glowIntensity={0.25}
-            saturation={resolvedTheme === "dark" ? 0.6 : 0.2}
-            hueShift={160}
-            twinkleIntensity={0.8}
-            rotationSpeed={0.15}
-            repulsionStrength={4}
-            starSpeed={1.5}
-            speed={0.8}
-            transparent={true}
-          />
-        </div>
-
         {/* Stars */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <GlitterWrap
             particleCount={350}
             speed={4}
