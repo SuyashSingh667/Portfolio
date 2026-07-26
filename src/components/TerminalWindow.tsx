@@ -154,7 +154,7 @@ export default function TerminalWindow() {
             type="text"
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
-            className="bg-transparent border-none outline-none text-white font-mono text-xs flex-1 ml-1"
+            className="bg-transparent border-none outline-none text-white font-mono text-sm flex-1 ml-1"
             autoFocus
             spellCheck={false}
           />
