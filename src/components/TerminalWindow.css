@@ -1,0 +1,136 @@
+.terminal-container {
+  width: 100%;
+  max-width: 480px;
+  height: 380px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal_toolbar {
+  display: flex;
+  height: 34px;
+  align-items: center;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background: linear-gradient(#504b45 0%, #3c3b37 100%);
+  user-select: none;
+}
+
+.butt {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin-right: 6px;
+  font-size: 8px;
+  height: 12px;
+  width: 12px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 100%;
+  background: linear-gradient(#7d7871 0%, #595953 100%);
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 0px 1px 0px #41403A, 0px 1px 1px 0px #474642;
+  transition: opacity 0.2s ease;
+}
+
+.btn-color {
+  background: #ee411a;
+}
+
+.btn:hover {
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.butt--exit {
+  background: linear-gradient(#f37458 0%, #de4c12 100%);
+}
+
+.terminal-user-title {
+  color: #d5d0ce;
+  margin-left: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.terminal_body {
+  background: rgba(45, 5, 33, 0.95);
+  backdrop-filter: blur(12px);
+  flex: 1;
+  padding: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  overflow-y: auto;
+  color: #eeeeee;
+}
+
+.terminal_promt {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.terminal_promt span {
+  margin-right: 6px;
+}
+
+.terminal_user {
+  color: #7eda28;
+  font-weight: 700;
+}
+
+.terminal_location {
+  color: #4878c0;
+  font-weight: 700;
+}
+
+.terminal_bling {
+  color: #dddddd;
+  font-weight: 700;
+}
+
+.terminal_cursor {
+  display: inline-block;
+  height: 15px;
+  width: 7px;
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: curbl 1200ms linear infinite;
+}
+
+@keyframes curbl {
+  0% {
+    background: #ffffff;
+  }
+  49% {
+    background: #ffffff;
+  }
+  50% {
+    background: transparent;
+  }
+  99% {
+    background: transparent;
+  }
+  100% {
+    background: #ffffff;
+  }
+}

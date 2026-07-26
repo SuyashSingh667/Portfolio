@@ -13,6 +13,7 @@ import { ThemeToggleButton } from "@/components/ThemeToggle";
 import { MusicToggleButton } from "@/components/MusicToggle";
 import { Spotlight } from "@/components/ui/spotlight";
 import PaperBinSkillset from "@/components/PaperBinSkillset";
+import TerminalWindow from "@/components/TerminalWindow";
 import MeshText from "@/components/MeshText";
 import InteractiveAvatar3D from "@/components/InteractiveAvatar3D";
 import { CinematicFooter } from "@/components/CinematicFooter";
@@ -805,14 +806,25 @@ export default function Home() {
         {/* Warm glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
 
-        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-16 flex justify-end items-center relative z-10">
-          {/* Paper Bin / Dustbin Skillset Canvas — shifted to the right side */}
+        <div className="w-full max-w-[1440px] mx-auto px-6 md:px-16 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 relative z-10">
+          {/* LEFT SIDE: Interactive Terminal Window */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[650px] md:max-w-[720px] h-[70vh] md:h-[78vh] relative ml-auto mr-0 md:mr-8 lg:mr-12"
+            className="w-full lg:w-[46%] flex justify-center lg:justify-start"
+          >
+            <TerminalWindow />
+          </motion.div>
+
+          {/* RIGHT SIDE: Paper Bin / Dustbin Skillset Canvas */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, margin: "-60px" }}
+            className="w-full lg:w-[50%] h-[65vh] md:h-[75vh] relative"
           >
             <PaperBinSkillset 
               theme={resolvedTheme} 
