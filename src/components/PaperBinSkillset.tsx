@@ -3,177 +3,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
 import * as THREE from "three";
-import { motion, AnimatePresence } from "framer-motion";
 
 const SKILL_ITEMS = [
   "React", "Next.js", "TypeScript", "WebGL", "Three.js", "Tailwind",
   "GSAP", "Framer", "Node.js", "Figma", "Shaders",
   "PostgreSQL", "Docker", "Python", "Git",
 ];
-
-interface SkillInfo {
-  name: string;
-  category: string;
-  rating: string;
-  experience: string;
-  description: string;
-  usedIn: string[];
-  tools: string[];
-  icon: string;
-}
-
-const SKILL_DATA: Record<string, SkillInfo> = {
-  "React": {
-    name: "React.js",
-    category: "Frontend Architecture",
-    rating: "★★★★★",
-    experience: "3+ Years",
-    description: "Building modern responsive web applications with modular component architecture, custom hooks, state management, and optimized rendering.",
-    usedIn: ["SkySentinel", "Portfolio", "IIT Kanpur Portal"],
-    tools: ["React 19", "JSX/TSX", "Context API", "Zustand"],
-    icon: "⚛️"
-  },
-  "Next.js": {
-    name: "Next.js",
-    category: "Full-Stack Web Framework",
-    rating: "★★★★★",
-    experience: "2.5+ Years",
-    description: "Architecting high-performance web applications with App Router, Server Components, SSR/SSG, dynamic routing, and Turbopack.",
-    usedIn: ["Portfolio", "SkySentinel", "Enterprise Dashboards"],
-    tools: ["Next.js 16", "App Router", "API Routes", "Turbopack"],
-    icon: "▲"
-  },
-  "TypeScript": {
-    name: "TypeScript",
-    category: "Typed JavaScript",
-    rating: "★★★★★",
-    experience: "3+ Years",
-    description: "Ensuring end-to-end type safety, robust interfaces, generics, strict type checking, and clean maintainable codebases.",
-    usedIn: ["SkySentinel", "Portfolio", "CodeChef Platform"],
-    tools: ["TypeScript 5", "TSX", "Strict Mode", "Generics"],
-    icon: "🔷"
-  },
-  "WebGL": {
-    name: "WebGL",
-    category: "Real-Time 3D Graphics",
-    rating: "★★★★☆",
-    experience: "2+ Years",
-    description: "Crafting hardware-accelerated 3D graphics, custom GLSL vertex/fragment shaders, and high-performance interactive canvas experiences.",
-    usedIn: ["SkySentinel Orbit 3D", "Interactive Avatar", "Paper Bin Mesh"],
-    tools: ["WebGL2", "GLSL Shaders", "Framebuffer", "BufferGeometry"],
-    icon: "🌐"
-  },
-  "Three.js": {
-    name: "Three.js",
-    category: "3D Rendering Engine",
-    rating: "★★★★★",
-    experience: "2+ Years",
-    description: "Engineering immersive 3D web scenes, orbital camera rigs, custom materials, GLTF/GLB asset loading, and particle systems.",
-    usedIn: ["SkySentinel 3D", "Interactive Avatar 3D", "Paper Dustbin"],
-    tools: ["Three.js", "OrbitControls", "GLTFLoader", "Raycasting"],
-    icon: "📦"
-  },
-  "Tailwind": {
-    name: "Tailwind CSS",
-    category: "Utility-First CSS",
-    rating: "★★★★★",
-    experience: "3+ Years",
-    description: "Designing ultra-responsive, pixel-perfect interfaces with custom utility classes, design tokens, dark mode, and smooth glassmorphism.",
-    usedIn: ["Portfolio", "SkySentinel UI", "SAIL Project"],
-    tools: ["Tailwind CSS v4", "Dark Mode", "Custom Plugins", "Flex/Grid"],
-    icon: "🎨"
-  },
-  "GSAP": {
-    name: "GSAP",
-    category: "High-Performance Motion",
-    rating: "★★★★★",
-    experience: "2+ Years",
-    description: "Creating complex ScrollTrigger pins, timeline sequences, motion paths, SVG morphing, and smooth 60fps web animations.",
-    usedIn: ["Portfolio Experience Track", "Hero Animation", "Smooth Pinning"],
-    tools: ["GSAP 3", "ScrollTrigger", "Timeline", "Flip Plugin"],
-    icon: "⚡"
-  },
-  "Framer": {
-    name: "Framer Motion",
-    category: "React Motion Library",
-    rating: "★★★★★",
-    experience: "2+ Years",
-    description: "Building fluid micro-interactions, layout morphing, spring physics gestures, and Apple-like entrance & exit transitions.",
-    usedIn: ["Portfolio Skill Cards", "Interactive Modals", "Navigation"],
-    tools: ["Framer Motion 12", "AnimatePresence", "Springs", "Gestures"],
-    icon: "✨"
-  },
-  "Node.js": {
-    name: "Node.js",
-    category: "Backend Runtime",
-    rating: "★★★★☆",
-    experience: "2.5+ Years",
-    description: "Developing scalable RESTful APIs, WebSockets backend services, asynchronous data pipelines, and serverless edge functions.",
-    usedIn: ["SkySentinel Backend", "AI Chat Proxy", "Telemetry Service"],
-    tools: ["Node.js", "Express", "REST", "WebSockets"],
-    icon: "🟢"
-  },
-  "Figma": {
-    name: "Figma",
-    category: "UI/UX & Product Design",
-    rating: "★★★★★",
-    experience: "3+ Years",
-    description: "Designing high-fidelity UI mockups, interactive prototypes, design systems, design tokens, and developer handoff assets.",
-    usedIn: ["SkySentinel UI Kit", "Portfolio Concept", "Brand Guidelines"],
-    tools: ["Figma", "Auto Layout", "Components", "Design Tokens"],
-    icon: "❖"
-  },
-  "Shaders": {
-    name: "GLSL Shaders",
-    category: "GPU Shader Programming",
-    rating: "★★★★☆",
-    experience: "1.5+ Years",
-    description: "Authoring custom vertex and fragment shaders for real-time visual effects, procedural noise, displacement mapping, and lighting.",
-    usedIn: ["Gradual Blur", "3D Wireframe Depth", "Glow Filters"],
-    tools: ["GLSL", "Fragment Shaders", "Procedural Noise", "UV Mapping"],
-    icon: "💎"
-  },
-  "PostgreSQL": {
-    name: "PostgreSQL",
-    category: "Relational Database",
-    rating: "★★★★☆",
-    experience: "2+ Years",
-    description: "Designing relational database schemas, writing optimized SQL queries, indexing, and managing persistent data layers.",
-    usedIn: ["SkySentinel Database", "User Auth", "Analytics Service"],
-    tools: ["PostgreSQL", "Prisma ORM", "SQL", "Index Tuning"],
-    icon: "🐘"
-  },
-  "Docker": {
-    name: "Docker",
-    category: "Containerization & DevOps",
-    rating: "★★★★☆",
-    experience: "2+ Years",
-    description: "Containerizing application services, orchestrating multi-container environments, and maintaining reproducible build pipelines.",
-    usedIn: ["SkySentinel Containers", "CI/CD Pipeline", "Microservices"],
-    tools: ["Docker", "Docker Compose", "Dockerfiles", "Containers"],
-    icon: "🐳"
-  },
-  "Python": {
-    name: "Python",
-    category: "Scripting & Data Analysis",
-    rating: "★★★★★",
-    experience: "3+ Years",
-    description: "Writing data processing scripts, machine learning models, orbital telemetry calculation, and automated backend tooling.",
-    usedIn: ["SkySentinel Data Engine", "Orbit Propagation", "Automation"],
-    tools: ["Python 3", "NumPy", "Pandas", "PyTorch"],
-    icon: "🐍"
-  },
-  "Git": {
-    name: "Git & GitHub",
-    category: "Version Control & CI/CD",
-    rating: "★★★★★",
-    experience: "4+ Years",
-    description: "Managing production version control workflows, feature branching, pull request reviews, rebase strategies, and GitHub Actions.",
-    usedIn: ["All Codebases", "Team Repositories", "GitHub Actions"],
-    tools: ["Git CLI", "GitHub", "Interactive Rebase", "Actions"],
-    icon: "🌿"
-  }
-};
 const M = Matter;
 const N = SKILL_ITEMS.length;
 
@@ -840,39 +675,6 @@ export default function PaperBinSkillset({
     };
   }, [ready, ballUrls.length, resetKey]);
 
-  const [activeSkill, setActiveSkill] = useState<SkillInfo | null>(null);
-  const activeSkillRef = useRef<SkillInfo | null>(null);
-  useEffect(() => { activeSkillRef.current = activeSkill; }, [activeSkill]);
-
-  const handleSelectSkill = (skillLabel: string) => {
-    const data = SKILL_DATA[skillLabel];
-    if (data) {
-      setActiveSkill(data);
-    }
-  };
-
-  const handleCloseSkill = () => {
-    setActiveSkill(null);
-    // Apply a slight downward nudge to physics bodies to simulate refolding & dropping back in
-    if (engineRef.current) {
-      const bodies = Matter.Composite.allBodies(engineRef.current.world).filter(b => !b.isStatic && b.label !== "bin");
-      bodies.forEach(b => {
-        Matter.Body.applyForce(b, b.position, { x: (Math.random() - 0.5) * 0.005, y: 0.008 * b.mass });
-      });
-    }
-  };
-
-  // Keyboard accessibility: ESC closes unfolded skill sheet
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && activeSkillRef.current) {
-        handleCloseSkill();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   return (
     <div
       ref={outerRef}
@@ -888,25 +690,18 @@ export default function PaperBinSkillset({
       <div ref={physRef}
         style={{ position:"absolute", inset:0, overflow:"hidden", zIndex:10 }}
       >
-        {ballUrls.map((src,i) => {
-          const label = SKILL_ITEMS[i];
-          return (
-            <div key={i} ref={el=>{ elRefs.current[i]=el; }}
-              onClick={() => handleSelectSkill(label)}
-              style={{
-                position:"absolute", visibility:"hidden",
-                width:BALL_D, height:BALL_D, borderRadius:"50%",
-                backgroundImage:`url(${src})`, backgroundSize:"cover",
-                cursor:"grab", userSelect:"none", willChange:"transform",
-                filter: dark ? "brightness(.82)" : "none",
-                transition: "box-shadow 0.2s ease, filter 0.2s ease",
-              }}
-              className="hover:scale-110 active:cursor-grabbing hover:drop-shadow-lg"
-              title={`Click or drag to unfold ${label}`}
-              draggable={false}
-            />
-          );
-        })}
+        {ballUrls.map((src,i) => (
+          <div key={i} ref={el=>{ elRefs.current[i]=el; }}
+            style={{
+              position:"absolute", visibility:"hidden",
+              width:BALL_D, height:BALL_D, borderRadius:"50%",
+              backgroundImage:`url(${src})`, backgroundSize:"cover",
+              cursor:"grab", userSelect:"none", willChange:"transform",
+              filter: dark ? "brightness(.82)" : "none",
+            }}
+            draggable={false}
+          />
+        ))}
       </div>
 
       {/* z:15 — bin FRONT hemisphere (z≥0 clipped) — in front of balls */}
@@ -914,155 +709,15 @@ export default function PaperBinSkillset({
         style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:15 }}
       />
 
-      {/* Modern Instruction Badge */}
+      {/* Hint */}
       <div style={{
-        position:"absolute", top:16, left:"50%", transform:"translateX(-50%)",
-        pointerEvents:"none", zIndex:30,
+        position:"absolute", top:14, left:"50%", transform:"translateX(-50%)",
+        fontSize:"9px", fontFamily:"monospace", textTransform:"uppercase",
+        letterSpacing:".28em", opacity:.28, pointerEvents:"none",
+        whiteSpace:"nowrap", zIndex:40,
       }}>
-        <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-black/10 dark:border-white/12 bg-white/80 dark:bg-black/80 backdrop-blur-md shadow-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-650 dark:bg-zinc-250"></span>
-          </span>
-          <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.24em] font-semibold text-zinc-600 dark:text-zinc-300">
-            Every crumpled paper hides a skill. Click or drag to unfold.
-          </span>
-        </div>
+        Grab &amp; toss the paper balls
       </div>
-
-      {/* Unfolding Skill Card Sheet Modal Overlay */}
-      <AnimatePresence>
-        {activeSkill && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-auto">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              onClick={handleCloseSkill}
-              className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-md"
-            />
-
-            {/* Unfolded Paper Card Container */}
-            <motion.div
-              initial={{ scale: 0.15, rotate: -18, opacity: 0, y: 120, skewX: 12 }}
-              animate={{ scale: 1, rotate: 0, opacity: 1, y: 0, skewX: 0 }}
-              exit={{ scale: 0.12, rotate: 22, opacity: 0, y: 140, skewX: -14 }}
-              transition={{ type: "spring", stiffness: 320, damping: 26 }}
-              className="relative w-full max-w-[540px] bg-[#fcfbfa] dark:bg-[#151516] text-[#171717] dark:text-[#ededed] border border-black/12 dark:border-white/15 rounded-2xl shadow-2xl p-6 sm:p-8 overflow-hidden z-10"
-              style={{
-                boxShadow: dark
-                  ? "0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1)"
-                  : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08)",
-              }}
-            >
-              {/* Subtle Paper Wrinkle Crease Overlays */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 dark:opacity-10" width="100%" height="100%">
-                <line x1="0" y1="0" x2="100%" y2="100%" stroke="currentColor" strokeWidth="0.75" strokeDasharray="4,4" />
-                <line x1="100%" y1="0" x2="0" y2="100%" stroke="currentColor" strokeWidth="0.75" strokeDasharray="4,4" />
-                <line x1="30%" y1="0" x2="70%" y2="100%" stroke="currentColor" strokeWidth="0.5" />
-              </svg>
-
-              {/* Folded Corner Accent */}
-              <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-bl from-black/10 to-transparent dark:from-white/10 rounded-bl-xl border-l border-b border-black/10 dark:border-white/10 pointer-events-none" />
-
-              {/* Header */}
-              <div className="flex justify-between items-start mb-5 relative z-10">
-                <div className="flex items-center gap-3">
-                  <span className="text-3xl sm:text-4xl p-2 rounded-xl bg-black/5 dark:bg-white/5 border border-black/8 dark:border-white/10 flex items-center justify-center">
-                    {activeSkill.icon}
-                  </span>
-                  <div>
-                    <div className="font-mono text-[9px] uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400 font-bold mb-0.5">
-                      // {activeSkill.category}
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-[#171717] dark:text-white">
-                      {activeSkill.name}
-                    </h2>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleCloseSkill}
-                  className="p-2 text-zinc-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors cursor-pointer"
-                  title="Close & Refold"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-
-              {/* Stats Row */}
-              <div className="flex items-center gap-4 mb-6 py-2.5 px-4 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/5 dark:border-white/8 relative z-10">
-                <div className="flex items-center gap-1.5 font-mono text-xs">
-                  <span className="text-zinc-400 dark:text-zinc-500 uppercase text-[9px] tracking-wider">Proficiency:</span>
-                  <span className="text-amber-500 dark:text-amber-400 font-bold tracking-widest">{activeSkill.rating}</span>
-                </div>
-                <div className="h-3 w-[1px] bg-black/10 dark:bg-white/10" />
-                <div className="flex items-center gap-1.5 font-mono text-xs">
-                  <span className="text-zinc-400 dark:text-zinc-500 uppercase text-[9px] tracking-wider">Experience:</span>
-                  <span className="font-bold text-[#171717] dark:text-white">{activeSkill.experience}</span>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="mb-6 relative z-10">
-                <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-500 font-bold mb-2">
-                  Summary
-                </div>
-                <p className="text-sm sm:text-base leading-relaxed text-zinc-700 dark:text-zinc-300 font-medium">
-                  {activeSkill.description}
-                </p>
-              </div>
-
-              {/* Used In Projects */}
-              <div className="mb-6 relative z-10">
-                <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-500 font-bold mb-2.5">
-                  Featured In Projects
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {activeSkill.usedIn.map((proj, idx) => (
-                    <span
-                      key={idx}
-                      className="px-3 py-1 rounded-lg text-xs font-mono font-semibold bg-black/[0.04] dark:bg-white/[0.06] text-zinc-800 dark:text-zinc-200 border border-black/8 dark:border-white/10"
-                    >
-                      • {proj}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Technologies Used With It */}
-              <div className="mb-7 relative z-10">
-                <div className="font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-500 font-bold mb-2.5">
-                  Ecosystem &amp; Tools
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {activeSkill.tools.map((tool, idx) => (
-                    <span
-                      key={idx}
-                      className="px-2.5 py-1 rounded-md text-[11px] font-mono text-zinc-600 dark:text-zinc-400 bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5"
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Footer Refold Action Button */}
-              <div className="pt-2 flex justify-end relative z-10">
-                <button
-                  onClick={handleCloseSkill}
-                  className="w-full sm:w-auto px-6 py-3 bg-[#171717] dark:bg-white text-white dark:text-black font-mono text-xs uppercase tracking-widest font-bold rounded-xl hover:opacity-90 active:scale-[0.98] transition-all cursor-pointer shadow-md flex items-center justify-center gap-2"
-                >
-                  <span>Fold &amp; Return to Dustbin</span>
-                  <span className="text-sm">↩</span>
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
