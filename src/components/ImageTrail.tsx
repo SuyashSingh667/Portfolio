@@ -79,7 +79,6 @@ class ImageTrailVariant1 implements TrailVariant {
   destroyed = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
-  initRender: (ev: MouseEvent | TouchEvent) => void;
 
   constructor(container: HTMLElement) {
     this.container = container;
@@ -95,19 +94,7 @@ class ImageTrailVariant1 implements TrailVariant {
     container.addEventListener('mousemove', this.handlePointerMove);
     container.addEventListener('touchmove', this.handlePointerMove);
 
-    this.initRender = ev => {
-      if (this.destroyed) return;
-      const rect = this.container.getBoundingClientRect();
-      this.mousePos = getLocalPointerPos(ev, rect);
-      this.cacheMousePos = { ...this.mousePos };
-
-      requestAnimationFrame(() => this.render());
-
-      container.removeEventListener('mousemove', this.initRender);
-      container.removeEventListener('touchmove', this.initRender);
-    };
-    container.addEventListener('mousemove', this.initRender);
-    container.addEventListener('touchmove', this.initRender);
+    requestAnimationFrame(() => this.render());
   }
 
   cleanup() {
@@ -115,8 +102,6 @@ class ImageTrailVariant1 implements TrailVariant {
     window.removeEventListener('mousemove', this.handlePointerMove);
     this.container.removeEventListener('mousemove', this.handlePointerMove);
     this.container.removeEventListener('touchmove', this.handlePointerMove);
-    this.container.removeEventListener('mousemove', this.initRender);
-    this.container.removeEventListener('touchmove', this.initRender);
     this.images.forEach(img => img.cleanup());
   }
 
@@ -143,7 +128,7 @@ class ImageTrailVariant1 implements TrailVariant {
     let targetX = this.mousePos.x;
     let targetY = this.mousePos.y;
 
-    if (targetX === 0 && targetY === 0) {
+    if (targetX <= 0 || targetY <= 0 || targetX >= rect.width || targetY >= rect.height) {
       targetX = rect.width * 0.5;
       targetY = rect.height * 0.45;
     }
@@ -159,6 +144,10 @@ class ImageTrailVariant1 implements TrailVariant {
     ++this.zIndexVal;
     this.imgPosition = this.imgPosition < this.imagesTotal - 1 ? this.imgPosition + 1 : 0;
     const img = this.images[this.imgPosition];
+    img.getRect();
+
+    const imgWidth = img.rect && img.rect.width > 0 ? img.rect.width : 220;
+    const imgHeight = img.rect && img.rect.height > 0 ? img.rect.height : 280;
 
     gsap.killTweensOf(img.DOM.el);
     gsap
@@ -172,14 +161,14 @@ class ImageTrailVariant1 implements TrailVariant {
           opacity: 1,
           scale: 1,
           zIndex: this.zIndexVal,
-          x: this.cacheMousePos.x - img.rect.width / 2,
-          y: this.cacheMousePos.y - img.rect.height / 2
+          x: this.cacheMousePos.x - imgWidth / 2,
+          y: this.cacheMousePos.y - imgHeight / 2
         },
         {
           duration: 0.4,
           ease: 'power1',
-          x: this.mousePos.x - img.rect.width / 2,
-          y: this.mousePos.y - img.rect.height / 2
+          x: this.mousePos.x - imgWidth / 2,
+          y: this.mousePos.y - imgHeight / 2
         },
         0
       )
