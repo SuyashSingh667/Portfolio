@@ -137,7 +137,7 @@ function initBin(
   // Shared scene & camera (rendered twice, different clip)
   const scene = new THREE.Scene();
 
-  const gx = 3.4; // Shift dustbin further right to the right side of the page
+  const gx = 5.2; // Shift dustbin even further right to the far right side of the page
   const cam = new THREE.PerspectiveCamera(38, cW/cH, 0.1, 200);
   cam.position.set(gx, 2.6, 10);
   cam.lookAt(gx, -0.2, 0);
