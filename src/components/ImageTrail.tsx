@@ -134,6 +134,19 @@ class ImageTrailVariant1 implements TrailVariant {
     requestAnimationFrame(() => this.render());
   }
 
+  triggerSample() {
+    if (this.destroyed || this.imagesTotal === 0) return;
+    const rect = this.container.getBoundingClientRect();
+    const targetX = rect.width * 0.5;
+    const targetY = rect.height * 0.45;
+
+    this.mousePos = { x: targetX, y: targetY };
+    this.cacheMousePos = { x: targetX - 60, y: targetY + 40 };
+    this.lastMousePos = { x: targetX, y: targetY };
+
+    this.showNextImage();
+  }
+
   showNextImage() {
     ++this.zIndexVal;
     this.imgPosition = this.imgPosition < this.imagesTotal - 1 ? this.imgPosition + 1 : 0;
@@ -1244,7 +1257,21 @@ export default function ImageTrail({ items = [], variant = 1 }: ImageTrailProps)
     const Cls = variantMap[variant] || variantMap[1];
     const trailInstance = new Cls(parent);
 
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          if (!trailInstance.destroyed && typeof (trailInstance as any).triggerSample === 'function') {
+            (trailInstance as any).triggerSample();
+          }
+        }, 400);
+        observer.disconnect();
+      }
+    }, { threshold: 0.15 });
+
+    observer.observe(parent);
+
     return () => {
+      observer.disconnect();
       trailInstance.cleanup();
     };
   }, [variant, items]);
