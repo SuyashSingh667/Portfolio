@@ -93,16 +93,20 @@ const RIM_Y  = 1.90;
 const BASE_Y = -1.90;
 const SC     = 0.85;
 
-interface BinPx { cx:number; rimY:number; botY:number; botYCenter:number; halfTop:number; halfBot:number; }
+interface BinPx {
+  cx: number;
+  rimY: number;
+  botY: number;
+  botYCenter: number;
+  lx1: number;
+  rx1: number;
+  lx2: number;
+  rx2: number;
+  halfTop: number;
+  halfBot: number;
+}
 
 // ─── Init Three.js — CLIP PLANE z-split for real 3D depth ─────────────────
-//
-//  z: 2   ← backCanvas  : entire scene BUT clipped to z ≤ 0  (bin's back half)
-//  z:10   ← DOM balls
-//  z:15   ← frontCanvas : entire scene BUT clipped to z ≥ 0  (bin's front half)
-//
-//  Result: balls appear INSIDE the bin — front mesh in front, back mesh behind.
-// ─────────────────────────────────────────────────────────────────────────
 function initBin(
   backCanvas:  HTMLCanvasElement,
   frontCanvas: HTMLCanvasElement,
@@ -133,20 +137,21 @@ function initBin(
   // Shared scene & camera (rendered twice, different clip)
   const scene = new THREE.Scene();
 
+  const gx = 2.0; // Shift dustbin to the right side of the canvas
   const cam = new THREE.PerspectiveCamera(38, cW/cH, 0.1, 200);
-  cam.position.set(0, 2.6, 10);
-  cam.lookAt(0, -0.2, 0);
+  cam.position.set(gx, 2.6, 10);
+  cam.lookAt(gx, -0.2, 0);
   cam.updateProjectionMatrix();
   cam.updateMatrixWorld(true);
 
   // Lights
   scene.add(new THREE.AmbientLight(0xffffff, dark?.48:.72));
   const key = new THREE.DirectionalLight(dark?0xfff0e0:0xfff8f0, dark?2.1:2.5);
-  key.position.set(3, 7, 9); scene.add(key);
+  key.position.set(gx + 3, 7, 9); scene.add(key);
   const fill = new THREE.DirectionalLight(0x8899cc, .48);
-  fill.position.set(-5,2,-4); scene.add(fill);
+  fill.position.set(gx - 5, 2, -4); scene.add(fill);
   const top = new THREE.PointLight(0xffffff, dark?1.4:1.8, 28);
-  top.position.set(0,6,5); scene.add(top);
+  top.position.set(gx, 6, 5); scene.add(top);
 
   // Materials
   const meshTex = makeMeshTex();
@@ -183,16 +188,13 @@ function initBin(
   botCap.position.y = BASE_Y;
 
   const group = new THREE.Group();
-  // botCap excluded — the flat grey disc was clipped by the canvas edge, causing a grey semi-circle
   group.add(body, rimTop, rimBot);
   group.scale.setScalar(SC);
   group.position.y = -0.2;
-  group.position.x = 2.0; // Shift dustbin to the right side of the canvas
+  group.position.x = gx;
   scene.add(group);
 
   // Project bin positions → canvas pixels for physics calibration
-  // We accept wz (depth) to account for perspective scaling of the tilted mouth/base
-  const gx = group.position.x;
   const proj = (wx: number, wy: number, wz: number = 0) => {
     const v = new THREE.Vector3(wx + gx, wy, wz).project(cam);
     return { x:(v.x*.5+.5)*cW, y:(-v.y*.5+.5)*cH };
@@ -201,15 +203,26 @@ function initBin(
   const rimWY = gy + RIM_Y  * SC;
   const botWY = gy + BASE_Y * SC;
 
-  const pRC = proj(0,         rimWY);
-  const pRR = proj( RIM_R*SC, rimWY);
-  // Project the FRONT edge of the bottom rim torus (z = BASE_R * SC)
-  // This ensures the 2D physics floor aligns with the front curve of the 3D rim rather than the higher center point
-  const pBC = proj(0,         botWY, BASE_R*SC);
-  const pBC_center = proj(0,  botWY, 0); // project the center for ellipse curvature math
-  const pBL = proj(-BASE_R*SC,botWY);
+  const pRC = proj(0,            rimWY);
+  const pTL = proj(-RIM_R * SC,  rimWY);
+  const pTR = proj(+RIM_R * SC,  rimWY);
+  const pBL = proj(-BASE_R * SC, botWY);
+  const pBR = proj(+BASE_R * SC, botWY);
+  const pBC = proj(0,            botWY, BASE_R*SC);
+  const pBC_center = proj(0,     botWY, 0);
 
-  onPx({ cx:pRC.x, rimY:pRC.y, botY:pBC.y, botYCenter:pBC_center.y, halfTop:pRR.x-pRC.x, halfBot:pRC.x-pBL.x });
+  onPx({
+    cx: pRC.x,
+    rimY: pRC.y,
+    botY: pBC.y,
+    botYCenter: pBC_center.y,
+    lx1: pTL.x,
+    rx1: pTR.x,
+    lx2: pBL.x,
+    rx2: pBR.x,
+    halfTop: (pTR.x - pTL.x) / 2,
+    halfBot: (pBR.x - pBL.x) / 2,
+  });
 
   // Render loop — same scene, different clip plane per renderer
   let raf = 0;
@@ -437,14 +450,14 @@ export default function PaperBinSkillset({
     const T = 14;
     const bwo = { isStatic:true, friction:.92, restitution:0.15, label:"bin" };
 
-    const lx1 = binCx - halfTop;
+    const lx1 = px.lx1;
     const ly1 = rimY;
-    const lx2 = binCx - halfBot;
+    const lx2 = px.lx2;
     const ly2 = botY;
 
-    const rx1 = binCx + halfTop;
+    const rx1 = px.rx1;
     const ry1 = rimY;
-    const rx2 = binCx + halfBot;
+    const rx2 = px.rx2;
     const ry2 = botY;
 
     const lLen = Math.hypot(lx2 - lx1, ly2 - ly1);
