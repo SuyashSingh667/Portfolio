@@ -435,12 +435,14 @@ export default function PaperBinSkillset({
     } as any);
     engineRef.current = engine;
 
-    // World bounds — expanded wide so paper balls can fly anywhere across the page
+    // Fixed 24px margin around the page
+    const PAGE_MARGIN = 24;
     const wo = { isStatic:true, friction:.7, restitution:.25 };
     M.Composite.add(engine.world, [
-      M.Bodies.rectangle(W/2,  H+120, W + 6000, 200, wo),     // Floor
-      M.Bodies.rectangle(-3000, H/2,   100,    H * 20, wo),    // Left boundary far out
-      M.Bodies.rectangle(W+3000, H/2, 100,   H * 20, wo),    // Right boundary far out
+      M.Bodies.rectangle(W/2, H - PAGE_MARGIN + 30, W * 2, 60, wo),        // Floor boundary
+      M.Bodies.rectangle(PAGE_MARGIN - 30, H/2, 60, H * 4, wo),             // Left margin wall
+      M.Bodies.rectangle(W - PAGE_MARGIN + 30, H/2, 60, H * 4, wo),        // Right margin wall
+      M.Bodies.rectangle(W/2, PAGE_MARGIN - 30, W * 2, 60, wo),             // Top ceiling boundary
     ]);
 
     // ── Bin physics walls — tapered trapezoid ──────────────────────────────
@@ -592,7 +594,18 @@ export default function PaperBinSkillset({
               }
             }
           } else {
-            // Outside the bin: cannot penetrate inwards through walls
+            // Outside the bin: cannot penetrate inwards through walls and restricted by fixed page margin
+            let clampedX = Math.max(PAGE_MARGIN + R_ball, Math.min(W - PAGE_MARGIN - R_ball, x));
+            let clampedY = Math.max(PAGE_MARGIN + R_ball, Math.min(H - PAGE_MARGIN - R_ball, y));
+
+            if (clampedX !== x || clampedY !== y) {
+              M.Body.setPosition(body, { x: clampedX, y: clampedY });
+              M.Body.setVelocity(body, {
+                x: clampedX !== x ? 0 : body.velocity.x,
+                y: clampedY !== y ? 0 : body.velocity.y,
+              });
+            }
+
             if (y >= rimY && y <= botY) {
               const t = Math.max(0, Math.min(1, (y - rimY) / (botY - rimY)));
               const leftOuterX  = lx1 + t * (lx2 - lx1) - R_ball;
