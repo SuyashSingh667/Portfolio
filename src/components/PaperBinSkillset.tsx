@@ -190,7 +190,7 @@ function initBin(
   const group = new THREE.Group();
   group.add(body, rimTop, rimBot);
   group.scale.setScalar(SC);
-  group.position.y = -0.2;
+  group.position.y = -0.7; // Shift dustbin lower towards the bottom of the section
   group.position.x = 0;
   scene.add(group);
 
