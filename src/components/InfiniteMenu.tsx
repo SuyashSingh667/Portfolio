@@ -66,41 +66,11 @@ flat in int vInstanceId;
 void main() {
     vec2 centerOffset = vUvs - vec2(0.5);
     float dist = length(centerOffset);
-
-    // Physical image circle radius inside 1.6x expanded quad
-    float imgRadius = 0.30;
-
-    // Realistic Elliptical Cast Shadow (shifted down: y = -0.045)
-    vec2 shadowCenter = vec2(0.5, 0.455);
-    vec2 shadowDiff = vUvs - shadowCenter;
-    // Scale Y by 1.7 to form an authentic 3D elliptical cast shadow
-    vec2 ellipticalDiff = vec2(shadowDiff.x, shadowDiff.y * 1.7);
-    float shadowDist = length(ellipticalDiff);
-
-    if (dist > imgRadius) {
-        // Contact shadow (tight near bottom edge of disc)
-        float contact = (1.0 - smoothstep(imgRadius - 0.02, imgRadius + 0.04, shadowDist)) * 0.42;
-        
-        // Soft ambient cast shadow (diffuse, extending downward)
-        float ambient = (1.0 - smoothstep(imgRadius + 0.01, imgRadius + 0.16, shadowDist)) * 0.20;
-        
-        float shadowIntensity = max(contact, ambient);
-        
-        // Mask so shadow only casts underneath the bottom half of the disc
-        float downMask = smoothstep(0.03, -0.12, centerOffset.y);
-        
-        float shadowAlpha = shadowIntensity * downMask * vAlpha;
-
-        if (shadowAlpha <= 0.001) {
-            discard;
-        }
-
-        outColor = vec4(vec3(0.02, 0.02, 0.04), shadowAlpha);
-        return;
+    
+    float circleAlpha = 1.0 - smoothstep(0.485, 0.50, dist);
+    if (circleAlpha <= 0.0) {
+        discard;
     }
-
-    // Remap vUvs inside image circle
-    vec2 imgUvs = (vUvs - vec2(0.5)) / (imgRadius * 2.0) + vec2(0.5);
 
     int itemIndex = vInstanceId % uItemCount;
     int cellsPerRow = uAtlasSize;
@@ -116,21 +86,22 @@ void main() {
     float scale = max(imageAspect / containerAspect, 
                      containerAspect / imageAspect);
     
-    vec2 st = vec2(imgUvs.x, 1.0 - imgUvs.y);
+    vec2 st = vec2(vUvs.x, 1.0 - vUvs.y);
     st = (st - 0.5) * scale + 0.5;
     st = clamp(st, 0.0, 1.0);
     st = st * cellSize + cellOffset;
     
     vec4 texColor = texture(uTex, st);
 
-    // Crisp 1px antialiased circular image crop
-    float edgeAlpha = 1.0 - smoothstep(imgRadius - 0.004, imgRadius, dist);
+    // Subtle 3D inner edge shadow for depth
+    float innerEdge = smoothstep(0.38, 0.49, dist);
+    vec3 shadowedRgb = mix(texColor.rgb, texColor.rgb * 0.5, innerEdge * 0.4);
 
-    // Subtle crisp border ring
-    float borderLine = smoothstep(imgRadius - 0.005, imgRadius - 0.001, dist);
-    vec3 borderRgb = mix(texColor.rgb, vec3(0.12), borderLine * 0.35);
+    // Fine 1px subtle border outline
+    float border = smoothstep(0.48, 0.495, dist);
+    shadowedRgb = mix(shadowedRgb, vec3(0.08), border * 0.5);
 
-    outColor = vec4(borderRgb, texColor.a * edgeAlpha * vAlpha);
+    outColor = vec4(shadowedRgb, texColor.a * circleAlpha * vAlpha);
 }
 `;
 
@@ -790,7 +761,7 @@ class InfiniteGridMenu {
       uAtlasSize: gl.getUniformLocation(this.discProgram, 'uAtlasSize')
     };
 
-    this.discGeo = new DiscGeometry(56, 1.6);
+    this.discGeo = new DiscGeometry(56, 1);
     this.discBuffers = this.discGeo.data;
     this.discVAO = makeVertexArray(
       gl,

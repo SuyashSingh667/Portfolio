@@ -5,11 +5,11 @@
   overflow: hidden;
   position: relative;
   outline: none;
-  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.18));
+  filter: drop-shadow(0px 12px 20px rgba(0, 0, 0, 0.18)) drop-shadow(0px 28px 50px rgba(0, 0, 0, 0.12));
 }
 
 .dark #infinite-grid-menu-canvas {
-  filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.65));
+  filter: drop-shadow(0px 18px 30px rgba(0, 0, 0, 0.6)) drop-shadow(0px 40px 70px rgba(0, 0, 0, 0.8));
 }
 
 #infinite-grid-menu-canvas:active {
