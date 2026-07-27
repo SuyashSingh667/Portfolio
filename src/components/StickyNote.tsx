@@ -21,8 +21,8 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
     1: {
       width: "w-72 sm:w-88 md:w-[420px]",
       containerClass: "top-[38%] left-[16%] right-[16%] bottom-[12%] rotate-[0deg]",
-      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs md:text-sm tracking-wider mb-1",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-normal",
+      titleColor: "text-amber-950 font-sans font-black text-[9px] sm:text-[10px] md:text-xs tracking-wider mb-1",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-extrabold leading-normal",
     },
     2: {
       width: "w-64 sm:w-80 md:w-[370px]",
