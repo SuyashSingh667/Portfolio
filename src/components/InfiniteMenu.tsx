@@ -605,7 +605,7 @@ export interface MenuItem {
 
 class InfiniteGridMenu {
   TARGET_FRAME_DURATION = 1000 / 60;
-  SPHERE_RADIUS = 1.20;
+  SPHERE_RADIUS = 0.85;
 
   #time = 0;
   #deltaTime = 0;
@@ -675,7 +675,7 @@ class InfiniteGridMenu {
     this.onActiveItemChange = onActiveItemChange || (() => {});
     this.onMovementChange = onMovementChange || (() => {});
     this.scaleFactor = scale;
-    this.camera.position[2] = 2.6 * scale;
+    this.camera.position[2] = 2.0 * scale;
     this.#init(onInit);
   }
 
