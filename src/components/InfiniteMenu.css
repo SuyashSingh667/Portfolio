@@ -24,14 +24,14 @@
   background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(10, 10, 10, 0.85) 100%);
 }
 
-/* Authentic 3D cast shadow overlay positioned further BELOW the center circle image */
+/* Authentic 3D cast shadow overlay positioned much further BELOW the center circle image */
 .center-disc-shadow {
   position: absolute;
   top: 50%;
   left: 50%;
   width: clamp(280px, 34vw, 420px);
   height: clamp(90px, 11vw, 130px);
-  transform: translate(-65%, 155%) rotate(-8deg);
+  transform: translate(-65%, 210%) rotate(-8deg);
   z-index: 4;
   pointer-events: none;
   border-radius: 50%;
