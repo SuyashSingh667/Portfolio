@@ -20,9 +20,9 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
   const layoutConfigs = {
     1: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[20%] left-[22%] right-[22%] bottom-[20%]",
-      titleColor: "text-amber-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-xs sm:text-sm md:text-base font-bold leading-normal",
+      containerClass: "top-[18%] left-[20%] right-[20%] bottom-[18%]",
+      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
     2: {
       width: "w-60 sm:w-76 md:w-[350px]",
@@ -38,9 +38,9 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
     },
     4: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[20%] left-[26%] right-[24%] bottom-[12%]",
-      titleColor: "text-amber-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-[11px] sm:text-xs md:text-sm font-bold leading-relaxed",
+      containerClass: "top-[18%] left-[26%] right-[16%] bottom-[12%]",
+      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
   };
 
