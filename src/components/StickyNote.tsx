@@ -38,9 +38,9 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
     },
     4: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[14%] left-[18%] right-[16%] bottom-[8%] rotate-[13.5deg]",
-      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm md:text-base tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-lg sm:text-xl md:text-2xl font-extrabold leading-snug",
+      containerClass: "top-[16%] left-[22%] right-[12%] bottom-[10%] rotate-[0deg]",
+      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm md:text-base tracking-wider mb-2",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-xl sm:text-2xl md:text-[26px] font-extrabold leading-relaxed",
     },
   };
 
@@ -85,7 +85,7 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
         />
 
         {/* Text Overlay Positioned 100% Inside White Paper Surface */}
-        <div className={`absolute ${config.containerClass} flex flex-col justify-center overflow-hidden`}>
+        <div className={`absolute ${config.containerClass} flex flex-col justify-start pt-2 overflow-hidden`}>
           {item.title && (
             <div className={`uppercase mb-0.5 ${config.titleColor}`}>
               {item.title}
