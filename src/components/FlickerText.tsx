@@ -437,7 +437,7 @@ export default function FlickerText(props: FlickerTextProps) {
     };
 
     const sharedContainerStyle: React.CSSProperties = {
-        transform: `translateX(${moveX}px)`,
+        transform: `translate(-50%, 0) translateX(${moveX}px)`,
         transition: "none",
         cursor: hoverEnabled ? "pointer" : undefined,
     };
