@@ -841,6 +841,10 @@ export default function Home() {
       <section
         id="skillset"
         className="relative bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-12 md:pt-20 pb-4 md:pb-8"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)`,
+          backgroundSize: "80px 80px",
+        }}
       >
         {/* Warm glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
