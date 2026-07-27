@@ -16,29 +16,29 @@ export interface StickyNoteItem {
 export function StickyNote({ item }: { item: StickyNoteItem }) {
   const noteSrc = `/notes/paper_note_${item.paperType}.png`;
 
-  // Custom percentage bounds & matching text rotation angles per paper texture type
+  // Custom percentage bounds & expressively tilted text rotation angles per paper texture type
   const layoutConfigs = {
     1: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[18%] left-[20%] right-[20%] bottom-[18%]",
+      containerClass: "top-[18%] left-[20%] right-[20%] bottom-[18%] rotate-[-4deg]",
       titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
     2: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[18%] left-[32%] right-[22%] bottom-[20%] rotate-[11deg]",
+      containerClass: "top-[18%] left-[32%] right-[22%] bottom-[20%] rotate-[14deg]",
       titleColor: "text-stone-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-bold leading-snug",
     },
     3: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[22%] left-[24%] right-[16%] bottom-[12%] rotate-[-3.8deg]",
+      containerClass: "top-[22%] left-[24%] right-[16%] bottom-[12%] rotate-[-6deg]",
       titleColor: "text-rose-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
       textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
     4: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[18%] left-[26%] right-[16%] bottom-[12%]",
+      containerClass: "top-[18%] left-[26%] right-[16%] bottom-[12%] rotate-[-3deg]",
       titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
