@@ -758,13 +758,11 @@ export default function Home() {
         )}
       </Chapter>
 
-      <section id="work" className="relative h-screen w-full overflow-hidden bg-white dark:bg-[#0c0c0c] border-b border-black/5 dark:border-white/5 transition-colors duration-500 p-4 md:p-8">
+      <section id="work" className="relative h-[650px] md:h-[750px] w-full overflow-hidden bg-white dark:bg-[#0c0c0c] border-b border-black/5 dark:border-white/5 transition-colors duration-500 p-4 md:p-8">
         <div className="h-full w-full rounded-[24px] md:rounded-[40px] overflow-hidden border border-black/5 dark:border-white/5 relative">
           <InfiniteMenu 
             items={menuItems} 
             scale={1.0} 
-            hasClickedProject={hasClickedProject}
-            onProjectSelect={() => setHasClickedProject(true)}
           />
         </div>
       </section>

@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from 'react';
-import { mat4, quat, vec2, vec3, vec4 } from 'gl-matrix';
-import FlickerText from './FlickerText';
+import { mat4, quat, vec2, vec3 } from 'gl-matrix';
 import './InfiniteMenu.css';
 
 const discVertShaderSource = `#version 300 es
@@ -17,11 +16,10 @@ in vec3 aModelPosition;
 in vec3 aModelNormal;
 in vec2 aModelUvs;
 in mat4 aInstanceMatrix;
-in float aItemIndex;
 
 out vec2 vUvs;
 out float vAlpha;
-out float vItemIndex;
+flat out int vInstanceId;
 
 #define PI 3.141593
 
@@ -48,7 +46,7 @@ void main() {
 
     vAlpha = smoothstep(0.5, 1., normalize(worldPosition.xyz).z) * .9 + .1;
     vUvs = aModelUvs;
-    vItemIndex = aItemIndex;
+    vInstanceId = gl_InstanceID;
 }
 `;
 
@@ -63,10 +61,10 @@ out vec4 outColor;
 
 in vec2 vUvs;
 in float vAlpha;
-in float vItemIndex;
+flat in int vInstanceId;
 
 void main() {
-    int itemIndex = int(vItemIndex) % uItemCount;
+    int itemIndex = vInstanceId % uItemCount;
     int cellsPerRow = uAtlasSize;
     int cellX = itemIndex % cellsPerRow;
     int cellY = itemIndex / cellsPerRow;
@@ -132,7 +130,7 @@ class Geometry {
     return this;
   }
 
-  get lastVertex() {
+  get lastVertex(): Vertex {
     return this.vertices[this.vertices.length - 1];
   }
 
@@ -141,7 +139,7 @@ class Geometry {
     let f = this.faces;
 
     for (let div = 0; div < divisions; ++div) {
-      const newFaces = new Array(f.length * 4);
+      const newFaces = new Array<Face>(f.length * 4);
 
       f.forEach((face, ndx) => {
         const mAB = this.getMidPoint(face.a, face.b, midPointCache);
@@ -214,39 +212,103 @@ class IcosahedronGeometry extends Geometry {
     super();
     const t = Math.sqrt(5) * 0.5 + 0.5;
     this.addVertex(
-      -1, t, 0,
-      1, t, 0,
-      -1, -t, 0,
-      1, -t, 0,
-      0, -1, t,
-      0, 1, t,
-      0, -1, -t,
-      0, 1, -t,
-      t, 0, -1,
-      t, 0, 1,
-      -t, 0, -1,
-      -t, 0, 1
+      -1,
+      t,
+      0,
+      1,
+      t,
+      0,
+      -1,
+      -t,
+      0,
+      1,
+      -t,
+      0,
+      0,
+      -1,
+      t,
+      0,
+      1,
+      t,
+      0,
+      -1,
+      -t,
+      0,
+      1,
+      -t,
+      t,
+      0,
+      -1,
+      t,
+      0,
+      1,
+      -t,
+      0,
+      -1,
+      -t,
+      0,
+      1
     ).addFace(
-      0, 11, 5,
-      0, 5, 1,
-      0, 1, 7,
-      0, 7, 10,
-      0, 10, 11,
-      1, 5, 9,
-      5, 11, 4,
-      11, 10, 2,
-      10, 7, 6,
-      7, 1, 8,
-      3, 9, 4,
-      3, 4, 2,
-      3, 2, 6,
-      3, 6, 8,
-      3, 8, 9,
-      4, 9, 5,
-      2, 4, 11,
-      6, 2, 10,
-      8, 6, 7,
-      9, 8, 1
+      0,
+      11,
+      5,
+      0,
+      5,
+      1,
+      0,
+      1,
+      7,
+      0,
+      7,
+      10,
+      0,
+      10,
+      11,
+      1,
+      5,
+      9,
+      5,
+      11,
+      4,
+      11,
+      10,
+      2,
+      10,
+      7,
+      6,
+      7,
+      1,
+      8,
+      3,
+      9,
+      4,
+      3,
+      4,
+      2,
+      3,
+      2,
+      6,
+      3,
+      6,
+      8,
+      3,
+      8,
+      9,
+      4,
+      9,
+      5,
+      2,
+      4,
+      11,
+      6,
+      2,
+      10,
+      8,
+      6,
+      7,
+      9,
+      8,
+      1
     );
   }
 }
@@ -277,7 +339,7 @@ class DiscGeometry extends Geometry {
   }
 }
 
-function createShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
+function createShader(gl: WebGL2RenderingContext, type: number, source: string) {
   const shader = gl.createShader(type);
   if (!shader) return null;
   gl.shaderSource(shader, source);
@@ -288,10 +350,7 @@ function createShader(gl: WebGL2RenderingContext, type: number, source: string):
     return shader;
   }
 
-  const infoLog = gl.getShaderInfoLog(shader);
-  if (infoLog && infoLog.trim()) {
-    console.warn("Shader compile note:", infoLog);
-  }
+  console.error(gl.getShaderInfoLog(shader));
   gl.deleteShader(shader);
   return null;
 }
@@ -300,24 +359,15 @@ function createProgram(
   gl: WebGL2RenderingContext,
   shaderSources: [string, string],
   transformFeedbackVaryings?: string[] | null,
-  attribLocations?: Record<string, number>
-): WebGLProgram | null {
+  attribLocations?: Record<string, number> | null
+) {
   const program = gl.createProgram();
   if (!program) return null;
 
-  const shaders: WebGLShader[] = [];
-
-  const vertShader = createShader(gl, gl.VERTEX_SHADER, shaderSources[0]);
-  const fragShader = createShader(gl, gl.FRAGMENT_SHADER, shaderSources[1]);
-
-  if (vertShader && fragShader) {
-    gl.attachShader(program, vertShader);
-    gl.attachShader(program, fragShader);
-    shaders.push(vertShader, fragShader);
-  } else {
-    gl.deleteProgram(program);
-    return null;
-  }
+  [gl.VERTEX_SHADER, gl.FRAGMENT_SHADER].forEach((type, ndx) => {
+    const shader = createShader(gl, type, shaderSources[ndx]);
+    if (shader) gl.attachShader(program, shader);
+  });
 
   if (transformFeedbackVaryings) {
     gl.transformFeedbackVaryings(program, transformFeedbackVaryings, gl.SEPARATE_ATTRIBS);
@@ -332,30 +382,21 @@ function createProgram(
   gl.linkProgram(program);
   const success = gl.getProgramParameter(program, gl.LINK_STATUS);
 
-  shaders.forEach(shader => {
-    gl.detachShader(program, shader);
-    gl.deleteShader(shader);
-  });
-
-  if (!success) {
-    const programLog = gl.getProgramInfoLog(program);
-    if (programLog && programLog.trim()) {
-      console.warn("Program link note:", programLog);
-    }
-    gl.deleteProgram(program);
-    return null;
+  if (success) {
+    return program;
   }
 
-  return program;
+  console.error(gl.getProgramInfoLog(program));
+  gl.deleteProgram(program);
+  return null;
 }
 
 function makeVertexArray(
   gl: WebGL2RenderingContext,
   bufLocNumElmPairs: [WebGLBuffer | null, number, number][],
-  indices: Uint16Array
-): WebGLVertexArrayObject | null {
+  indices?: Uint16Array
+) {
   const va = gl.createVertexArray();
-  if (!va) return null;
   gl.bindVertexArray(va);
 
   for (const [buffer, loc, numElem] of bufLocNumElmPairs) {
@@ -368,15 +409,15 @@ function makeVertexArray(
   if (indices) {
     const indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
   }
 
   gl.bindVertexArray(null);
   return va;
 }
 
-function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement): boolean {
-  const dpr = Math.min(2, window.devicePixelRatio);
+function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
   const displayWidth = Math.round(canvas.clientWidth * dpr);
   const displayHeight = Math.round(canvas.clientHeight * dpr);
   const needResize = canvas.width !== displayWidth || canvas.height !== displayHeight;
@@ -387,9 +428,8 @@ function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement): boolean {
   return needResize;
 }
 
-function makeBuffer(gl: WebGL2RenderingContext, sizeOrData: BufferSource, usage: number): WebGLBuffer | null {
+function makeBuffer(gl: WebGL2RenderingContext, sizeOrData: BufferSource, usage: number) {
   const buf = gl.createBuffer();
-  if (!buf) return null;
   gl.bindBuffer(gl.ARRAY_BUFFER, buf);
   gl.bufferData(gl.ARRAY_BUFFER, sizeOrData, usage);
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
@@ -402,9 +442,8 @@ function createAndSetupTexture(
   magFilter: number,
   wrapS: number,
   wrapT: number
-): WebGLTexture | null {
+) {
   const texture = gl.createTexture();
-  if (!texture) return null;
   gl.bindTexture(gl.TEXTURE_2D, texture);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapT);
@@ -423,14 +462,14 @@ class ArcballControl {
   rotationVelocity = 0;
   rotationAxis = vec3.fromValues(1, 0, 0);
   snapDirection = vec3.fromValues(0, 0, -1);
-  snapTargetVertex: vec3 | null = null;
+  snapTargetDirection: vec3 | null = null;
   EPSILON = 0.1;
   IDENTITY_QUAT = quat.create();
 
   pointerPos: vec2;
   previousPointerPos: vec2;
-  _rotationVelocity: number;
-  _combinedQuat: quat;
+  _rotationVelocity = 0;
+  _combinedQuat = quat.create();
 
   constructor(canvas: HTMLCanvasElement, updateCallback?: (deltaTime: number) => void) {
     this.canvas = canvas;
@@ -438,27 +477,21 @@ class ArcballControl {
 
     this.pointerPos = vec2.create();
     this.previousPointerPos = vec2.create();
-    this._rotationVelocity = 0;
-    this._combinedQuat = quat.create();
 
     canvas.addEventListener('pointerdown', e => {
-      const rect = canvas.getBoundingClientRect();
-      vec2.set(this.pointerPos, e.clientX - rect.left, e.clientY - rect.top);
+      vec2.set(this.pointerPos, e.clientX, e.clientY);
       vec2.copy(this.previousPointerPos, this.pointerPos);
       this.isPointerDown = true;
     });
     canvas.addEventListener('pointerup', () => {
       this.isPointerDown = false;
-      quat.identity(this.pointerRotation);
     });
     canvas.addEventListener('pointerleave', () => {
       this.isPointerDown = false;
-      quat.identity(this.pointerRotation);
     });
     canvas.addEventListener('pointermove', e => {
       if (this.isPointerDown) {
-        const rect = canvas.getBoundingClientRect();
-        vec2.set(this.pointerPos, e.clientX - rect.left, e.clientY - rect.top);
+        vec2.set(this.pointerPos, e.clientX, e.clientY);
       }
     });
 
@@ -480,8 +513,8 @@ class ArcballControl {
       if (vec2.sqrLen(midPointerPos) > this.EPSILON) {
         vec2.add(midPointerPos, this.previousPointerPos, midPointerPos);
 
-        const p = this.project(midPointerPos);
-        const q = this.project(this.previousPointerPos);
+        const p = this.#project(midPointerPos);
+        const q = this.#project(this.previousPointerPos);
         const a = vec3.normalize(vec3.create(), p);
         const b = vec3.normalize(vec3.create(), q);
 
@@ -497,19 +530,14 @@ class ArcballControl {
       const INTENSITY = 0.1 * timeScale;
       quat.slerp(this.pointerRotation, this.pointerRotation, this.IDENTITY_QUAT, INTENSITY);
 
-      if (this.snapTargetVertex) {
-        const SNAPPING_INTENSITY = 0.5;
-        const currentWorldPos = vec3.transformQuat(vec3.create(), this.snapTargetVertex, this.orientation);
-        const a = vec3.normalize(vec3.create(), currentWorldPos);
+      if (this.snapTargetDirection) {
+        const SNAPPING_INTENSITY = 0.2;
+        const a = this.snapTargetDirection;
         const b = this.snapDirection;
         const sqrDist = vec3.squaredDistance(a, b);
-        if (sqrDist < 0.0005) {
-          this.snapTargetVertex = null;
-        } else {
-          const distanceFactor = Math.max(0.1, 1 - sqrDist * 10);
-          angleFactor *= SNAPPING_INTENSITY * distanceFactor;
-          this.quatFromVectors(a, b, snapRotation, angleFactor);
-        }
+        const distanceFactor = Math.max(0.1, 1 - sqrDist * 10);
+        angleFactor *= SNAPPING_INTENSITY * distanceFactor;
+        this.quatFromVectors(a, b, snapRotation, angleFactor);
       }
     }
 
@@ -521,7 +549,7 @@ class ArcballControl {
     quat.slerp(this._combinedQuat, this._combinedQuat, combinedQuat, RA_INTENSITY);
     quat.normalize(this._combinedQuat, this._combinedQuat);
 
-    const rad = Math.acos(Math.max(-1, Math.min(1, this._combinedQuat[3]))) * 2.0;
+    const rad = Math.acos(this._combinedQuat[3]) * 2.0;
     const s = Math.sin(rad / 2.0);
     let rv = 0;
     if (s > 0.000001) {
@@ -540,19 +568,14 @@ class ArcballControl {
 
   quatFromVectors(a: vec3, b: vec3, out: quat, angleFactor = 1) {
     const axis = vec3.cross(vec3.create(), a, b);
-    const len = vec3.length(axis);
-    if (len < 0.00001) {
-      quat.identity(out);
-      return { q: out, axis: vec3.fromValues(0, 1, 0), angle: 0 };
-    }
-    vec3.scale(axis, axis, 1 / len);
+    vec3.normalize(axis, axis);
     const d = Math.max(-1, Math.min(1, vec3.dot(a, b)));
     const angle = Math.acos(d) * angleFactor;
     quat.setAxisAngle(out, axis, angle);
     return { q: out, axis, angle };
   }
 
-  private project(pos: vec2): vec3 {
+  #project(pos: vec2) {
     const r = 2;
     const w = this.canvas.clientWidth;
     const h = this.canvas.clientHeight;
@@ -573,35 +596,50 @@ class ArcballControl {
   }
 }
 
+export interface MenuItem {
+  image: string;
+  link: string;
+  title: string;
+  description: string;
+}
+
 class InfiniteGridMenu {
   TARGET_FRAME_DURATION = 1000 / 60;
   SPHERE_RADIUS = 2;
-
-  canvas: HTMLCanvasElement;
-  items: any[];
-  onActiveItemChange: (index: number) => void;
-  onMovementChange: (isMoving: boolean) => void;
-  viewportSize!: vec2;
-  drawBufferSize!: vec2;
-  discProgram!: WebGLProgram | null;
-  discLocations: any;
-  discGeo!: DiscGeometry;
-  discBuffers: any;
-  discVAO!: WebGLVertexArrayObject | null;
-  icoGeo!: IcosahedronGeometry;
-  instancePositions!: vec3[];
-  DISC_INSTANCE_COUNT!: number;
-  discInstances: any;
-  worldMatrix = mat4.create();
-  tex!: WebGLTexture | null;
-  atlasSize!: number;
-  control!: ArcballControl;
-  gl!: WebGL2RenderingContext;
 
   #time = 0;
   #deltaTime = 0;
   #deltaFrames = 0;
   #frames = 0;
+
+  canvas: HTMLCanvasElement;
+  items: MenuItem[];
+  onActiveItemChange: (index: number) => void;
+  onMovementChange: (isMoving: boolean) => void;
+
+  gl!: WebGL2RenderingContext;
+  viewportSize!: vec2;
+  drawBufferSize!: vec2;
+
+  discProgram!: WebGLProgram | null;
+  discLocations!: Record<string, any>;
+  discGeo!: DiscGeometry;
+  discBuffers!: any;
+  discVAO!: WebGLVertexArrayObject | null;
+
+  icoGeo!: IcosahedronGeometry;
+  instancePositions!: vec3[];
+  DISC_INSTANCE_COUNT = 0;
+  discInstances!: {
+    matricesArray: Float32Array;
+    matrices: Float32Array[];
+    buffer: WebGLBuffer | null;
+  };
+
+  worldMatrix!: mat4;
+  tex!: WebGLTexture | null;
+  atlasSize = 1;
+  control!: ArcballControl;
 
   camera = {
     matrix: mat4.create(),
@@ -622,19 +660,16 @@ class InfiniteGridMenu {
   smoothRotationVelocity = 0;
   scaleFactor = 1.0;
   movementActive = false;
-  onProjectSelect?: (index: number) => void;
-  isZoomed = false;
-  manualSnapping = false;
-  itemIndicesArray!: Float32Array;
+  animFrameId: number | null = null;
 
-  getItemIndex(index: number): number {
-    if (this.itemIndicesArray && this.itemIndicesArray[index] !== undefined) {
-      return this.itemIndicesArray[index];
-    }
-    return index % Math.max(1, this.items.length);
-  }
-
-  constructor(canvas: HTMLCanvasElement, items: any[], onActiveItemChange: (index: number) => void, onMovementChange: (isMoving: boolean) => void, onInit: ((sk: InfiniteGridMenu) => void) | null = null, scale = 1.0) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    items: MenuItem[],
+    onActiveItemChange?: (index: number) => void,
+    onMovementChange?: (isMoving: boolean) => void,
+    onInit?: ((menu: InfiniteGridMenu) => void) | null,
+    scale = 1.0
+  ) {
     this.canvas = canvas;
     this.items = items || [];
     this.onActiveItemChange = onActiveItemChange || (() => {});
@@ -648,6 +683,7 @@ class InfiniteGridMenu {
     this.viewportSize = vec2.set(this.viewportSize || vec2.create(), this.canvas.clientWidth, this.canvas.clientHeight);
 
     const gl = this.gl;
+    if (!gl) return;
     const needsResize = resizeCanvasToDisplaySize(gl.canvas as HTMLCanvasElement);
     if (needsResize) {
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -656,73 +692,7 @@ class InfiniteGridMenu {
     this.#updateProjectionMatrix(gl);
   }
 
-  handleCanvasClick(clientX: number, clientY: number): boolean {
-    const rect = this.canvas.getBoundingClientRect();
-    const x = ((clientX - rect.left) / rect.width) * 2 - 1;
-    const y = -(((clientY - rect.top) / rect.height) * 2 - 1);
-
-    const viewProj = mat4.multiply(mat4.create(), this.camera.matrices.projection, this.camera.matrices.view);
-
-    let nearestIndex = -1;
-    let minNDCDist = Infinity;
-
-    for (let i = 0; i < this.DISC_INSTANCE_COUNT; i++) {
-      const matrix = this.discInstances.matrices[i];
-      const worldPos = vec4.fromValues(matrix[12], matrix[13], matrix[14], 1.0);
-      
-      // Skip back-facing discs (worldPos.z > 0 in camera coordinate system)
-      if (worldPos[2] > 0.0) continue;
-      
-      const clip = vec4.create();
-      vec4.transformMat4(clip, worldPos, viewProj);
-
-      if (clip[3] <= 0.0001) continue;
-      const ndcX = clip[0] / clip[3];
-      const ndcY = clip[1] / clip[3];
-
-      const dist = Math.sqrt((ndcX - x) * (ndcX - x) + (ndcY - y) * (ndcY - y));
-
-      if (dist < minNDCDist) {
-        minNDCDist = dist;
-        nearestIndex = i;
-      }
-    }
-
-    if (nearestIndex !== -1) {
-      const itemIndex = this.getItemIndex(nearestIndex);
-      this.onActiveItemChange(itemIndex);
-      
-      this.control.snapTargetVertex = this.instancePositions[nearestIndex];
-      this.manualSnapping = true;
-
-      // Force movement state to stopped so overlay shows immediately
-      this.movementActive = false;
-      this.onMovementChange(false);
-
-      if (this.onProjectSelect) {
-        this.onProjectSelect(itemIndex);
-      }
-      return true;
-    } else {
-      this.manualSnapping = false;
-      return false;
-    }
-  }
-
-  isIntersectingRef?: React.RefObject<boolean>;
-
-  reqId: number | null = null;
-
-  destroy() {
-    if (this.reqId) {
-      cancelAnimationFrame(this.reqId);
-    }
-  }
-
   run(time = 0) {
-    this.reqId = requestAnimationFrame(t => this.run(t));
-    if (this.isIntersectingRef && !this.isIntersectingRef.current) return;
-
     this.#deltaTime = Math.min(32, time - this.#time);
     this.#time = time;
     this.#deltaFrames = this.#deltaTime / this.TARGET_FRAME_DURATION;
@@ -730,15 +700,23 @@ class InfiniteGridMenu {
 
     this.#animate(this.#deltaTime);
     this.#render();
+
+    this.animFrameId = requestAnimationFrame(t => this.run(t));
   }
 
-  #init(onInit: ((sk: InfiniteGridMenu) => void) | null) {
-    const glCtx = this.canvas.getContext('webgl2', { antialias: true, alpha: true, powerPreference: 'high-performance' });
-    if (!glCtx) {
+  destroy() {
+    if (this.animFrameId !== null) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+  }
+
+  #init(onInit?: ((menu: InfiniteGridMenu) => void) | null) {
+    const gl = this.canvas.getContext('webgl2', { antialias: true, alpha: false });
+    if (!gl) {
       throw new Error('No WebGL 2 context!');
     }
-    this.gl = glCtx;
-    const gl = this.gl;
+    this.gl = gl;
 
     this.viewportSize = vec2.fromValues(this.canvas.clientWidth, this.canvas.clientHeight);
     this.drawBufferSize = vec2.clone(this.viewportSize);
@@ -750,15 +728,12 @@ class InfiniteGridMenu {
       aInstanceMatrix: 3
     });
 
-    if (!this.discProgram) {
-      throw new Error('Failed to create disc program');
-    }
+    if (!this.discProgram) return;
 
     this.discLocations = {
       aModelPosition: gl.getAttribLocation(this.discProgram, 'aModelPosition'),
       aModelUvs: gl.getAttribLocation(this.discProgram, 'aModelUvs'),
       aInstanceMatrix: gl.getAttribLocation(this.discProgram, 'aInstanceMatrix'),
-      aItemIndex: gl.getAttribLocation(this.discProgram, 'aItemIndex'),
       uWorldMatrix: gl.getUniformLocation(this.discProgram, 'uWorldMatrix'),
       uViewMatrix: gl.getUniformLocation(this.discProgram, 'uViewMatrix'),
       uProjectionMatrix: gl.getUniformLocation(this.discProgram, 'uProjectionMatrix'),
@@ -773,22 +748,14 @@ class InfiniteGridMenu {
 
     this.discGeo = new DiscGeometry(56, 1);
     this.discBuffers = this.discGeo.data;
-    
-    const posBuffer = makeBuffer(gl, this.discBuffers.vertices, gl.STATIC_DRAW);
-    const uvBuffer = makeBuffer(gl, this.discBuffers.uvs, gl.STATIC_DRAW);
-
-    const vao = makeVertexArray(
+    this.discVAO = makeVertexArray(
       gl,
       [
-        [posBuffer, this.discLocations.aModelPosition, 3],
-        [uvBuffer, this.discLocations.aModelUvs, 2]
+        [makeBuffer(gl, this.discBuffers.vertices, gl.STATIC_DRAW), this.discLocations.aModelPosition, 3],
+        [makeBuffer(gl, this.discBuffers.uvs, gl.STATIC_DRAW), this.discLocations.aModelUvs, 2]
       ],
       this.discBuffers.indices
     );
-    if (!vao) {
-      throw new Error('Failed to create VAO');
-    }
-    this.discVAO = vao;
 
     this.icoGeo = new IcosahedronGeometry();
     this.icoGeo.subdivide(1).spherize(this.SPHERE_RADIUS);
@@ -810,11 +777,7 @@ class InfiniteGridMenu {
 
   #initTexture() {
     const gl = this.gl;
-    const tex = createAndSetupTexture(gl, gl.LINEAR, gl.LINEAR, gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE);
-    if (!tex) {
-      throw new Error('Failed to create WebGL texture');
-    }
-    this.tex = tex;
+    this.tex = createAndSetupTexture(gl, gl.LINEAR, gl.LINEAR, gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE);
 
     const itemCount = Math.max(1, this.items.length);
     this.atlasSize = Math.ceil(Math.sqrt(itemCount));
@@ -831,14 +794,9 @@ class InfiniteGridMenu {
         item =>
           new Promise<HTMLImageElement>(resolve => {
             const img = new Image();
+            img.crossOrigin = 'anonymous';
             img.onload = () => resolve(img);
-            img.onerror = (e) => {
-              console.error('InfiniteMenu: Failed to load image:', item.image, e);
-              if (typeof window !== 'undefined') {
-                window.alert('InfiniteMenu failed to load: ' + item.image);
-              }
-              resolve(img);
-            };
+            img.onerror = () => resolve(img);
             img.src = item.image;
           })
       )
@@ -846,11 +804,14 @@ class InfiniteGridMenu {
       images.forEach((img, i) => {
         const x = (i % this.atlasSize) * cellSize;
         const y = Math.floor(i / this.atlasSize) * cellSize;
-        ctx.drawImage(img, x, y, cellSize, cellSize);
+        try {
+          ctx.drawImage(img, x, y, cellSize, cellSize);
+        } catch (e) {
+          console.error(e);
+        }
       });
 
       gl.bindTexture(gl.TEXTURE_2D, this.tex);
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
       gl.generateMipmap(gl.TEXTURE_2D);
     });
@@ -858,11 +819,10 @@ class InfiniteGridMenu {
 
   #initDiscInstances(count: number) {
     const gl = this.gl;
-    const buf = gl.createBuffer();
     this.discInstances = {
       matricesArray: new Float32Array(count * 16),
-      matrices: [] as Float32Array[],
-      buffer: buf
+      matrices: [],
+      buffer: gl.createBuffer()
     };
     for (let i = 0; i < count; ++i) {
       const instanceMatrixArray = new Float32Array(this.discInstances.matricesArray.buffer, i * 16 * 4, 16);
@@ -880,34 +840,6 @@ class InfiniteGridMenu {
       gl.vertexAttribPointer(loc, 4, gl.FLOAT, false, bytesPerMatrix, j * 4 * 4);
       gl.vertexAttribDivisor(loc, 1);
     }
-
-    // Set up instanced attribute buffer for item indices with balanced distribution for 3 items
-    const itemIndices = new Float32Array(count);
-    const itemCount = Math.max(1, this.items.length);
-    const overrideMap: Record<number, number> = {
-      25: 0, // SkySentinel (Center)
-      4: 1,  // Tribe (Top)
-      33: 2, // VoteSamvidhan (Top-Left)
-      24: 1, // Tribe (Top-Right)
-      22: 0, // SkySentinel (Bottom-Left)
-      13: 2, // VoteSamvidhan (Bottom-Right)
-      5: 2   // VoteSamvidhan (Bottom)
-    };
-    for (let i = 0; i < count; ++i) {
-      if (itemCount === 3 && overrideMap[i] !== undefined) {
-        itemIndices[i] = overrideMap[i];
-      } else {
-        itemIndices[i] = i % itemCount;
-      }
-    }
-    this.itemIndicesArray = itemIndices;
-    const itemIndexBuf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, itemIndexBuf);
-    gl.bufferData(gl.ARRAY_BUFFER, itemIndices, gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(this.discLocations.aItemIndex);
-    gl.vertexAttribPointer(this.discLocations.aItemIndex, 1, gl.FLOAT, false, 0, 0);
-    gl.vertexAttribDivisor(this.discLocations.aItemIndex, 1);
-
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     gl.bindVertexArray(null);
   }
@@ -941,10 +873,6 @@ class InfiniteGridMenu {
   #render() {
     const gl = this.gl;
     if (!this.discProgram) return;
-
-    if (this.canvas.clientWidth !== this.viewportSize[0] || this.canvas.clientHeight !== this.viewportSize[1]) {
-      this.resize();
-    }
 
     gl.useProgram(this.discProgram);
 
@@ -996,7 +924,8 @@ class InfiniteGridMenu {
   }
 
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
-    this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
+    const canvasEl = gl.canvas as HTMLCanvasElement;
+    this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
     const height = this.SPHERE_RADIUS * 0.35;
     const distance = this.camera.position[2];
     if (this.camera.aspect > 1) {
@@ -1017,7 +946,7 @@ class InfiniteGridMenu {
   #onControlUpdate(deltaTime: number) {
     const timeScale = deltaTime / this.TARGET_FRAME_DURATION + 0.0001;
     let damping = 5 / timeScale;
-    let cameraTargetZ = (this.isZoomed ? 3.1 : 4.5) * this.scaleFactor;
+    let cameraTargetZ = 3 * this.scaleFactor;
 
     const isMoving = this.control.isPointerDown || Math.abs(this.smoothRotationVelocity) > 0.01;
 
@@ -1027,25 +956,13 @@ class InfiniteGridMenu {
     }
 
     if (!this.control.isPointerDown) {
-      if (!this.control.snapTargetVertex) {
-        this.manualSnapping = false;
-      }
-      if (!this.manualSnapping) {
-        const nearestVertexIndex = this.#findNearestVertexIndex();
-        const itemIndex = this.getItemIndex(nearestVertexIndex);
-        this.onActiveItemChange(itemIndex);
-        const currentWorldPos = vec3.transformQuat(vec3.create(), this.instancePositions[nearestVertexIndex], this.control.orientation);
-        const sqrDist = vec3.squaredDistance(vec3.normalize(vec3.create(), currentWorldPos), this.control.snapDirection);
-        if (sqrDist > 0.0005) {
-          this.control.snapTargetVertex = this.instancePositions[nearestVertexIndex];
-        } else {
-          this.control.snapTargetVertex = null;
-        }
-      }
+      const nearestVertexIndex = this.#findNearestVertexIndex();
+      const itemIndex = nearestVertexIndex % Math.max(1, this.items.length);
+      this.onActiveItemChange(itemIndex);
+      const snapDirection = vec3.normalize(vec3.create(), this.#getVertexWorldPosition(nearestVertexIndex));
+      this.control.snapTargetDirection = snapDirection;
     } else {
-      this.control.snapTargetVertex = null;
-      this.manualSnapping = false;
-      cameraTargetZ += this.control.rotationVelocity * 80 + (this.isZoomed ? 1.4 : 0.2) * this.scaleFactor;
+      cameraTargetZ += this.control.rotationVelocity * 80 + 2.5;
       damping = 7 / timeScale;
     }
 
@@ -1058,7 +975,7 @@ class InfiniteGridMenu {
     const inversOrientation = quat.conjugate(quat.create(), this.control.orientation);
     const nt = vec3.transformQuat(vec3.create(), n, inversOrientation);
 
-    let maxD = -Infinity;
+    let maxD = -1;
     let nearestVertexIndex = 0;
     for (let i = 0; i < this.instancePositions.length; ++i) {
       const d = vec3.dot(nt, this.instancePositions[i]);
@@ -1076,7 +993,7 @@ class InfiniteGridMenu {
   }
 }
 
-const defaultItems = [
+const defaultItems: MenuItem[] = [
   {
     image: 'https://picsum.photos/900/900?grayscale',
     link: 'https://google.com/',
@@ -1085,109 +1002,35 @@ const defaultItems = [
   }
 ];
 
-export interface InfiniteMenuItem {
-  image: string;
-  link: string;
-  title: string;
-  description: string;
-}
-
 export interface InfiniteMenuProps {
-  items?: InfiniteMenuItem[];
+  items?: MenuItem[];
   scale?: number;
-  hasClickedProject?: boolean;
-  onProjectSelect?: (index: number) => void;
 }
 
-export default function InfiniteMenu({ 
-  items = [], 
-  scale = 1.0,
-  hasClickedProject: propsHasClickedProject,
-  onProjectSelect: propsOnProjectSelect
-}: InfiniteMenuProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [activeItem, setActiveItem] = useState<InfiniteMenuItem | null>(null);
+export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [activeItem, setActiveItem] = useState<MenuItem | null>(null);
   const [isMoving, setIsMoving] = useState(false);
-  const [localHasClickedProject, setLocalHasClickedProject] = useState(false);
-  const hasClickedProject = propsHasClickedProject || localHasClickedProject;
-  const setHasClickedProject = (index: number = 0) => {
-    setLocalHasClickedProject(true);
-    if (propsOnProjectSelect) {
-      propsOnProjectSelect(index);
-    }
-  };
-
-  const isIntersectingRef = useRef(false);
-  const sketchRef = useRef<InfiniteGridMenu | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      isIntersectingRef.current = entry.isIntersecting;
-    }, { threshold: 0.05 });
-    observer.observe(canvas);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (sketchRef.current) {
-      sketchRef.current.isZoomed = hasClickedProject;
-    }
-  }, [hasClickedProject]);
-
-  const itemsKey = items.map(i => i.title).join(',');
 
   useEffect(() => {
     const canvas = canvasRef.current;
     let sketch: InfiniteGridMenu | null = null;
 
     const handleActiveItem = (index: number) => {
-      const list = items.length ? items : defaultItems;
-      const itemIndex = index % list.length;
-      setActiveItem(list[itemIndex] as InfiniteMenuItem);
+      const itemList = items.length ? items : defaultItems;
+      const itemIndex = index % itemList.length;
+      setActiveItem(itemList[itemIndex]);
     };
 
-    let startX = 0;
-    let startY = 0;
-    let startTime = 0;
-
-    const onPointerDown = (e: PointerEvent) => {
-      startX = e.clientX;
-      startY = e.clientY;
-      startTime = Date.now();
-    };
-
-    const onPointerUp = (e: PointerEvent) => {
-      const diffX = e.clientX - startX;
-      const diffY = e.clientY - startY;
-      const elapsed = Date.now() - startTime;
-
-      if (Math.sqrt(diffX * diffX + diffY * diffY) < 15 && elapsed < 600) {
-        if (sketch) {
-          sketch.handleCanvasClick(e.clientX, e.clientY);
-        }
-      }
-    };
-
-    if (canvas && items.length > 0) {
+    if (canvas) {
       sketch = new InfiniteGridMenu(
         canvas,
-        items,
+        items.length ? items : defaultItems,
         handleActiveItem,
         setIsMoving,
         sk => sk.run(),
         scale
       );
-      sketch.isIntersectingRef = isIntersectingRef;
-      sketch.isZoomed = hasClickedProject;
-      sketchRef.current = sketch;
-      sketch.onProjectSelect = (index: number) => {
-        setHasClickedProject(index);
-      };
-
-      canvas.addEventListener('pointerdown', onPointerDown);
-      canvas.addEventListener('pointerup', onPointerUp);
     }
 
     const handleResize = () => {
@@ -1201,23 +1044,18 @@ export default function InfiniteMenu({
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (canvas) {
-        canvas.removeEventListener('pointerdown', onPointerDown);
-        canvas.removeEventListener('pointerup', onPointerUp);
-      }
       if (sketch) {
         sketch.destroy();
       }
-      sketchRef.current = null;
     };
-  }, [itemsKey, scale]);
+  }, [items, scale]);
 
   const handleButtonClick = () => {
     if (!activeItem?.link) return;
     if (activeItem.link.startsWith('http')) {
       window.open(activeItem.link, '_blank');
     } else {
-      console.log('Internal route:', activeItem.link);
+      window.open(activeItem.link, '_blank');
     }
   };
 
@@ -1225,70 +1063,13 @@ export default function InfiniteMenu({
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas id="infinite-grid-menu-canvas" ref={canvasRef} />
 
-      {activeItem && hasClickedProject && (
+      {activeItem && (
         <>
-          <div className={`face-title ${isMoving ? 'inactive' : 'active'}`}>
-            <FlickerText
-              key={activeItem.title}
-              text={activeItem.title}
-              tag="h2"
-              font={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontWeight: 700,
-                fontSize: 'inherit',
-                lineHeight: '1.05em',
-                letterSpacing: '-0.03em',
-              }}
-              colorMode="solid"
-              fontColor="currentColor"
-              textEnterFlickerEnabled={true}
-              flicker={{
-                position: 'above',
-                replay: 'no',
-                restState: 'filled',
-                delay: 0,
-                ease: { type: 'tween', duration: 1.2, ease: 'easeInOut' },
-                flickerCount: 8,
-                showStroke: false,
-                strokePosition: 'start',
-                strokeCount: 1,
-                strokeColor: 'currentColor',
-                strokeWidth: 1.5,
-                wordFlickerEnabled: false,
-                shakeEnabled: false,
-                shakeWidth: 10,
-                shakeSpeed: 10,
-                letterFlickerEnabled: true,
-                letterFlickerMode: 'opacity',
-                letterFlickerOpacity: 25,
-                letterFlickerIntensity: 12,
-              }}
-              textHoverFlickerEnabled={true}
-              flickerHover={{
-                ease: { type: 'tween', duration: 1.5, ease: 'easeInOut' },
-                flickerCount: 3,
-                showStroke: false,
-                strokePosition: 'start',
-                strokeCount: 1,
-                strokeColor: 'currentColor',
-                strokeWidth: 1.5,
-                wordFlickerEnabled: false,
-                shakeEnabled: false,
-                shakeWidth: 10,
-                shakeSpeed: 10,
-                letterFlickerEnabled: true,
-                letterFlickerMode: 'opacity',
-                letterFlickerOpacity: 30,
-                letterFlickerIntensity: 8,
-              }}
-            />
-          </div>
+          <h2 className={`face-title ${isMoving ? 'inactive' : 'active'}`}>{activeItem.title}</h2>
 
-          <p className={`face-description text-black dark:text-white transition-opacity ${isMoving ? 'inactive' : 'active'}`}> {activeItem.description}</p>
+          <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}> {activeItem.description}</p>
 
           <div onClick={handleButtonClick} className={`action-button ${isMoving ? 'inactive' : 'active'}`}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-            <span>GitHub</span>
             <p className="action-button-icon">&#x2197;</p>
           </div>
         </>
