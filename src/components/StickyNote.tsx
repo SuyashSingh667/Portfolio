@@ -50,7 +50,7 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
     <motion.div
       initial={{ opacity: 0, scale: 0.8, y: 20, rotate: item.rotation - 4 }}
       whileInView={{ opacity: 1, scale: 1, y: 0, rotate: item.rotation }}
-      whileHover={{ scale: 1.08, rotate: 0, zIndex: 40 }}
+      whileHover={{ scale: 1.08, rotate: 0, zIndex: 25 }}
       transition={{
         type: "spring",
         stiffness: 300,
@@ -58,7 +58,7 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
         delay: item.floatDelay || 0,
       }}
       viewport={{ once: true }}
-      className={`absolute ${item.positionClass} ${config.width} cursor-pointer select-none z-20 pointer-events-auto filter drop-shadow-md hover:drop-shadow-2xl transition-all duration-300`}
+      className={`absolute ${item.positionClass} ${config.width} cursor-pointer select-none z-5 pointer-events-auto filter drop-shadow-md hover:drop-shadow-2xl transition-all duration-300`}
       style={{
         transformOrigin: "center center",
       }}

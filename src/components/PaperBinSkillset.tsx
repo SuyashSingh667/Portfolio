@@ -660,31 +660,35 @@ export default function PaperBinSkillset({
         div.style.left = `${position.x}px`;
         div.style.top = `${position.y}px`;
 
-        // Apply highlights based on category hover
+        const isDragged = mc.body === bodies[i];
         const label = SKILL_ITEMS[i];
         const isHighlighted = hasHighlights && activeHighlights.includes(label);
 
-        if (hasHighlights) {
+        if (isDragged) {
+          div.style.filter = dark ? "brightness(.95)" : "none";
+          div.style.transform = `translate(-50%,-50%) rotate(${angle}rad) scale(1.08)`;
+          div.style.zIndex = "50";
+        } else if (hasHighlights) {
           if (isHighlighted) {
             // Glowing, scale up, highlight on top
             div.style.filter = dark 
               ? "brightness(1.15) drop-shadow(0 0 10px rgba(255,255,255,0.4))" 
               : "brightness(1.05) drop-shadow(0 0 10px rgba(0,0,0,0.18))";
             div.style.transform = `translate(-50%,-50%) rotate(${angle}rad) scale(1.22)`;
-            div.style.zIndex = "25";
+            div.style.zIndex = "40";
           } else {
             // Fade, scale down, drop to background
             div.style.filter = dark 
               ? "brightness(0.35) grayscale(60%) opacity(0.4)" 
               : "brightness(0.85) grayscale(60%) opacity(0.3)";
             div.style.transform = `translate(-50%,-50%) rotate(${angle}rad) scale(0.88)`;
-            div.style.zIndex = "5";
+            div.style.zIndex = "4";
           }
         } else {
-          // Standard styling
+          // Standard styling: balls outside bin sit above sticky notes (zIndex: 20 vs StickyNote zIndex: 5)
           div.style.filter = dark ? "brightness(.82)" : "none";
           div.style.transform = `translate(-50%,-50%) rotate(${angle}rad) scale(1)`;
-          div.style.zIndex = "10";
+          div.style.zIndex = bodies[i].plugin.isInsideBin ? "10" : "20";
         }
       }
       if (onCountChangeRef.current) {

@@ -28,7 +28,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Each paper ball represents a tech skill I build apps with.",
     paperType: 1,
     rotation: -6,
-    positionClass: "top-2 left-[0%] sm:left-[2%] md:left-[4%]",
+    positionClass: "top-[-4%] left-[-4%] sm:left-[-8%] md:left-[-14%] lg:left-[-18%]",
     floatDelay: 0,
   },
   {
@@ -37,7 +37,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Drag & toss paper balls out of the bin to test 3D physics!",
     paperType: 2,
     rotation: 5,
-    positionClass: "top-4 right-[0%] sm:right-[2%] md:right-[4%]",
+    positionClass: "top-[-2%] right-[-4%] sm:right-[-8%] md:right-[-14%] lg:right-[-18%]",
     floatDelay: 0.15,
   },
   {
@@ -46,7 +46,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "React, Next.js, WebGL, Three.js, Python, Docker & PostgreSQL.",
     paperType: 3,
     rotation: -5,
-    positionClass: "top-[48%] left-[-2%] sm:left-[1%] md:left-[3%] hidden sm:block",
+    positionClass: "top-[44%] left-[-6%] sm:left-[-10%] md:left-[-16%] lg:left-[-20%] hidden sm:block",
     floatDelay: 0.3,
   },
   {
@@ -55,7 +55,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "60 FPS WebGL depth z-splitting clip planes immersion.",
     paperType: 4,
     rotation: 7,
-    positionClass: "top-[48%] right-[-2%] sm:right-[1%] md:right-[3%] hidden sm:block",
+    positionClass: "top-[44%] right-[-6%] sm:right-[-10%] md:right-[-16%] lg:right-[-20%] hidden sm:block",
     floatDelay: 0.45,
   },
 ];
