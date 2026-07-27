@@ -45,7 +45,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     title: "LEADERSHIP",
     content: "Led the CodeChef Bennett University Chapter as President.",
     paperType: 3,
-    rotation: -5,
+    rotation: -7,
     positionClass: "top-[44%] left-[-8%] sm:left-[-14%] md:left-[-20%] lg:left-[-26%] hidden sm:block",
     floatDelay: 0.3,
   },
