@@ -20,27 +20,27 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
   const layoutConfigs = {
     1: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[14%] left-[16%] right-[16%] bottom-[12%] rotate-[-3deg]",
-      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm tracking-wider",
+      containerClass: "top-[24%] left-[14%] right-[14%] bottom-[16%] rotate-[0deg]",
+      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-extrabold leading-snug",
     },
     2: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[14%] left-[28%] right-[18%] bottom-[12%] rotate-[11deg]",
-      titleColor: "text-stone-950 font-sans font-black text-xs sm:text-sm tracking-wider",
+      containerClass: "top-[22%] left-[24%] right-[16%] bottom-[16%] rotate-[8deg]",
+      titleColor: "text-stone-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-extrabold leading-snug",
     },
     3: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[16%] left-[22%] right-[10%] bottom-[8%] rotate-[-3.8deg]",
-      titleColor: "text-rose-950 font-sans font-black text-xs sm:text-sm tracking-wider",
+      containerClass: "top-[20%] left-[26%] right-[10%] bottom-[12%] rotate-[-3.5deg]",
+      titleColor: "text-rose-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1.5",
       textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-bold leading-relaxed",
     },
     4: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[16%] left-[22%] right-[12%] bottom-[10%] rotate-[0deg]",
-      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm md:text-base tracking-wider mb-2",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-xl sm:text-2xl md:text-[26px] font-extrabold leading-relaxed",
+      containerClass: "top-[24%] left-[24%] right-[12%] bottom-[12%] rotate-[0deg]",
+      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1.5",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-extrabold leading-snug",
     },
   };
 
