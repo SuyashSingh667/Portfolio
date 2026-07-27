@@ -11,116 +11,155 @@
   cursor: grabbing;
 }
 
-.action-button {
-  position: absolute;
-  left: 50%;
-  z-index: 10;
-  width: 60px;
-  height: 60px;
-  display: grid;
-  place-items: center;
-  background: #5227ff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 5px solid #000;
-}
-
+/* Header overlay for active project title */
 .face-title {
   user-select: none;
   position: absolute;
+  top: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  text-align: center;
   font-family: 'Space Grotesk', sans-serif;
-  font-weight: 900;
-  font-size: 3rem;
-  left: 1.6em;
-  top: 50%;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 3.5vw, 3.5rem);
+  letter-spacing: -0.03em;
   color: #171717;
+  width: 90%;
+  max-width: 800px;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .face-title {
   color: #ffffff;
 }
 
-.action-button-icon {
-  user-select: none;
-  position: relative;
-  color: #fff;
-  top: 2px;
-  font-size: 26px;
-}
-
-.face-title {
-  position: absolute;
-  top: 50%;
-  transform: translate(20%, -50%);
-}
-
 .face-title.active {
   opacity: 1;
-  transform: translate(20%, -50%);
-  pointer-events: auto;
-  transition: 0.5s ease;
+  transform: translateX(-50%) translateY(0);
 }
 
 .face-title.inactive {
-  pointer-events: none;
   opacity: 0;
-  transition: 0.1s ease;
+  transform: translateX(-50%) translateY(-12px);
 }
 
+/* Bottom panel overlay for active project description */
 .face-description {
   user-select: none;
   position: absolute;
-  max-width: 18ch;
-  top: 50%;
-  font-size: 1.2rem;
-  right: 1%;
-  color: #404040;
-  transform: translate(0, -50%);
+  bottom: 14%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  text-align: center;
+  font-family: var(--font-sans, system-ui), sans-serif;
+  font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+  line-height: 1.6;
+  color: #52525b;
+  width: 90%;
+  max-width: 580px;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark .face-description {
-  color: #d4d4d8;
+  color: #a1a1aa;
 }
 
 .face-description.active {
   opacity: 1;
-  transform: translate(-90%, -50%);
-  pointer-events: auto;
-  transition: 0.5s ease;
+  transform: translateX(-50%) translateY(0);
 }
 
 .face-description.inactive {
-  pointer-events: none;
-  transform: translate(-60%, -50%);
   opacity: 0;
-  transition: 0.1s ease;
+  transform: translateX(-50%) translateY(12px);
 }
 
+/* Action button (Sleek Portfolio Pill Button) */
 .action-button {
   position: absolute;
   left: 50%;
+  bottom: 5%;
+  z-index: 30;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 24px;
+  background: #09090b;
+  color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 9999px;
+  cursor: pointer;
+  font-family: var(--font-mono, monospace), monospace;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.action-button:hover {
+  background: #18181b;
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.35);
+}
+
+.dark .action-button {
+  background: #ffffff;
+  color: #09090b;
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+.dark .action-button:hover {
+  background: #e4e4e7;
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 15px 30px -5px rgba(255, 255, 255, 0.2);
 }
 
 .action-button.active {
-  bottom: 3.8em;
-  transform: translateX(-50%) scale(1);
   opacity: 1;
   pointer-events: auto;
-  transition: 0.5s ease;
 }
 
 .action-button.inactive {
-  bottom: -80px;
-  transform: translateX(-50%) scale(0);
   opacity: 0;
   pointer-events: none;
-  transition: 0.1s ease;
+  transform: translateX(-50%) translateY(16px) scale(0.95);
 }
 
-@media (max-width: 1024px) {
-  .face-title,
+.action-button-icon {
+  user-select: none;
+  display: inline-block;
+  font-size: 14px;
+  transition: transform 0.25s ease;
+}
+
+.action-button:hover .action-button-icon {
+  transform: translate(2px, -2px);
+}
+
+@media (max-width: 640px) {
+  .face-title {
+    font-size: 1.6rem;
+    top: 4%;
+  }
   .face-description {
-    display: none;
+    font-size: 0.8rem;
+    bottom: 15%;
+    max-width: 90%;
+  }
+  .action-button {
+    height: 42px;
+    padding: 0 18px;
+    font-size: 10px;
+    bottom: 4%;
   }
 }
