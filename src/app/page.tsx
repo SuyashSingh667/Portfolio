@@ -843,7 +843,7 @@ export default function Home() {
         className="relative bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-12 md:pt-20 pb-4 md:pb-8"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)`,
-          backgroundSize: "80px 80px",
+          backgroundSize: "40px 40px",
         }}
       >
         {/* Warm glow */}
