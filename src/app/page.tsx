@@ -403,7 +403,7 @@ export default function Home() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [resetKey, setResetKey] = useState(0);
-  const [hasClickedProject, setHasClickedProject] = useState(false);
+  const [hasClickedProject, setHasClickedProject] = useState(true);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });

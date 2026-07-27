@@ -1225,7 +1225,7 @@ export default function InfiniteMenu({
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas id="infinite-grid-menu-canvas" ref={canvasRef} />
 
-      {activeItem && hasClickedProject && (
+      {activeItem && (
         <>
           <div className={`face-title ${isMoving ? 'inactive' : 'active'}`}>
             <FlickerText
