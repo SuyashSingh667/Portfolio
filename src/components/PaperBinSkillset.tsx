@@ -91,7 +91,7 @@ const RIM_R  = 1.87;
 const BASE_R = 1.50;
 const RIM_Y  = 1.90;
 const BASE_Y = -1.90;
-const SC     = 1.02;
+const SC     = 0.94;
 
 interface BinPx {
   cx: number;
