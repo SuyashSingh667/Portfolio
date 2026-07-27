@@ -24,7 +24,7 @@ import ImageTrail from "@/components/ImageTrail";
 const STICKY_NOTES: StickyNoteItem[] = [
   {
     id: "note-1",
-    title: "🎓 IIT KANPUR & BOKARO",
+    title: "IIT KANPUR & BOKARO",
     content: "Completed internships at both IIT Kanpur and Bokaro Steel Plant back to back.",
     paperType: 1,
     rotation: -6,
@@ -33,7 +33,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-2",
-    title: "🚀 SYSTEM BUILDER",
+    title: "SYSTEM BUILDER",
     content: "Built software across space-tech, enterprise systems, and industrial automation.",
     paperType: 2,
     rotation: 5,
@@ -42,7 +42,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-3",
-    title: "👑 LEADERSHIP",
+    title: "LEADERSHIP",
     content: "Led the CodeChef Bennett University Chapter as President.",
     paperType: 3,
     rotation: -5,
@@ -51,7 +51,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-4",
-    title: "💡 PRODUCT FOCUS",
+    title: "PRODUCT FOCUS",
     content: "Focused on building products that solve practical, real-world problems.",
     paperType: 4,
     rotation: 7,
