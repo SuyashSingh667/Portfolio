@@ -24,8 +24,8 @@ import ImageTrail from "@/components/ImageTrail";
 const STICKY_NOTES: StickyNoteItem[] = [
   {
     id: "note-1",
-    title: "📌 Quick Note",
-    content: "Each paper ball represents a tech skill I build apps with.",
+    title: "📌 MY PHILOSOPHY",
+    content: "Code is just a tool. Great software is built with curiosity, craftsmanship, and user focus.",
     paperType: 1,
     rotation: -6,
     positionClass: "top-[-4%] left-[-4%] sm:left-[-8%] md:left-[-14%] lg:left-[-18%]",
@@ -33,8 +33,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-2",
-    title: "💡 Physics Fun",
-    content: "Drag & toss paper balls out of the bin to test 3D physics!",
+    title: "💡 WHAT I BUILD",
+    content: "From 3D interactive graphics to scalable systems — I turn complex ideas into smooth products.",
     paperType: 2,
     rotation: 5,
     positionClass: "top-[-2%] right-[-4%] sm:right-[-8%] md:right-[-14%] lg:right-[-18%]",
@@ -42,8 +42,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-3",
-    title: "🚀 Full Stack",
-    content: "React, Next.js, WebGL, Three.js, Python, Docker & PostgreSQL.",
+    title: "🚀 TECH STACK",
+    content: "React, Next.js, TypeScript, Three.js, WebGL, Node.js, Python, Docker & PostgreSQL.",
     paperType: 3,
     rotation: -5,
     positionClass: "top-[44%] left-[-6%] sm:left-[-10%] md:left-[-16%] lg:left-[-20%] hidden sm:block",
@@ -51,8 +51,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-4",
-    title: "✨ 3D Depth",
-    content: "60 FPS WebGL depth z-splitting clip planes immersion.",
+    title: "✨ ALWAYS LEARNING",
+    content: "No skill is ever wasted — every project is a chance to refine my craft and push limits.",
     paperType: 4,
     rotation: 7,
     positionClass: "top-[44%] right-[-6%] sm:right-[-10%] md:right-[-16%] lg:right-[-20%] hidden sm:block",
