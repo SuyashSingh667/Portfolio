@@ -372,7 +372,7 @@ export default function PaperBinSkillset({
   const [ready,    setReady   ] = useState(0); // number to trigger re-init
 
   const dark   = theme === "dark";
-  const BALL_D = 104;
+  const BALL_D = 88;
 
   // Track outer container dimensions dynamically (ResizeObserver)
   // This ensures calculations are only performed with final, settled pixel dimensions
@@ -504,8 +504,8 @@ export default function PaperBinSkillset({
     const bOpts = { friction:.80, frictionAir:.028, restitution: bounciness, density:.0018, inertia: Infinity };
     const bodies: Matter.Body[] = [];
     const cols = 3;
-    const hSp  = 108; // horizontal spacing (no overlap since 108 > 104)
-    const vSp  = 112; // vertical spacing (no overlap since 112 > 104)
+    const hSp  = 92; // horizontal spacing (no overlap since 92 > 88)
+    const vSp  = 96; // vertical spacing (no overlap since 96 > 88)
 
     for (let i=0;i<N;i++) {
       const col = i % cols;
