@@ -763,8 +763,6 @@ export default function Home() {
           <InfiniteMenu 
             items={menuItems} 
             scale={1.0} 
-            hasClickedProject={hasClickedProject}
-            onProjectSelect={() => setHasClickedProject(true)}
           />
         </div>
       </section>
