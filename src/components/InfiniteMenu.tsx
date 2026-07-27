@@ -66,11 +66,31 @@ flat in int vInstanceId;
 void main() {
     vec2 centerOffset = vUvs - vec2(0.5);
     float dist = length(centerOffset);
+
+    // Physical image circle radius inside expanded 1.4x quad
+    float imgRadius = 0.35;
+
+    // Sunlight direction (shining from top-left)
+    vec2 sunDir = normalize(vec2(-0.5, 0.7));
     
-    float circleAlpha = 1.0 - smoothstep(0.485, 0.50, dist);
-    if (circleAlpha <= 0.0) {
-        discard;
+    // Directional shadow center offset (shadow cast down-right OUTSIDE image)
+    vec2 shadowOffset = vec2(0.035, -0.045);
+    vec2 shadowCenter = vec2(0.5) + shadowOffset;
+    float shadowDist = length(vUvs - shadowCenter);
+
+    // Outer drop shadow falloff outside the image
+    float shadowAlpha = (1.0 - smoothstep(imgRadius - 0.04, 0.48, shadowDist)) * 0.55;
+    
+    if (dist > imgRadius) {
+        if (shadowAlpha <= 0.001) {
+            discard;
+        }
+        outColor = vec4(vec3(0.01, 0.01, 0.03), shadowAlpha * vAlpha);
+        return;
     }
+
+    // Remap vUvs inside image circle
+    vec2 imgUvs = (vUvs - vec2(0.5)) / (imgRadius * 2.0) + vec2(0.5);
 
     int itemIndex = vInstanceId % uItemCount;
     int cellsPerRow = uAtlasSize;
@@ -86,30 +106,31 @@ void main() {
     float scale = max(imageAspect / containerAspect, 
                      containerAspect / imageAspect);
     
-    vec2 st = vec2(vUvs.x, 1.0 - vUvs.y);
+    vec2 st = vec2(imgUvs.x, 1.0 - imgUvs.y);
     st = (st - 0.5) * scale + 0.5;
     st = clamp(st, 0.0, 1.0);
     st = st * cellSize + cellOffset;
     
     vec4 texColor = texture(uTex, st);
 
-    // Inner depth shadow vignette
-    float innerShadow = smoothstep(0.22, 0.49, dist);
-    vec3 shadowedRgb = mix(texColor.rgb, texColor.rgb * 0.35, innerShadow * 0.5);
+    // Smooth circular image edge antialiasing
+    float edgeAlpha = 1.0 - smoothstep(imgRadius - 0.01, imgRadius, dist);
 
-    // Directional Sunlight Lighting (Sun from top-left)
-    vec2 sunDir = normalize(vec2(-0.6, 0.8));
-    float sunLighting = dot(normalize(centerOffset + vec2(0.0001)), sunDir);
-    
+    // Inner depth shadow vignette
+    float innerShadow = smoothstep(0.18, imgRadius, dist);
+    vec3 shadowedRgb = mix(texColor.rgb, texColor.rgb * 0.4, innerShadow * 0.45);
+
     // Top-Left Sunlight Rim Highlight
-    float sunHighlight = smoothstep(0.40, 0.485, dist) * max(0.0, sunLighting);
-    shadowedRgb = mix(shadowedRgb, vec3(1.0, 0.98, 0.92), sunHighlight * 0.4);
+    vec2 imgCenterOffset = imgUvs - vec2(0.5);
+    float sunLighting = dot(normalize(imgCenterOffset + vec2(0.0001)), sunDir);
+    float sunHighlight = smoothstep(0.25, imgRadius, dist) * max(0.0, sunLighting);
+    shadowedRgb = mix(shadowedRgb, vec3(1.0, 0.98, 0.92), sunHighlight * 0.35);
 
     // Bottom-Right Sun Shadow Edge
-    float sunShadowEdge = smoothstep(0.40, 0.485, dist) * max(0.0, -sunLighting);
-    shadowedRgb = mix(shadowedRgb, vec3(0.01, 0.01, 0.03), sunShadowEdge * 0.6);
+    float sunShadowEdge = smoothstep(0.25, imgRadius, dist) * max(0.0, -sunLighting);
+    shadowedRgb = mix(shadowedRgb, vec3(0.01, 0.01, 0.03), sunShadowEdge * 0.5);
 
-    outColor = vec4(shadowedRgb, texColor.a * circleAlpha * vAlpha);
+    outColor = vec4(shadowedRgb, texColor.a * edgeAlpha * vAlpha);
 }
 `;
 
@@ -769,7 +790,7 @@ class InfiniteGridMenu {
       uAtlasSize: gl.getUniformLocation(this.discProgram, 'uAtlasSize')
     };
 
-    this.discGeo = new DiscGeometry(56, 1);
+    this.discGeo = new DiscGeometry(56, 1.4);
     this.discBuffers = this.discGeo.data;
     this.discVAO = makeVertexArray(
       gl,
