@@ -67,25 +67,29 @@ void main() {
     vec2 centerOffset = vUvs - vec2(0.5);
     float dist = length(centerOffset);
 
-    // Physical image circle radius inside expanded 1.4x quad
-    float imgRadius = 0.35;
+    // Physical image circle radius
+    float imgRadius = 0.38;
 
-    // Sunlight direction (shining from top-left)
-    vec2 sunDir = normalize(vec2(-0.5, 0.7));
-    
-    // Directional shadow center offset (shadow cast down-right OUTSIDE image)
-    vec2 shadowOffset = vec2(0.035, -0.045);
-    vec2 shadowCenter = vec2(0.5) + shadowOffset;
-    float shadowDist = length(vUvs - shadowCenter);
+    // Directional shadow offset (shining light from above, casting shadow DOWN)
+    vec2 shadowOffset = vec2(0.005, -0.025);
+    vec2 shadowUV = (vUvs - shadowOffset) - vec2(0.5);
+    float shadowDist = length(shadowUV);
 
-    // Outer drop shadow falloff outside the image
-    float shadowAlpha = (1.0 - smoothstep(imgRadius - 0.04, 0.48, shadowDist)) * 0.55;
-    
     if (dist > imgRadius) {
-        if (shadowAlpha <= 0.001) {
+        // Authentically cast shadow ONLY beneath the disc (downward)
+        float contactShadow = (1.0 - smoothstep(imgRadius, imgRadius + 0.035, shadowDist)) * 0.40;
+        float ambientShadow = (1.0 - smoothstep(imgRadius + 0.015, imgRadius + 0.08, shadowDist)) * 0.22;
+        float totalShadow = max(contactShadow, ambientShadow);
+
+        // Directional weight: NO shadow above the disc (centerOffset.y > 0)
+        float directionWeight = smoothstep(0.04, -0.15, centerOffset.y);
+        float shadowAlpha = totalShadow * directionWeight * vAlpha;
+
+        if (shadowAlpha <= 0.002) {
             discard;
         }
-        outColor = vec4(vec3(0.01, 0.01, 0.03), shadowAlpha * vAlpha);
+
+        outColor = vec4(vec3(0.02, 0.02, 0.04), shadowAlpha);
         return;
     }
 
@@ -113,24 +117,14 @@ void main() {
     
     vec4 texColor = texture(uTex, st);
 
-    // Smooth circular image edge antialiasing
-    float edgeAlpha = 1.0 - smoothstep(imgRadius - 0.01, imgRadius, dist);
+    // Crisp 1px antialiased circular image crop
+    float edgeAlpha = 1.0 - smoothstep(imgRadius - 0.004, imgRadius, dist);
 
-    // Inner depth shadow vignette
-    float innerShadow = smoothstep(0.18, imgRadius, dist);
-    vec3 shadowedRgb = mix(texColor.rgb, texColor.rgb * 0.4, innerShadow * 0.45);
+    // Subtle crisp border ring
+    float borderLine = smoothstep(imgRadius - 0.005, imgRadius - 0.001, dist);
+    vec3 borderRgb = mix(texColor.rgb, vec3(0.1), borderLine * 0.3);
 
-    // Top-Left Sunlight Rim Highlight
-    vec2 imgCenterOffset = imgUvs - vec2(0.5);
-    float sunLighting = dot(normalize(imgCenterOffset + vec2(0.0001)), sunDir);
-    float sunHighlight = smoothstep(0.25, imgRadius, dist) * max(0.0, sunLighting);
-    shadowedRgb = mix(shadowedRgb, vec3(1.0, 0.98, 0.92), sunHighlight * 0.35);
-
-    // Bottom-Right Sun Shadow Edge
-    float sunShadowEdge = smoothstep(0.25, imgRadius, dist) * max(0.0, -sunLighting);
-    shadowedRgb = mix(shadowedRgb, vec3(0.01, 0.01, 0.03), sunShadowEdge * 0.5);
-
-    outColor = vec4(shadowedRgb, texColor.a * edgeAlpha * vAlpha);
+    outColor = vec4(borderRgb, texColor.a * edgeAlpha * vAlpha);
 }
 `;
 
