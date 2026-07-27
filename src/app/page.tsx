@@ -802,28 +802,28 @@ export default function Home() {
             {experiences.map((item, idx) => (
               <div
                 key={idx}
-                className="experience-card w-[88vw] sm:w-[55vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 last:border-r-0 pr-12 md:pr-16 mr-12 md:mr-16 last:pr-0 last:mr-0 min-h-[50vh]"
+                className="experience-card w-[90vw] sm:w-[75vw] md:w-[58vw] lg:w-[50vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 last:border-r-0 pr-12 md:pr-20 mr-12 md:mr-20 last:pr-0 last:mr-0 min-h-[55vh] py-4"
               >
                 {/* Top */}
                 <div>
-                  <span className="card-num text-[clamp(5rem,12vw,9rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-4">
+                  <span className="card-num text-[clamp(6rem,14vw,11rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-4">
                     {item.num}
                   </span>
-                  <span className="card-role text-[9px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-3 font-semibold">
+                  <span className="card-role text-[10px] sm:text-xs font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-3 font-semibold">
                     {item.role}
                   </span>
-                  <h3 className="card-org text-3xl md:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-5 leading-tight">
+                  <h3 className="card-org text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#171717] dark:text-white mb-6 leading-tight">
                     {item.org}
                   </h3>
-                  <p className="card-desc text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
+                  <p className="card-desc text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-300 max-w-[480px]">
                     {item.desc}
                   </p>
                 </div>
 
                 {/* Bottom — tags */}
-                <div className="flex flex-wrap gap-2 mt-8">
+                <div className="flex flex-wrap gap-2.5 mt-10">
                   {item.tags.map((tag) => (
-                    <span key={tag} className="card-tag px-3 py-1 border border-black/10 dark:border-zinc-800 rounded-full text-[8px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
+                    <span key={tag} className="card-tag px-4 py-1.5 border border-black/10 dark:border-zinc-800 rounded-full text-[9px] sm:text-[10px] font-mono uppercase tracking-wider text-zinc-600 dark:text-zinc-400 font-medium">
                       {tag}
                     </span>
                   ))}
