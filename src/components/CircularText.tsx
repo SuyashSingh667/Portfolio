@@ -17,7 +17,7 @@ const CircularText: React.FC<CircularTextProps> = ({
 }) => {
   const baseText = text.trim() ? text.trim() : 'PROJECT';
   let fullText = baseText;
-  while (fullText.length < 34) {
+  while (fullText.length < 36) {
     fullText += ` • ${baseText}`;
   }
   fullText += ' • ';
@@ -38,7 +38,7 @@ const CircularText: React.FC<CircularTextProps> = ({
         <svg viewBox="0 0 500 500" className="w-full h-full overflow-visible">
           <path
             id="circlePath"
-            d="M 250, 250 m -228, 0 a 228,228 0 1,1 456,0 a 228,228 0 1,1 -456,0"
+            d="M 250, 250 m -242, 0 a 242,242 0 1,1 484,0 a 242,242 0 1,1 -484,0"
             fill="none"
           />
           <text className="circular-text-path">
