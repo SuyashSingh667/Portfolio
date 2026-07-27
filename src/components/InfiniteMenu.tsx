@@ -1067,10 +1067,8 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
       {activeItem && (
         <>
           <CircularText 
-            text={`${activeItem.title.toUpperCase()} • ${activeItem.title.toUpperCase()} • ${activeItem.title.toUpperCase()} • `} 
+            text={activeItem.title} 
             spinDuration={20} 
-            radius={140}
-            onHover="speedUp" 
             className={`center-circular-text ${isMoving ? 'inactive' : 'active'}`} 
           />
 
