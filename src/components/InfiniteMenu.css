@@ -11,6 +11,27 @@
   cursor: grabbing;
 }
 
+/* Rotating circular text around main center circle */
+.center-circular-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  pointer-events: none;
+  width: clamp(270px, 36vw, 370px) !important;
+  height: clamp(270px, 36vw, 370px) !important;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.center-circular-text.active {
+  opacity: 1;
+}
+
+.center-circular-text.inactive {
+  opacity: 0;
+}
+
 /* Header/Left overlay for active project title */
 .face-title {
   user-select: none;
@@ -81,7 +102,7 @@
 .action-button {
   position: absolute;
   left: 50%;
-  bottom: 20%;
+  bottom: 18%;
   z-index: 30;
   transform: translateX(-50%);
   display: inline-flex;
@@ -165,5 +186,9 @@
     height: 42px;
     padding: 0 18px;
     font-size: 10px;
+  }
+  .center-circular-text {
+    width: 250px !important;
+    height: 250px !important;
   }
 }
