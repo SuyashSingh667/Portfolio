@@ -1167,15 +1167,7 @@ export default function Home() {
                   </div>
                 ))}
 
-                {chatLoading && (
-                  <div className="flex items-start max-w-[85%]">
-                    <div className="px-4 py-2.5 liquid-bubble-ai flex gap-1.5 items-center">
-                      <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <span className="w-1.5 h-1.5 bg-zinc-400 dark:bg-white/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-                    </div>
-                  </div>
-                )}
+
               </div>
             )}
 
