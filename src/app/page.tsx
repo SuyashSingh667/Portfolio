@@ -744,14 +744,21 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           01 — WORK
       ════════════════════════════════════════════════════════════════════════ */}
-      <section id="work" className="relative h-screen w-full flex flex-col bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden">
-        <Chapter num="01" eyebrow="Selected Work" title="Projects." />
-
-        <div className="relative w-full flex-1 overflow-hidden">
+      <section id="work" className="relative h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500">
+        {/* Full Page 3D Menu Canvas */}
+        <div className="absolute inset-0 w-full h-full z-0">
           <InfiniteMenu 
             items={menuItems} 
             scale={1.0} 
           />
+        </div>
+
+        {/* Floating Section Badge */}
+        <div className="relative z-10 p-6 md:p-12 pointer-events-none select-none">
+          <div className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.38em] text-zinc-500 dark:text-zinc-400 bg-white/60 dark:bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-black/8 dark:border-white/10 shadow-sm">
+            <span className="w-4 h-px bg-zinc-400 dark:bg-zinc-500 inline-block" />
+            01 — Selected Work
+          </div>
         </div>
       </section>
 
