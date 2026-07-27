@@ -20,27 +20,27 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
   const layoutConfigs = {
     1: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[18%] left-[20%] right-[20%] bottom-[18%] rotate-[-3deg]",
-      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
+      containerClass: "top-[20%] left-[22%] right-[22%] bottom-[20%] rotate-[-3deg]",
+      titleColor: "text-amber-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-xs sm:text-sm md:text-base font-bold leading-normal",
     },
     2: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[18%] left-[32%] right-[22%] bottom-[20%] rotate-[11deg]",
-      titleColor: "text-stone-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-bold leading-snug",
+      containerClass: "top-[20%] left-[34%] right-[24%] bottom-[20%] rotate-[11deg]",
+      titleColor: "text-stone-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-[11px] sm:text-xs md:text-sm font-extrabold leading-normal",
     },
     3: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[22%] left-[24%] right-[16%] bottom-[12%] rotate-[-3.8deg]",
-      titleColor: "text-rose-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
-      textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
+      containerClass: "top-[24%] left-[26%] right-[20%] bottom-[14%] rotate-[-3.8deg]",
+      titleColor: "text-rose-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
+      textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-xs sm:text-sm md:text-base font-bold leading-normal",
     },
     4: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[18%] left-[26%] right-[16%] bottom-[12%] rotate-[-2.5deg]",
-      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
+      containerClass: "top-[20%] left-[26%] right-[24%] bottom-[14%] rotate-[-2.5deg]",
+      titleColor: "text-amber-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-xs sm:text-sm md:text-base font-bold leading-relaxed",
     },
   };
 
