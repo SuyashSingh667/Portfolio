@@ -19,28 +19,28 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
   // Custom percentage bounds & matching text rotation angles per paper texture type
   const layoutConfigs = {
     1: {
-      width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[24%] left-[14%] right-[14%] bottom-[16%] rotate-[0deg]",
-      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-extrabold leading-snug",
+      width: "w-72 sm:w-88 md:w-[420px]",
+      containerClass: "top-[35%] left-[18%] right-[18%] bottom-[32%] rotate-[0deg]",
+      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider mb-1",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-extrabold leading-snug",
     },
     2: {
-      width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[22%] left-[24%] right-[16%] bottom-[16%] rotate-[8deg]",
-      titleColor: "text-stone-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-extrabold leading-snug",
+      width: "w-64 sm:w-80 md:w-[370px]",
+      containerClass: "top-[28%] left-[28%] right-[16%] bottom-[18%] rotate-[6.5deg]",
+      titleColor: "text-stone-950 font-sans font-black text-[10px] sm:text-xs tracking-wider mb-1",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-extrabold leading-snug",
     },
     3: {
-      width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[20%] left-[26%] right-[10%] bottom-[12%] rotate-[-3.5deg]",
-      titleColor: "text-rose-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1.5",
+      width: "w-72 sm:w-88 md:w-[420px]",
+      containerClass: "top-[22%] left-[30%] right-[8%] bottom-[18%] rotate-[-3.5deg]",
+      titleColor: "text-rose-950 font-sans font-black text-[10px] sm:text-xs tracking-wider mb-1.5",
       textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-bold leading-relaxed",
     },
     4: {
-      width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[24%] left-[24%] right-[12%] bottom-[12%] rotate-[0deg]",
-      titleColor: "text-amber-950 font-sans font-black text-xs sm:text-sm tracking-wider mb-1.5",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-extrabold leading-snug",
+      width: "w-72 sm:w-88 md:w-[420px]",
+      containerClass: "top-[28%] left-[28%] right-[14%] bottom-[16%] rotate-[0deg]",
+      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider mb-1.5",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-extrabold leading-relaxed",
     },
   };
 
