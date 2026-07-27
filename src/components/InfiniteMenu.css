@@ -28,7 +28,7 @@
 .face-title {
   user-select: none;
   position: absolute;
-  top: 10%;
+  top: 3%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
