@@ -16,31 +16,31 @@ export interface StickyNoteItem {
 export function StickyNote({ item }: { item: StickyNoteItem }) {
   const noteSrc = `/notes/paper_note_${item.paperType}.png`;
 
-  // Custom padding & sizing per paper texture type to align text perfectly inside white paper boundaries
+  // Custom percentage bounds per paper texture type to keep text 100% inside white paper area
   const layoutConfigs = {
     1: {
-      width: "w-56 sm:w-72 md:w-84",
-      padding: "px-10 py-7 sm:px-12 sm:py-9",
-      titleColor: "text-amber-950 font-black text-xs sm:text-sm tracking-wider",
-      textColor: "text-zinc-950 font-mono text-xs sm:text-sm md:text-base font-bold leading-snug",
+      width: "w-56 sm:w-68 md:w-80",
+      containerClass: "top-[16%] left-[12%] right-[12%] bottom-[14%]",
+      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
     2: {
       width: "w-52 sm:w-64 md:w-76",
-      padding: "pt-12 pb-8 px-8 sm:pt-14 sm:pb-10 sm:px-10",
-      titleColor: "text-stone-950 font-black text-xs sm:text-sm tracking-wider",
-      textColor: "text-zinc-950 font-mono text-xs sm:text-sm md:text-base font-black leading-snug",
+      containerClass: "top-[26%] left-[22%] right-[12%] bottom-[14%]",
+      titleColor: "text-stone-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-tight",
     },
     3: {
-      width: "w-56 sm:w-72 md:w-84",
-      padding: "pt-10 pb-6 px-10 sm:pt-12 sm:pb-8 sm:px-12",
-      titleColor: "text-rose-950 font-black text-xs sm:text-sm tracking-wider",
-      textColor: "text-slate-950 font-sans text-xs sm:text-sm md:text-base font-bold leading-snug",
+      width: "w-56 sm:w-68 md:w-80",
+      containerClass: "top-[22%] left-[18%] right-[10%] bottom-[12%]",
+      titleColor: "text-rose-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
+      textColor: "text-slate-900 font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
     4: {
       width: "w-52 sm:w-64 md:w-72",
-      padding: "pt-14 pb-8 px-8 sm:pt-16 sm:pb-10 sm:px-10",
-      titleColor: "text-amber-950 font-black text-xs sm:text-sm tracking-wider",
-      textColor: "text-zinc-950 font-mono text-xs sm:text-sm md:text-base font-bold leading-snug",
+      containerClass: "top-[26%] left-[18%] right-[10%] bottom-[10%]",
+      titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-tight",
     },
   };
 
@@ -84,10 +84,10 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
           loading="eager"
         />
 
-        {/* Text Overlay Positioned Over Paper Surface */}
-        <div className={`absolute inset-0 flex flex-col justify-center ${config.padding}`}>
+        {/* Text Overlay Positioned 100% Inside White Paper Surface */}
+        <div className={`absolute ${config.containerClass} flex flex-col justify-center overflow-hidden`}>
           {item.title && (
-            <div className={`font-mono text-[9px] sm:text-[10px] uppercase mb-1 ${config.titleColor}`}>
+            <div className={`uppercase mb-0.5 ${config.titleColor}`}>
               {item.title}
             </div>
           )}

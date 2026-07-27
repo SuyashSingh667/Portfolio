@@ -30,7 +30,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&amp;family=Archivo+Narrow:wght@600;700&amp;display=swap" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&amp;family=Archivo+Narrow:wght@600;700&amp;family=Caveat:wght@600;700&amp;family=Patrick+Hand&amp;display=swap" rel="stylesheet"/>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
       </head>
       <body className="min-h-full flex flex-col">
