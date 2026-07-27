@@ -744,10 +744,10 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           01 — WORK
       ════════════════════════════════════════════════════════════════════════ */}
-      <section id="work" className="relative min-h-[110vh] h-[110vh] w-full flex flex-col overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500">
+      <section id="work" className="relative w-full bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500">
         <Chapter num="01" eyebrow="Selected Work" title="Projects." />
 
-        <div className="relative w-full flex-1 min-h-0 overflow-hidden pb-12">
+        <div className="relative w-full h-screen overflow-hidden">
           <InfiniteMenu 
             items={menuItems} 
             scale={1.0} 
