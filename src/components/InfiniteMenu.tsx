@@ -44,7 +44,7 @@ void main() {
 
     gl_Position = uProjectionMatrix * uViewMatrix * worldPosition;
 
-    vAlpha = smoothstep(0.5, 1., normalize(worldPosition.xyz).z) * .9 + .1;
+    vAlpha = smoothstep(-0.3, 0.7, normalize(worldPosition.xyz).z) * .85 + .15;
     vUvs = aModelUvs;
     vInstanceId = gl_InstanceID;
 }
@@ -675,7 +675,7 @@ class InfiniteGridMenu {
     this.onActiveItemChange = onActiveItemChange || (() => {});
     this.onMovementChange = onMovementChange || (() => {});
     this.scaleFactor = scale;
-    this.camera.position[2] = 3.4 * scale;
+    this.camera.position[2] = 4.8 * scale;
     this.#init(onInit);
   }
 
@@ -849,8 +849,8 @@ class InfiniteGridMenu {
     this.control.update(deltaTime, this.TARGET_FRAME_DURATION);
 
     let positions = this.instancePositions.map(p => vec3.transformQuat(vec3.create(), p, this.control.orientation));
-    const scale = 0.18;
-    const SCALE_INTENSITY = 0.5;
+    const scale = 0.13;
+    const SCALE_INTENSITY = 0.4;
     positions.forEach((p, ndx) => {
       const s = (Math.abs(p[2]) / this.SPHERE_RADIUS) * SCALE_INTENSITY + (1 - SCALE_INTENSITY);
       const finalScale = s * scale;
