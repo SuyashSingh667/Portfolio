@@ -77,7 +77,7 @@ const projects: Project[] = [
   {
     title: "SkySentinel",
     description: "Space situational awareness platform monitoring satellite risks in Earth's orbit, integrating live TLE data with interactive 3D visualisation.",
-    image: "/images/projects/skysentinel.jpg?v=4",
+    image: "/images/projects/skysentinel_v2.png?v=5",
     link: "https://github.com/SuyashSingh667/SkySentinel",
   },
   {
