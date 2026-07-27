@@ -19,26 +19,26 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
   // Custom percentage bounds & matching text rotation angles per paper texture type
   const layoutConfigs = {
     1: {
-      width: "w-56 sm:w-68 md:w-80",
-      containerClass: "top-[18%] left-[16%] right-[16%] bottom-[16%] rotate-[-3deg]",
+      width: "w-64 sm:w-80 md:w-[380px]",
+      containerClass: "top-[20%] left-[20%] right-[20%] bottom-[20%] rotate-[-3deg]",
       titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
     2: {
-      width: "w-52 sm:w-64 md:w-76",
-      containerClass: "top-[24%] left-[34%] right-[24%] bottom-[16%] rotate-[5deg]",
+      width: "w-60 sm:w-76 md:w-[350px]",
+      containerClass: "top-[25%] left-[34%] right-[24%] bottom-[18%] rotate-[5deg]",
       titleColor: "text-stone-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-extrabold leading-snug",
     },
     3: {
-      width: "w-56 sm:w-68 md:w-80",
-      containerClass: "top-[22%] left-[26%] right-[14%] bottom-[12%] rotate-[-7deg]",
+      width: "w-64 sm:w-80 md:w-[380px]",
+      containerClass: "top-[24%] left-[26%] right-[16%] bottom-[14%] rotate-[-7deg]",
       titleColor: "text-rose-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
       textColor: "text-slate-900 font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
     },
     4: {
-      width: "w-52 sm:w-64 md:w-72",
-      containerClass: "top-[20%] left-[28%] right-[16%] bottom-[12%] rotate-[-4deg]",
+      width: "w-60 sm:w-76 md:w-[350px]",
+      containerClass: "top-[22%] left-[28%] right-[16%] bottom-[14%] rotate-[-4deg]",
       titleColor: "text-amber-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-bold leading-relaxed",
     },
