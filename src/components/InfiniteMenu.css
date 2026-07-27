@@ -5,11 +5,6 @@
   overflow: hidden;
   position: relative;
   outline: none;
-  filter: drop-shadow(0px 12px 20px rgba(0, 0, 0, 0.18)) drop-shadow(0px 28px 50px rgba(0, 0, 0, 0.12));
-}
-
-.dark #infinite-grid-menu-canvas {
-  filter: drop-shadow(0px 18px 30px rgba(0, 0, 0, 0.6)) drop-shadow(0px 40px 70px rgba(0, 0, 0, 0.8));
 }
 
 #infinite-grid-menu-canvas:active {
@@ -27,6 +22,47 @@
 
 .dark .menu-gradient-overlay {
   background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(10, 10, 10, 0.85) 100%);
+}
+
+/* Authentic 3D cast shadow overlay matching user reference image (light from top-right, shadow cast to bottom-left) */
+.center-disc-shadow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(280px, 34vw, 420px);
+  height: clamp(90px, 11vw, 130px);
+  transform: translate(-72%, 65%) rotate(-12deg);
+  z-index: 4;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at 68% 28%,
+    rgba(10, 10, 15, 0.75) 0%,
+    rgba(15, 18, 25, 0.48) 30%,
+    rgba(20, 22, 30, 0.20) 55%,
+    rgba(0, 0, 0, 0) 75%
+  );
+  filter: blur(16px);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .center-disc-shadow {
+  background: radial-gradient(
+    ellipse at 68% 28%,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.70) 32%,
+    rgba(0, 0, 0, 0.30) 58%,
+    rgba(0, 0, 0, 0) 78%
+  );
+  filter: blur(18px);
+}
+
+.center-disc-shadow.active {
+  opacity: 1;
+}
+
+.center-disc-shadow.inactive {
+  opacity: 0;
 }
 
 /* Header overlay for active project title directly on top of center circle image */
