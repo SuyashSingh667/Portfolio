@@ -452,14 +452,14 @@ export default function PaperBinSkillset({
     const T = 14;
     const bwo = { isStatic:true, friction:.92, restitution:0.15, label:"bin" };
 
-    const lx1 = px.lx1;
+    const lx1 = px.lx1 + 3;
     const ly1 = rimY;
-    const lx2 = px.lx2;
+    const lx2 = px.lx2 + 4;
     const ly2 = botY;
 
-    const rx1 = px.rx1;
+    const rx1 = px.rx1 - 3;
     const ry1 = rimY;
-    const rx2 = px.rx2;
+    const rx2 = px.rx2 - 4;
     const ry2 = botY;
 
     const lLen = Math.hypot(lx2 - lx1, ly2 - ly1);
@@ -556,17 +556,17 @@ export default function PaperBinSkillset({
             // Check escape through upper rim
             if (y < rimY - R_ball) {
               body.plugin.isInsideBin = false;
-            } else if (isDragged) {
-              // Only force-override coordinates while dragging to prevent wall-phasing
+            } else {
+              // Enforce position clamping for ALL bodies inside the bin to guarantee zero mesh penetration
               const t = Math.max(0, Math.min(1, (y - rimY) / (botY - rimY)));
-              const leftInnerX  = lx1 + t * (lx2 - lx1) + R_ball;
-              const rightInnerX = rx1 + t * (rx2 - rx1) - R_ball;
+              const leftInnerX  = lx1 + t * (lx2 - lx1) + R_ball + 2;
+              const rightInnerX = rx1 + t * (rx2 - rx1) - R_ball - 2;
               
               // Curve the floor Y coordinate upward at the sides to match the bottom rim ellipse curve
               const dy = Math.max(10, px.botY - px.botYCenter);
               const dx = Math.abs(x - binCx);
               const ratio = Math.max(0, Math.min(1, dx / halfBot));
-              const floorY = botY - dy * (1 - Math.sqrt(1 - ratio * ratio)) - R_ball;
+              const floorY = botY - dy * (1 - Math.sqrt(1 - ratio * ratio)) - R_ball - 2;
 
               let newX = x;
               let newY = y;
@@ -588,8 +588,8 @@ export default function PaperBinSkillset({
               if (newX !== x || newY !== y) {
                 M.Body.setPosition(body, { x: newX, y: newY });
                 M.Body.setVelocity(body, {
-                  x: resetX ? 0 : body.velocity.x,
-                  y: resetY ? 0 : body.velocity.y
+                  x: resetX ? (x < leftInnerX ? Math.max(0, body.velocity.x) : Math.min(0, body.velocity.x)) : body.velocity.x,
+                  y: resetY ? Math.min(0, body.velocity.y) : body.velocity.y
                 });
               }
             }
