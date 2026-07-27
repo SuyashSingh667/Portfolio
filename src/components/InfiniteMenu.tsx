@@ -605,7 +605,7 @@ export interface MenuItem {
 
 class InfiniteGridMenu {
   TARGET_FRAME_DURATION = 1000 / 60;
-  SPHERE_RADIUS = 1.35;
+  SPHERE_RADIUS = 1.65;
 
   #time = 0;
   #deltaTime = 0;
@@ -675,7 +675,7 @@ class InfiniteGridMenu {
     this.onActiveItemChange = onActiveItemChange || (() => {});
     this.onMovementChange = onMovementChange || (() => {});
     this.scaleFactor = scale;
-    this.camera.position[2] = 2.8 * scale;
+    this.camera.position[2] = 3.6 * scale;
     this.#init(onInit);
   }
 
@@ -849,8 +849,8 @@ class InfiniteGridMenu {
     this.control.update(deltaTime, this.TARGET_FRAME_DURATION);
 
     let positions = this.instancePositions.map(p => vec3.transformQuat(vec3.create(), p, this.control.orientation));
-    const scale = 0.36;
-    const SCALE_INTENSITY = 0.55;
+    const scale = 0.20;
+    const SCALE_INTENSITY = 0.5;
     positions.forEach((p, ndx) => {
       const s = (Math.abs(p[2]) / this.SPHERE_RADIUS) * SCALE_INTENSITY + (1 - SCALE_INTENSITY);
       const finalScale = s * scale;
