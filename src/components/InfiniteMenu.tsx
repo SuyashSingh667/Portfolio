@@ -64,6 +64,14 @@ in float vAlpha;
 flat in int vInstanceId;
 
 void main() {
+    vec2 centerOffset = vUvs - vec2(0.5);
+    float dist = length(centerOffset);
+    
+    float circleAlpha = 1.0 - smoothstep(0.485, 0.50, dist);
+    if (circleAlpha <= 0.0) {
+        discard;
+    }
+
     int itemIndex = vInstanceId % uItemCount;
     int cellsPerRow = uAtlasSize;
     int cellX = itemIndex % cellsPerRow;
@@ -80,13 +88,20 @@ void main() {
     
     vec2 st = vec2(vUvs.x, 1.0 - vUvs.y);
     st = (st - 0.5) * scale + 0.5;
-    
     st = clamp(st, 0.0, 1.0);
-    
     st = st * cellSize + cellOffset;
     
-    outColor = texture(uTex, st);
-    outColor.a *= vAlpha;
+    vec4 texColor = texture(uTex, st);
+
+    // Inner depth shadow vignette
+    float innerShadow = smoothstep(0.25, 0.49, dist);
+    vec3 shadowedRgb = mix(texColor.rgb, texColor.rgb * 0.4, innerShadow * 0.55);
+    
+    // Outer drop shadow border ring
+    float shadowRing = smoothstep(0.45, 0.485, dist);
+    shadowedRgb = mix(shadowedRgb, vec3(0.0), shadowRing * 0.65);
+
+    outColor = vec4(shadowedRgb, texColor.a * circleAlpha * vAlpha);
 }
 `;
 
