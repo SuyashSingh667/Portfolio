@@ -52,7 +52,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
   {
     id: "note-4",
     title: "PRODUCT FOCUS",
-    content: "Focused on building products that solve practical, real-world problems.",
+    content: "Building purposeful products that connect people, solve meaningful challenges, and create lasting impact through technology.",
     paperType: 4,
     rotation: 0,
     positionClass: "top-[44%] right-[-8%] sm:right-[-14%] md:right-[-20%] lg:right-[-26%] hidden sm:block",
