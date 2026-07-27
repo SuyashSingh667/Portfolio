@@ -31,10 +31,10 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
       textColor: "text-zinc-950 font-['Caveat',cursive] text-lg sm:text-xl md:text-2xl font-extrabold leading-snug",
     },
     3: {
-      width: "w-72 sm:w-88 md:w-[420px]",
+      width: "w-52 sm:w-64 md:w-[290px]",
       containerClass: "top-[35%] left-[28%] right-[8%] bottom-[6%] rotate-[-3.5deg]",
-      titleColor: "text-rose-950 font-sans font-black text-xs sm:text-sm md:text-base tracking-wider mb-2",
-      textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-xl sm:text-2xl md:text-[25px] font-bold leading-[1.38]",
+      titleColor: "text-rose-950 font-sans font-black text-[10px] sm:text-xs tracking-wider mb-1",
+      textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-sm sm:text-base md:text-lg font-bold leading-snug",
     },
     4: {
       width: "w-72 sm:w-88 md:w-[420px]",
