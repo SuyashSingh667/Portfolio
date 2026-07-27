@@ -45,7 +45,7 @@ void main() {
 
     gl_Position = uProjectionMatrix * uViewMatrix * worldPosition;
 
-    vAlpha = smoothstep(0.65, 0.98, normalize(worldPosition.xyz).z) * 0.75 + 0.25;
+    vAlpha = smoothstep(0.92, 0.999, normalize(worldPosition.xyz).z) * 0.82 + 0.18;
     vUvs = aModelUvs;
     vInstanceId = gl_InstanceID;
 }
