@@ -849,6 +849,9 @@ export default function Home() {
         {/* Warm glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
 
+        {/* Top fade — softens the hard edge between the Skills heading and the grid */}
+        <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent pointer-events-none z-20" />
+
         <div className="w-full max-w-[1380px] mx-auto px-6 md:px-16 flex justify-center items-end relative z-10">
           {/* Centered 3D Paper Bin / Dustbin Skillset Canvas — shifted lower */}
           <motion.div
