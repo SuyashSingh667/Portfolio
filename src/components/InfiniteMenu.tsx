@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { mat4, quat, vec2, vec3 } from 'gl-matrix';
-import CircularText from './CircularText';
 import './InfiniteMenu.css';
 
 const discVertShaderSource = `#version 300 es
@@ -1066,11 +1065,7 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
 
       {activeItem && (
         <>
-          <CircularText 
-            text={activeItem.title} 
-            spinDuration={20} 
-            className={`center-circular-text ${isMoving ? 'inactive' : 'active'}`} 
-          />
+          <h2 className={`face-title ${isMoving ? 'inactive' : 'active'}`}>{activeItem.title}</h2>
 
           <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}>{activeItem.description}</p>
 
