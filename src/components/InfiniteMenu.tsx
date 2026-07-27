@@ -623,7 +623,7 @@ class InfiniteGridMenu {
   scaleFactor = 1.0;
   movementActive = false;
   onProjectSelect?: (index: number) => void;
-  isZoomed = false;
+  isZoomed = true;
   manualSnapping = false;
   itemIndicesArray!: Float32Array;
 
@@ -1017,7 +1017,7 @@ class InfiniteGridMenu {
   #onControlUpdate(deltaTime: number) {
     const timeScale = deltaTime / this.TARGET_FRAME_DURATION + 0.0001;
     let damping = 5 / timeScale;
-    let cameraTargetZ = (this.isZoomed ? 3.1 : 4.5) * this.scaleFactor;
+    let cameraTargetZ = 3.0 * this.scaleFactor;
 
     const isMoving = this.control.isPointerDown || Math.abs(this.smoothRotationVelocity) > 0.01;
 
