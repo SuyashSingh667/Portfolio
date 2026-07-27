@@ -26,7 +26,7 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
     },
     2: {
       width: "w-52 sm:w-64 md:w-76",
-      containerClass: "top-[22%] left-[30%] right-[18%] bottom-[14%]",
+      containerClass: "top-[24%] left-[34%] right-[24%] bottom-[16%] rotate-[-2deg]",
       titleColor: "text-stone-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
       textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-extrabold leading-snug",
     },
