@@ -67,25 +67,31 @@ void main() {
     vec2 centerOffset = vUvs - vec2(0.5);
     float dist = length(centerOffset);
 
-    // Physical image circle radius
-    float imgRadius = 0.38;
+    // Physical image circle radius inside 1.6x expanded quad
+    float imgRadius = 0.30;
 
-    // Directional shadow offset (shining light from above, casting shadow DOWN)
-    vec2 shadowOffset = vec2(0.005, -0.025);
-    vec2 shadowUV = (vUvs - shadowOffset) - vec2(0.5);
-    float shadowDist = length(shadowUV);
+    // Realistic Elliptical Cast Shadow (shifted down: y = -0.045)
+    vec2 shadowCenter = vec2(0.5, 0.455);
+    vec2 shadowDiff = vUvs - shadowCenter;
+    // Scale Y by 1.7 to form an authentic 3D elliptical cast shadow
+    vec2 ellipticalDiff = vec2(shadowDiff.x, shadowDiff.y * 1.7);
+    float shadowDist = length(ellipticalDiff);
 
     if (dist > imgRadius) {
-        // Authentically cast shadow ONLY beneath the disc (downward)
-        float contactShadow = (1.0 - smoothstep(imgRadius, imgRadius + 0.035, shadowDist)) * 0.40;
-        float ambientShadow = (1.0 - smoothstep(imgRadius + 0.015, imgRadius + 0.08, shadowDist)) * 0.22;
-        float totalShadow = max(contactShadow, ambientShadow);
+        // Contact shadow (tight near bottom edge of disc)
+        float contact = (1.0 - smoothstep(imgRadius - 0.02, imgRadius + 0.04, shadowDist)) * 0.42;
+        
+        // Soft ambient cast shadow (diffuse, extending downward)
+        float ambient = (1.0 - smoothstep(imgRadius + 0.01, imgRadius + 0.16, shadowDist)) * 0.20;
+        
+        float shadowIntensity = max(contact, ambient);
+        
+        // Mask so shadow only casts underneath the bottom half of the disc
+        float downMask = smoothstep(0.03, -0.12, centerOffset.y);
+        
+        float shadowAlpha = shadowIntensity * downMask * vAlpha;
 
-        // Directional weight: NO shadow above the disc (centerOffset.y > 0)
-        float directionWeight = smoothstep(0.04, -0.15, centerOffset.y);
-        float shadowAlpha = totalShadow * directionWeight * vAlpha;
-
-        if (shadowAlpha <= 0.002) {
+        if (shadowAlpha <= 0.001) {
             discard;
         }
 
@@ -122,7 +128,7 @@ void main() {
 
     // Subtle crisp border ring
     float borderLine = smoothstep(imgRadius - 0.005, imgRadius - 0.001, dist);
-    vec3 borderRgb = mix(texColor.rgb, vec3(0.1), borderLine * 0.3);
+    vec3 borderRgb = mix(texColor.rgb, vec3(0.12), borderLine * 0.35);
 
     outColor = vec4(borderRgb, texColor.a * edgeAlpha * vAlpha);
 }
@@ -784,7 +790,7 @@ class InfiniteGridMenu {
       uAtlasSize: gl.getUniformLocation(this.discProgram, 'uAtlasSize')
     };
 
-    this.discGeo = new DiscGeometry(56, 1.4);
+    this.discGeo = new DiscGeometry(56, 1.6);
     this.discBuffers = this.discGeo.data;
     this.discVAO = makeVertexArray(
       gl,
