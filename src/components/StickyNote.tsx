@@ -20,27 +20,27 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
   const layoutConfigs = {
     1: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[20%] left-[20%] right-[20%] bottom-[20%]",
+      containerClass: "top-[20%] left-[20%] right-[24%] bottom-[20%]",
       titleColor: "text-amber-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-bold leading-snug",
     },
     2: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[24%] left-[34%] right-[24%] bottom-[16%] rotate-[11deg]",
+      containerClass: "top-[24%] left-[34%] right-[26%] bottom-[16%] rotate-[11deg]",
       titleColor: "text-stone-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-extrabold leading-snug",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-xs sm:text-sm md:text-base font-extrabold leading-snug",
     },
     3: {
       width: "w-64 sm:w-80 md:w-[380px]",
-      containerClass: "top-[24%] left-[26%] right-[16%] bottom-[14%] rotate-[-3.8deg]",
+      containerClass: "top-[24%] left-[26%] right-[20%] bottom-[14%] rotate-[-3.8deg]",
       titleColor: "text-rose-950 font-sans font-black text-[10px] sm:text-xs tracking-wider",
-      textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-base sm:text-lg md:text-xl font-bold leading-snug",
+      textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-sm sm:text-base md:text-lg font-bold leading-snug",
     },
     4: {
       width: "w-60 sm:w-76 md:w-[350px]",
-      containerClass: "top-[22%] left-[28%] right-[16%] bottom-[14%]",
+      containerClass: "top-[20%] left-[26%] right-[24%] bottom-[12%]",
       titleColor: "text-amber-950 font-sans font-black text-[9px] sm:text-[10px] tracking-wider",
-      textColor: "text-zinc-950 font-['Caveat',cursive] text-sm sm:text-base md:text-lg font-bold leading-relaxed",
+      textColor: "text-zinc-950 font-['Caveat',cursive] text-xs sm:text-sm md:text-base font-bold leading-relaxed",
     },
   };
 
