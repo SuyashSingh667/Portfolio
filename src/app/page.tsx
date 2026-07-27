@@ -1088,13 +1088,7 @@ export default function Home() {
                 </svg>
                 <span className="text-[11px] font-sans font-medium tracking-widest uppercase opacity-70">Curious? Ask!</span>
               </div>
-              <div className="w-6 h-6 rounded-full flex items-center justify-center bg-zinc-800/5 dark:bg-white/5 border border-zinc-950/10 dark:border-white/5 text-zinc-500 dark:text-white/40 hover:text-zinc-800 dark:hover:text-white/80 hover:bg-zinc-800/10 dark:hover:bg-white/10 transition-all cursor-pointer">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="5" cy="12" r="1.6"/>
-                  <circle cx="12" cy="12" r="1.6"/>
-                  <circle cx="19" cy="12" r="1.6"/>
-                </svg>
-              </div>
+
             </div>
 
             {/* Dynamic Content Area */}
