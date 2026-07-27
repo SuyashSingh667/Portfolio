@@ -744,22 +744,10 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           01 — WORK
       ════════════════════════════════════════════════════════════════════════ */}
-      <Chapter num="01" eyebrow="Selected Work" title="Projects.">
-        {!hasClickedProject && (
-          <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/80 dark:bg-black/80 backdrop-blur-xl shadow-lg animate-pulse w-fit mt-4">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
-            </span>
-            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] font-semibold text-zinc-700 dark:text-zinc-200">
-              Click a project to explore
-            </span>
-          </div>
-        )}
-      </Chapter>
+      <section id="work" className="relative w-full bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500">
+        <Chapter num="01" eyebrow="Selected Work" title="Projects." />
 
-      <section id="work" className="relative h-screen w-full overflow-hidden bg-white dark:bg-[#0c0c0c] border-b border-black/5 dark:border-white/5 transition-colors duration-500 p-4 md:p-8">
-        <div className="h-full w-full rounded-[24px] md:rounded-[40px] overflow-hidden border border-black/5 dark:border-white/5 relative">
+        <div className="relative w-full h-[620px] md:h-[750px] overflow-hidden">
           <InfiniteMenu 
             items={menuItems} 
             scale={1.0} 
