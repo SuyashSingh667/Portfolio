@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { mat4, quat, vec2, vec3 } from 'gl-matrix';
+import FlickerText from './FlickerText';
 import './InfiniteMenu.css';
 
 const discVertShaderSource = `#version 300 es
@@ -1082,7 +1083,31 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
         <>
           <div className={`center-disc-shadow ${isMoving ? 'inactive' : 'active'}`} />
 
-          <h2 className={`face-title ${isMoving ? 'inactive' : 'active'}`}>{activeItem.title}</h2>
+          <FlickerText 
+            text={activeItem.title}
+            tag="h2"
+            className={`face-title ${isMoving ? 'inactive' : 'active'}`}
+            flicker={{
+              duration: 1.2,
+              ease: "easeInOut",
+              flickerCount: 6,
+              wordFlickerEnabled: false,
+              letterFlickerEnabled: true,
+              letterFlickerMode: "opacity",
+              letterFlickerOpacity: 25,
+              letterFlickerIntensity: 12
+            }}
+            flickerHover={{
+              duration: 1.0,
+              ease: "easeInOut",
+              flickerCount: 4,
+              wordFlickerEnabled: false,
+              letterFlickerEnabled: true,
+              letterFlickerMode: "opacity",
+              letterFlickerOpacity: 20,
+              letterFlickerIntensity: 15
+            }}
+          />
 
           <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}>{activeItem.description}</p>
 
