@@ -28,7 +28,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Completed internships at both IIT Kanpur and Bokaro Steel Plant back to back.",
     paperType: 1,
     rotation: -6,
-    positionClass: "top-[-4%] left-[-4%] sm:left-[-8%] md:left-[-14%] lg:left-[-18%]",
+    positionClass: "top-[-4%] left-[-6%] sm:left-[-12%] md:left-[-18%] lg:left-[-24%]",
     floatDelay: 0,
   },
   {
@@ -37,7 +37,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Built software across space-tech, enterprise systems, and industrial automation.",
     paperType: 2,
     rotation: 5,
-    positionClass: "top-[-2%] right-[-4%] sm:right-[-8%] md:right-[-14%] lg:right-[-18%]",
+    positionClass: "top-[-2%] right-[-6%] sm:right-[-12%] md:right-[-18%] lg:right-[-24%]",
     floatDelay: 0.15,
   },
   {
@@ -46,7 +46,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Led the CodeChef Bennett University Chapter as President.",
     paperType: 3,
     rotation: -5,
-    positionClass: "top-[44%] left-[-6%] sm:left-[-10%] md:left-[-16%] lg:left-[-20%] hidden sm:block",
+    positionClass: "top-[44%] left-[-8%] sm:left-[-14%] md:left-[-20%] lg:left-[-26%] hidden sm:block",
     floatDelay: 0.3,
   },
   {
@@ -55,7 +55,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "Focused on building products that solve practical, real-world problems.",
     paperType: 4,
     rotation: 7,
-    positionClass: "top-[44%] right-[-6%] sm:right-[-10%] md:right-[-16%] lg:right-[-20%] hidden sm:block",
+    positionClass: "top-[44%] right-[-8%] sm:right-[-14%] md:right-[-20%] lg:right-[-26%] hidden sm:block",
     floatDelay: 0.45,
   },
 ];
