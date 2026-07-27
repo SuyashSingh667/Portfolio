@@ -94,12 +94,20 @@ void main() {
     vec4 texColor = texture(uTex, st);
 
     // Inner depth shadow vignette
-    float innerShadow = smoothstep(0.25, 0.49, dist);
-    vec3 shadowedRgb = mix(texColor.rgb, texColor.rgb * 0.4, innerShadow * 0.55);
+    float innerShadow = smoothstep(0.22, 0.49, dist);
+    vec3 shadowedRgb = mix(texColor.rgb, texColor.rgb * 0.35, innerShadow * 0.5);
+
+    // Directional Sunlight Lighting (Sun from top-left)
+    vec2 sunDir = normalize(vec2(-0.6, 0.8));
+    float sunLighting = dot(normalize(centerOffset + vec2(0.0001)), sunDir);
     
-    // Outer drop shadow border ring
-    float shadowRing = smoothstep(0.45, 0.485, dist);
-    shadowedRgb = mix(shadowedRgb, vec3(0.0), shadowRing * 0.65);
+    // Top-Left Sunlight Rim Highlight
+    float sunHighlight = smoothstep(0.40, 0.485, dist) * max(0.0, sunLighting);
+    shadowedRgb = mix(shadowedRgb, vec3(1.0, 0.98, 0.92), sunHighlight * 0.4);
+
+    // Bottom-Right Sun Shadow Edge
+    float sunShadowEdge = smoothstep(0.40, 0.485, dist) * max(0.0, -sunLighting);
+    shadowedRgb = mix(shadowedRgb, vec3(0.01, 0.01, 0.03), sunShadowEdge * 0.6);
 
     outColor = vec4(shadowedRgb, texColor.a * circleAlpha * vAlpha);
 }
