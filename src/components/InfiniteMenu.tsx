@@ -712,7 +712,7 @@ class InfiniteGridMenu {
   }
 
   #init(onInit?: ((menu: InfiniteGridMenu) => void) | null) {
-    const gl = this.canvas.getContext('webgl2', { antialias: true, alpha: false });
+    const gl = this.canvas.getContext('webgl2', { antialias: true, alpha: true, powerPreference: 'high-performance' });
     if (!gl) {
       throw new Error('No WebGL 2 context!');
     }
