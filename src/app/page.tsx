@@ -24,8 +24,8 @@ import ImageTrail from "@/components/ImageTrail";
 const STICKY_NOTES: StickyNoteItem[] = [
   {
     id: "note-1",
-    title: "📌 MY PHILOSOPHY",
-    content: "Code is just a tool. Great software is built with curiosity, craftsmanship, and user focus.",
+    title: "💡 FUN FACT #1",
+    content: "I write my cleanest code past midnight with a playlist on repeat.",
     paperType: 1,
     rotation: -6,
     positionClass: "top-[-4%] left-[-4%] sm:left-[-8%] md:left-[-14%] lg:left-[-18%]",
@@ -33,8 +33,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-2",
-    title: "💡 WHAT I BUILD",
-    content: "From 3D interactive graphics to scalable systems — I turn complex ideas into smooth products.",
+    title: "☕ FUN FACT #2",
+    content: "Powered by coffee and an obsession with smooth 60fps micro-animations.",
     paperType: 2,
     rotation: 5,
     positionClass: "top-[-2%] right-[-4%] sm:right-[-8%] md:right-[-14%] lg:right-[-18%]",
@@ -42,8 +42,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-3",
-    title: "🚀 TECH STACK",
-    content: "React, Next.js, TypeScript, Three.js, WebGL, Node.js, Python, Docker & PostgreSQL.",
+    title: "👾 FUN FACT #3",
+    content: "I spent 4 hours tweaking a 3D paper ball bounce physics curve just for fun.",
     paperType: 3,
     rotation: -5,
     positionClass: "top-[44%] left-[-6%] sm:left-[-10%] md:left-[-16%] lg:left-[-20%] hidden sm:block",
@@ -51,8 +51,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-4",
-    title: "✨ ALWAYS LEARNING",
-    content: "No skill is ever wasted — every project is a chance to refine my craft and push limits.",
+    title: "🚀 FUN FACT #4",
+    content: "When I'm not coding, I'm exploring WebGL shaders & creative UI layout bounds.",
     paperType: 4,
     rotation: 7,
     positionClass: "top-[44%] right-[-6%] sm:right-[-10%] md:right-[-16%] lg:right-[-20%] hidden sm:block",
