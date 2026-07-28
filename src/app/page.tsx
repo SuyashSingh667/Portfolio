@@ -88,8 +88,9 @@ const projects: Project[] = [
     title: "Tribe",
     description: "Centralised campus clubs and events hub with custom calendar-based planning, event discovery, and light AI recommendations.",
     image: "/images/projects/tribe_poster.png?v=10",
-    link: "https://github.com/SuyashSingh667/Tribe",
+    link: "https://tribe-bennett.vercel.app/",
     github: "https://github.com/SuyashSingh667/Tribe",
+    live: "https://tribe-bennett.vercel.app/",
   },
   {
     title: "VoteSamvidhan",
