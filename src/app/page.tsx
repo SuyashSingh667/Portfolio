@@ -430,66 +430,30 @@ export default function Home() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Set scrollRestoration to manual so Next.js/browser doesn't reset scroll before layout completes
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
 
-    // Always reset scroll to hero section (top: 0) on page refresh / load
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+
     const resetToHero = () => {
-      sessionStorage.removeItem("suyash_current_section");
-      sessionStorage.removeItem("suyash_scroll_y");
-      if (window.location.hash) {
-        window.history.replaceState(null, "", window.location.pathname);
-      }
-      window.scrollTo({ top: 0, behavior: "instant" });
+      sessionStorage.clear();
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     };
 
     resetToHero();
-    const restoreTimer = setTimeout(resetToHero, 100);
-    const restoreTimer2 = setTimeout(resetToHero, 350);
-
-    // Track visible section as user scrolls and sync URL hash + sessionStorage
-    const observerCallback: IntersectionObserverCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
-          const id = entry.target.id;
-          if (id) {
-            sessionStorage.setItem("suyash_current_section", id);
-            sessionStorage.setItem("suyash_scroll_y", String(window.scrollY));
-            if (window.location.hash !== `#${id}`) {
-              window.history.replaceState(null, "", `#${id}`);
-            }
-          }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, {
-      threshold: [0.2, 0.5]
-    });
-
-    const sectionIds = ["hero", "work", "experiences", "skillset", "about", "contact"];
-
-    // Observe all sections once mounted
-    const timer = setTimeout(() => {
-      sectionIds.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) observer.observe(el);
-      });
-    }, 100);
-
-    const handleScroll = () => {
-      sessionStorage.setItem("suyash_scroll_y", String(window.scrollY));
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const t1 = setTimeout(resetToHero, 50);
+    const t2 = setTimeout(resetToHero, 200);
+    const t3 = setTimeout(resetToHero, 500);
+    const t4 = setTimeout(resetToHero, 1000);
 
     return () => {
-      clearTimeout(restoreTimer);
-      clearTimeout(restoreTimer2);
-      clearTimeout(timer);
-      observer.disconnect();
-      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
     };
   }, []);
 
