@@ -106,9 +106,9 @@ const experiences = [
   {
     num: "01",
     org: "IIT Kanpur",
-    role: "Software Dev & Research Intern",
-    desc: "Re-engineered the DoRA Giveaway Portal using React.js. Architected real-time analytical dashboards using JavaScript and the Fetch API, consuming REST endpoints to enable live CSR data tracking.",
-    tags: ["React.js", "REST APIs", "Dashboards", "IIT Kanpur"],
+    role: "Software Dev & Research Analytics Intern",
+    desc: "Re-engineered the DoRA Giveaway Portal to streamline donor registration. Architected real-time analytical dashboards consuming REST endpoints for live CSR data tracking, and conducted quantitative analysis for 7 infrastructure project proposals.",
+    tags: ["DoRA Portal Refactor", "CSR Analytics Dashboards", "RESTful API Integration", "Quantitative Research"],
   },
   {
     num: "02",
