@@ -526,30 +526,29 @@ export default function Home() {
         ScrollTrigger.refresh();
 
         const getXTranslation = () => {
-          const sWidth = container.scrollWidth;
-          const cWidth = window.innerWidth;
-          const pad = window.innerWidth >= 768 ? 64 : 24;
-          const dist = sWidth - cWidth + pad * 2;
+          if (!container || !container.parentElement) return 0;
+          const dist = container.scrollWidth - container.parentElement.clientWidth;
           return dist > 0 ? -dist : 0;
         };
 
         const anim = gsap.to(container, {
           x: getXTranslation,
-          ease: "none"
+          ease: "none",
         });
 
         ScrollTrigger.create({
           trigger: "#experiences",
           start: "top top",
           end: () => {
-            const sWidth = container.scrollWidth;
-            const cWidth = window.innerWidth;
-            const pad = window.innerWidth >= 768 ? 64 : 24;
-            const dist = sWidth - cWidth + pad * 2;
-            return `+=${dist > 0 ? dist : 0}`;
+            if (!container || !container.parentElement) return "+=1000";
+            const dist = container.scrollWidth - container.parentElement.clientWidth;
+            return `+=${Math.max(dist, 400)}`;
           },
           pin: true,
-          scrub: 1.2,
+          scrub: 0.5,
+          anticipatePin: 1,
+          fastScrollEnd: true,
+          preventOverlaps: true,
           animation: anim,
           invalidateOnRefresh: true,
         });
@@ -767,8 +766,8 @@ export default function Home() {
         <div className="w-full overflow-hidden relative z-10">
           <div
             ref={cardsContainerRef}
-            className="flex gap-0 px-6 md:px-16"
-            style={{ willChange: "transform" }}
+            className="flex gap-0 px-6 md:px-16 transform-gpu"
+            style={{ willChange: "transform", transform: "translate3d(0, 0, 0)" }}
           >
             {experiences.map((item, idx) => (
               <div
