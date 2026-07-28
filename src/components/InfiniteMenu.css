@@ -135,19 +135,41 @@
   transform: translateX(-50%) translateY(12px);
 }
 
-/* Action button (Sleek Portfolio Pill Button) */
-.action-button {
+/* Action button container & Sleek Portfolio Pill Buttons */
+.action-buttons-container {
   position: absolute;
   left: 50%;
   bottom: 6%;
   z-index: 30;
   transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: max-content;
+  max-width: 95%;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.action-buttons-container.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.action-buttons-container.inactive {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(16px) scale(0.95);
+}
+
+.action-button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   height: 48px;
-  padding: 0 26px;
+  padding: 0 24px;
   background: #09090b;
   color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.15);
@@ -157,14 +179,15 @@
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
+  text-decoration: none;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .action-button:hover {
   background: #18181b;
-  transform: translateX(-50%) scale(1.05);
+  transform: translateY(-2px) scale(1.04);
   box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.3);
 }
 
@@ -177,19 +200,8 @@
 
 .dark .action-button:hover {
   background: #f4f4f5;
-  transform: translateX(-50%) scale(1.05);
+  transform: translateY(-2px) scale(1.04);
   box-shadow: 0 15px 30px -5px rgba(255, 255, 255, 0.2);
-}
-
-.action-button.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.action-button.inactive {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-50%) translateY(16px) scale(0.95);
 }
 
 .action-button-icon {
@@ -213,10 +225,14 @@
     bottom: 16%;
     max-width: 92%;
   }
+  .action-buttons-container {
+    bottom: 4%;
+    gap: 8px;
+  }
   .action-button {
-    height: 42px;
-    padding: 0 20px;
+    height: 40px;
+    padding: 0 16px;
     font-size: 10px;
-    bottom: 5%;
+    letter-spacing: 0.12em;
   }
 }

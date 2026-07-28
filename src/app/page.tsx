@@ -71,6 +71,8 @@ interface Project {
   description: string;
   image: string;
   link: string;
+  github?: string;
+  live?: string;
 }
 
 const projects: Project[] = [
@@ -79,18 +81,22 @@ const projects: Project[] = [
     description: "Space situational awareness platform monitoring satellite risks in Earth's orbit, integrating live TLE data with interactive 3D visualisation.",
     image: "/images/projects/skysentinel_yellow.png",
     link: "https://new-sky-sentinal.vercel.app",
+    live: "https://new-sky-sentinal.vercel.app",
+    github: "https://github.com/SuyashSingh667/SkySentinel",
   },
   {
     title: "Tribe",
     description: "Centralised campus clubs and events hub with custom calendar-based planning, event discovery, and light AI recommendations.",
     image: "/images/projects/tribe_poster.png?v=10",
     link: "https://github.com/SuyashSingh667/Tribe",
+    github: "https://github.com/SuyashSingh667/Tribe",
   },
   {
     title: "VoteSamvidhan",
     description: "Blockchain-backed election integrity with constitutional literacy — secure digital voting, transparent verification, and real-time dashboards.",
     image: "/images/projects/votesamvidhan_poster.png?v=10",
     link: "https://github.com/SuyashSingh667/VoteSamvidhan",
+    github: "https://github.com/SuyashSingh667/VoteSamvidhan",
   },
 ];
 
@@ -614,7 +620,12 @@ export default function Home() {
   }, []);
 
   const menuItems = useMemo(() => projects.map((p) => ({
-    image: p.image, link: p.link, title: p.title, description: p.description,
+    image: p.image,
+    link: p.link,
+    github: p.github,
+    live: p.live,
+    title: p.title,
+    description: p.description,
   })), []);
 
   const CATEGORIES: Record<string, string[]> = {

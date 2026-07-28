@@ -615,6 +615,8 @@ class ArcballControl {
 export interface MenuItem {
   image: string;
   link: string;
+  github?: string;
+  live?: string;
   title: string;
   description: string;
 }
@@ -1066,14 +1068,9 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
     };
   }, [items, scale]);
 
-  const handleButtonClick = () => {
-    if (!activeItem?.link) return;
-    if (activeItem.link.startsWith('http')) {
-      window.open(activeItem.link, '_blank');
-    } else {
-      window.open(activeItem.link, '_blank');
-    }
-  };
+  const liveUrl = activeItem?.live || (activeItem?.link && activeItem.link !== activeItem?.github ? activeItem.link : undefined);
+  const githubUrl = activeItem?.github || (activeItem?.link && activeItem.link.includes('github.com') ? activeItem.link : undefined);
+  const fallbackUrl = activeItem?.link;
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -1111,10 +1108,43 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
 
           <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}>{activeItem.description}</p>
 
-          <button onClick={handleButtonClick} className={`action-button ${isMoving ? 'inactive' : 'active'}`}>
-            <span>View Project</span>
-            <span className="action-button-icon">↗</span>
-          </button>
+          <div className={`action-buttons-container ${isMoving ? 'inactive' : 'active'}`}>
+            {liveUrl && (
+              <a
+                href={liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="action-button"
+              >
+                <span>Live Demo</span>
+                <span className="action-button-icon">↗</span>
+              </a>
+            )}
+
+            {githubUrl && (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="action-button"
+              >
+                <span>GitHub</span>
+                <span className="action-button-icon">↗</span>
+              </a>
+            )}
+
+            {!liveUrl && !githubUrl && fallbackUrl && (
+              <a
+                href={fallbackUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="action-button"
+              >
+                <span>View Project</span>
+                <span className="action-button-icon">↗</span>
+              </a>
+            )}
+          </div>
         </>
       )}
     </div>
