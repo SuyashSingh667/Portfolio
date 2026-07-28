@@ -396,7 +396,7 @@ const RadarChart = ({
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function Home() {
-  const { resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
@@ -418,11 +418,15 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+    setTheme("light");
+    try {
+      localStorage.setItem("theme", "light");
+    } catch (e) {}
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [setTheme]);
 
 
 
