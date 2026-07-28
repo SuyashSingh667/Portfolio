@@ -53,7 +53,7 @@ About Suyash:
 - Education: B.Tech in Computer Science & Engineering (Cloud Computing specialization) at Bennett University (Class of 2024-2028), holding a stellar CGPA of 8.98/10. Key courses include Data Structures, Analysis of Algorithms, Design of Cloud Architectural Solutions, React, and DBMS.
 - Work Experience:
   * Software Development & Research Analytics Intern at IIT Kanpur (June 2026 - August 2026): Re-engineered DoRA giveaway portal with React.js, built real-time analytical dashboards using JS/Fetch API for live CSR tracking, co-authored 7 infrastructure-focused project proposals.
-  * Project Intern at SAIL Bokaro Steel Plant (July 2026 - August 2026): Analyzed plant production and process data under Chief General Manager (CGM) to identify trends, wrote performance documentation/technical reports.
+  * Project Intern at SAIL Bokaro Steel Plant (July 2026 - August 2026): Designed and deployed an NLP-based incident classification model under the CGM to categorize plant safety hazards in real time. Built an automated reporting and audit dashboard to replace manual incident-sorting workflows across departments.
   * President of CodeChef Bennett University Chapter (August 2025 - May 2026): Led and organized 10+ coding contests/events with 1000+ cumulative participants, managed core team operations and sponsorships.
 - Key Projects:
   * VoteSamvidhan: A secure blockchain-backed election integrity and digital voting platform with constitutional literacy.

@@ -114,8 +114,8 @@ const experiences = [
     num: "02",
     org: "SAIL Bokaro Steel Plant",
     role: "Project Intern",
-    desc: "Analyzed plant production and process data under the CGM to identify trends. Prepared structured technical reports and process documentation summarizing plant performance metrics for review.",
-    tags: ["Data Analysis", "Process Data", "Technical Writing"],
+    desc: "Designed and deployed an NLP-based incident classification model under the CGM to categorize plant safety hazards in real time. Built an automated reporting and audit dashboard to replace manual incident-sorting workflows across departments.",
+    tags: ["NLP & Classification", "Flask & Python", "Safety Audit Platform", "Process Digitization"],
   },
   {
     num: "03",
