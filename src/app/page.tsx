@@ -653,13 +653,7 @@ export default function Home() {
           />
         </div>
 
-        {/* Top info strip */}
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 0.3 }}
-          className="relative z-10 flex items-center justify-start px-6 md:px-16 pt-28 pb-0"
-        >
-          <span className="font-mono text-[9px] uppercase tracking-[0.38em] text-[#171717]/25 dark:text-white/25">Est. 2024</span>
-        </motion.div>
+
 
         {/* Massive name — centred */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center -mt-10 px-4">
