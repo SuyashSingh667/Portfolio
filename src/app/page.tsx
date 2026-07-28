@@ -866,16 +866,18 @@ export default function Home() {
               <StickyNote key={note.id} item={note} />
             ))}
 
-            <PaperBinSkillset 
-              theme={resolvedTheme} 
-              gravityY={gravityY}
-              gravityX={gravityX}
-              bounciness={bounciness}
-              explodeTrigger={explodeTrigger}
-              vacuumTrigger={vacuumTrigger}
-              resetKey={resetKey}
-              highlightedSkills={highlightedSkills}
-            />
+            <div className="absolute inset-0 -translate-y-16">
+              <PaperBinSkillset 
+                theme={resolvedTheme} 
+                gravityY={gravityY}
+                gravityX={gravityX}
+                bounciness={bounciness}
+                explodeTrigger={explodeTrigger}
+                vacuumTrigger={vacuumTrigger}
+                resetKey={resetKey}
+                highlightedSkills={highlightedSkills}
+              />
+            </div>
           </motion.div>
         </div>
       </section>
