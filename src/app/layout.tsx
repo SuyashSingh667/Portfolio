@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: "Suyash Singh Portfolio",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.png?v=3",
         width: 1200,
         height: 630,
         alt: "Suyash Singh Portfolio",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Suyash Singh — Creative Developer & Full Stack Engineer",
     description: "Interactive portfolio featuring WebGL 3D graphics, full-stack projects, and real-time interactive experiences.",
-    images: ["/og-image.png"],
+    images: ["/og-image.png?v=3"],
   },
 };
 
