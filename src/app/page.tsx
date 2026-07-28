@@ -859,7 +859,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[1000px] h-[72vh] md:h-[80vh] relative translate-y-4 md:translate-y-8"
+            className="w-full max-w-[1000px] h-[72vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
           >
             {/* Sticky Notes Snug & Random Around the Dustbin */}
             {STICKY_NOTES.map((note) => (
