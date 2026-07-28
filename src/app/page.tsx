@@ -435,25 +435,19 @@ export default function Home() {
       window.history.scrollRestoration = "manual";
     }
 
-    const sectionIds = ["hero", "work", "experiences", "skillset", "about", "contact"];
-
-    const restoreScroll = () => {
-      const currentHash = window.location.hash.replace("#", "") || sessionStorage.getItem("suyash_current_section");
-      if (currentHash) {
-        const targetEl = document.getElementById(currentHash);
-        if (targetEl) {
-          targetEl.scrollIntoView({ behavior: "instant", block: "start" });
-          return;
-        }
+    // Always reset scroll to hero section (top: 0) on page refresh / load
+    const resetToHero = () => {
+      sessionStorage.removeItem("suyash_current_section");
+      sessionStorage.removeItem("suyash_scroll_y");
+      if (window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
       }
-      const savedY = sessionStorage.getItem("suyash_scroll_y");
-      if (savedY) {
-        window.scrollTo({ top: parseInt(savedY, 10), behavior: "instant" });
-      }
+      window.scrollTo({ top: 0, behavior: "instant" });
     };
 
-    // Delay scroll restoration slightly to ensure GSAP ScrollTrigger & 3D models initialize layout
-    const restoreTimer = setTimeout(restoreScroll, 350);
+    resetToHero();
+    const restoreTimer = setTimeout(resetToHero, 100);
+    const restoreTimer2 = setTimeout(resetToHero, 350);
 
     // Track visible section as user scrolls and sync URL hash + sessionStorage
     const observerCallback: IntersectionObserverCallback = (entries) => {
@@ -475,6 +469,8 @@ export default function Home() {
       threshold: [0.2, 0.5]
     });
 
+    const sectionIds = ["hero", "work", "experiences", "skillset", "about", "contact"];
+
     // Observe all sections once mounted
     const timer = setTimeout(() => {
       sectionIds.forEach((id) => {
@@ -490,6 +486,7 @@ export default function Home() {
 
     return () => {
       clearTimeout(restoreTimer);
+      clearTimeout(restoreTimer2);
       clearTimeout(timer);
       observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
