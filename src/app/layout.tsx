@@ -14,8 +14,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Suyash - Creative Developer & Designer",
-  description: "Creative developer and designer portfolio",
+  metadataBase: new URL("https://myselfsuyash.vercel.app"),
+  title: "Suyash Singh — Creative Developer & Full Stack Engineer",
+  description: "Portfolio of Suyash Singh. B.Tech Computer Science student specializing in Cloud Computing, WebGL/Three.js interactive web applications, and Full-Stack Engineering.",
+  openGraph: {
+    title: "Suyash Singh — Creative Developer & Full Stack Engineer",
+    description: "Interactive portfolio featuring WebGL 3D graphics, full-stack projects, and real-time interactive experiences.",
+    url: "https://myselfsuyash.vercel.app",
+    siteName: "Suyash Singh Portfolio",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Suyash Singh Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Suyash Singh — Creative Developer & Full Stack Engineer",
+    description: "Interactive portfolio featuring WebGL 3D graphics, full-stack projects, and real-time interactive experiences.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({

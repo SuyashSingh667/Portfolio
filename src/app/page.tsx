@@ -418,15 +418,15 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    setTheme("light");
-    try {
-      localStorage.setItem("theme", "light");
-    } catch (e) {}
+    if (typeof window !== "undefined" && !sessionStorage.getItem("has_visited_portfolio")) {
+      sessionStorage.setItem("has_visited_portfolio", "true");
+      setTheme("light");
+    }
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [setTheme]);
+  }, []);
 
 
 
