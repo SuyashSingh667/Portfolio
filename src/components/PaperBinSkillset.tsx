@@ -504,8 +504,8 @@ export default function PaperBinSkillset({
     const bOpts = { friction:.80, frictionAir:.028, restitution: bounciness, density:.0018, inertia: Infinity };
     const bodies: Matter.Body[] = [];
     const cols = 3;
-    const hSp  = 92; // horizontal spacing (no overlap since 92 > 88)
-    const vSp  = 96; // vertical spacing (no overlap since 96 > 88)
+    const hSp  = 84; // horizontal spacing (tight for 82px balls)
+    const vSp  = 86; // vertical spacing (tight for 82px balls)
 
     for (let i=0;i<N;i++) {
       const col = i % cols;
