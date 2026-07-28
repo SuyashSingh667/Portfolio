@@ -74,15 +74,15 @@ export const MusicToggleButton = () => {
           ))}
         </div>
         <div className="flex items-center gap-1">
+          <span className="font-mono text-[8px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            OFF
+          </span>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/music-note.png"
             alt="Music"
             className="w-3.5 h-3.5 object-contain dark:invert opacity-80"
           />
-          <span className="font-mono text-[8px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            OFF
-          </span>
         </div>
       </div>
     );
@@ -116,15 +116,15 @@ export const MusicToggleButton = () => {
         ))}
       </div>
       <div className="flex items-center gap-1">
+        <span className="font-mono text-[8px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          {isPlaying ? "ON" : "OFF"}
+        </span>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/music-note.png"
           alt="Music"
           className="w-3.5 h-3.5 object-contain dark:invert opacity-80"
         />
-        <span className="font-mono text-[8px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-          {isPlaying ? "ON" : "OFF"}
-        </span>
       </div>
     </motion.div>
   );
