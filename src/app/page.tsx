@@ -840,7 +840,7 @@ export default function Home() {
               <StickyNote key={note.id} item={note} />
             ))}
 
-            <div className="absolute inset-0 -translate-y-20">
+            <div className="absolute inset-0">
               <PaperBinSkillset 
                 theme={resolvedTheme} 
                 gravityY={gravityY}

@@ -435,11 +435,12 @@ export default function PaperBinSkillset({
     } as any);
     engineRef.current = engine;
 
-    // Fixed 24px margin around the page
+    // Page margins and bottom floor
     const PAGE_MARGIN = 24;
+    const BOTTOM_MARGIN = 8; // floor extends all the way down to bottom of section
     const wo = { isStatic:true, friction:.7, restitution:.25 };
     M.Composite.add(engine.world, [
-      M.Bodies.rectangle(W/2, H - PAGE_MARGIN + 30, W * 2, 60, wo),        // Floor boundary
+      M.Bodies.rectangle(W/2, H - BOTTOM_MARGIN + 30, W * 2, 60, wo),        // Floor boundary
       M.Bodies.rectangle(PAGE_MARGIN - 30, H/2, 60, H * 4, wo),             // Left margin wall
       M.Bodies.rectangle(W - PAGE_MARGIN + 30, H/2, 60, H * 4, wo),        // Right margin wall
       M.Bodies.rectangle(W/2, PAGE_MARGIN - 30, W * 2, 60, wo),             // Top ceiling boundary
@@ -594,9 +595,9 @@ export default function PaperBinSkillset({
               }
             }
           } else {
-            // Outside the bin: cannot penetrate inwards through walls and restricted by fixed page margin
+            // Outside the bin: cannot penetrate inwards through walls and restricted by page margin / bottom floor
             let clampedX = Math.max(PAGE_MARGIN + R_ball, Math.min(W - PAGE_MARGIN - R_ball, x));
-            let clampedY = Math.max(PAGE_MARGIN + R_ball, Math.min(H - PAGE_MARGIN - R_ball, y));
+            let clampedY = Math.max(PAGE_MARGIN + R_ball, Math.min(H - BOTTOM_MARGIN - R_ball, y));
 
             if (clampedX !== x || clampedY !== y) {
               M.Body.setPosition(body, { x: clampedX, y: clampedY });
