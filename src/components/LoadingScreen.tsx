@@ -289,18 +289,11 @@ export default function LoadingScreen({
           </svg>
         </div>
 
-        {/* Progress Bar & Tagline */}
-        <div className="mt-8 flex flex-col items-center gap-3">
-          <div className="text-xs font-mono tracking-widest text-slate-400 uppercase">
-            Loading Experience
+        {/* Clean Numerical Counter */}
+        <div className="mt-8 flex flex-col items-center gap-1">
+          <div className="text-4xl font-mono font-light text-zinc-200 tracking-wider">
+            {progress.toString().padStart(2, "0")}%
           </div>
-          <div className="w-48 h-1 bg-slate-800 rounded-full overflow-hidden relative">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-150 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="text-xs font-mono text-slate-500">{progress}%</div>
         </div>
       </div>
     </div>
