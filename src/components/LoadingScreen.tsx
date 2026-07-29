@@ -274,7 +274,7 @@ export default function LoadingScreen({
     // Hold on 100% before starting tear transition
     setTimeout(() => {
       setIsTearing(true);
-    }, 500);
+    }, 1000);
   };
 
   if (!isVisible) return null;
@@ -294,7 +294,7 @@ export default function LoadingScreen({
                 to={100}
                 separator=""
                 direction="up"
-                duration={1.5}
+                duration={3.5}
                 startWhen={true}
                 onEnd={handleCountEnd}
               />
@@ -322,7 +322,7 @@ export default function LoadingScreen({
               initial={{ x: "0%" }}
               animate={{ x: "-105%", rotate: -2 }}
               transition={{
-                duration: 1.0,
+                duration: 1.5,
                 ease: [0.22, 1, 0.36, 1],
               }}
               onAnimationComplete={() => {
@@ -330,11 +330,11 @@ export default function LoadingScreen({
                 setIsVisible(false);
                 if (onFinish) onFinish();
               }}
-              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"
+              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform border-r border-black/5"
             >
               {/* Jagged Torn Edge SVG on Right Border */}
               <svg
-                className="absolute top-0 bottom-0 left-[99.5%] h-full w-8 pointer-events-none drop-shadow-[8px_0_15px_rgba(0,0,0,0.12)]"
+                className="absolute top-0 bottom-0 left-[99.5%] h-full w-12 pointer-events-none drop-shadow-[15px_0_30px_rgba(0,0,0,0.3)]"
                 viewBox="0 0 30 1000"
                 preserveAspectRatio="none"
               >
@@ -348,14 +348,14 @@ export default function LoadingScreen({
               initial={{ x: "0%" }}
               animate={{ x: "105%", rotate: 2 }}
               transition={{
-                duration: 1.0,
+                duration: 1.5,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"
+              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform border-l border-black/5"
             >
               {/* Jagged Torn Edge SVG on Left Border */}
               <svg
-                className="absolute top-0 bottom-0 right-[99.5%] h-full w-8 pointer-events-none transform -scale-x-100 drop-shadow-[-8px_0_15px_rgba(0,0,0,0.12)]"
+                className="absolute top-0 bottom-0 right-[99.5%] h-full w-12 pointer-events-none transform -scale-x-100 drop-shadow-[-15px_0_30px_rgba(0,0,0,0.3)]"
                 viewBox="0 0 30 1000"
                 preserveAspectRatio="none"
               >
