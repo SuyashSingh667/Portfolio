@@ -52,20 +52,7 @@ export default function CountUp({
     return 0;
   };
 
-  const maxDecimals = Math.max(getDecimalPlaces(from), getDecimalPlaces(to));
-
-  const digitMap: Record<string, string> = {
-    "1": "⇂",
-    "2": "ᘔ",
-    "3": "Ɛ",
-    "4": "߈",
-    "5": "ဌ",
-    "6": "9",
-    "7": "ㄥ",
-    "8": "8",
-    "9": "6",
-    "0": "0"
-  };
+  const maxDecimals = Math.max(getDecimalPlaces(from || 0), getDecimalPlaces(to));
 
   const formatValue = useCallback(
     (latest: number) => {
@@ -80,8 +67,7 @@ export default function CountUp({
       };
 
       const formattedNumber = Intl.NumberFormat("en-US", options).format(rounded);
-      let mapped = separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
-      return mapped.split('').map(char => digitMap[char] || char).join('');
+      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
     },
     [maxDecimals, separator]
   );
