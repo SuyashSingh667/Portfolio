@@ -94,8 +94,7 @@ export default function CountUp({
         ease: "linear", // Smooth linear curve so it doesn't slow down at 90%
         onUpdate(latest) {
           if (ref.current) {
-            // Explicitly round to increments of 25 to create the requested "skip 25%" effect
-            ref.current.textContent = formatValue(Math.round(latest / 25) * 25);
+            ref.current.textContent = formatValue(Math.round(latest));
           }
         },
         onComplete() {
