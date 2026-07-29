@@ -771,13 +771,13 @@ export default function Home() {
         <div className="w-full overflow-hidden relative z-10">
           <div
             ref={cardsContainerRef}
-            className="flex gap-0 px-6 md:px-16 transform-gpu"
+            className="flex gap-0 px-6 md:px-16 transform-gpu items-center"
             style={{ willChange: "transform", transform: "translate3d(0, 0, 0)" }}
           >
             {experiences.map((item, idx) => (
               <div
                 key={idx}
-                className="experience-card w-[88vw] sm:w-[55vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 last:border-r-0 pr-12 md:pr-16 mr-12 md:mr-16 last:pr-0 last:mr-0 min-h-[50vh]"
+                className="experience-card w-[88vw] sm:w-[55vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-12 md:pr-16 mr-12 md:mr-16 min-h-[50vh]"
               >
                 {/* Top */}
                 <div>
@@ -805,6 +805,13 @@ export default function Home() {
                 </div>
               </div>
             ))}
+
+            {/* Generous White Space Buffer after Bennett University */}
+            <div className="w-[50vw] md:w-[65vw] shrink-0 pointer-events-none flex flex-col justify-center items-start pl-8">
+              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-400 dark:text-zinc-600">
+                End of Journey — Scroll down for Skills
+              </span>
+            </div>
           </div>
         </div>
       </section>
