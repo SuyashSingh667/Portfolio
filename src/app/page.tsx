@@ -807,7 +807,7 @@ export default function Home() {
             ))}
 
             {/* Clean Blank White Space Buffer after Bennett University */}
-            <div className="w-[18vw] md:w-[22vw] shrink-0 pointer-events-none" />
+            <div className="w-[70vw] md:w-[80vw] shrink-0 pointer-events-none" />
           </div>
         </div>
       </section>
