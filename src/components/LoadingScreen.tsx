@@ -283,6 +283,8 @@ export default function LoadingScreen({
         // Clear beat pause at 100% before starting tear split
         setTimeout(() => {
           setIsTearing(true);
+          // Immediately unlock body scroll so page is scrollable as tear opens
+          document.body.style.overflow = "";
         }, 500);
       }
     };
@@ -298,12 +300,7 @@ export default function LoadingScreen({
   if (!isVisible) return null;
 
   return (
-    <AnimatePresence
-      onExitComplete={() => {
-        document.body.style.overflow = "";
-        if (onFinish) onFinish();
-      }}
-    >
+    <AnimatePresence>
       <div className="fixed inset-0 z-[99999] pointer-events-none overflow-hidden select-none">
         {/* SOLID SEAMLESS BACKGROUND DURING LOADING (0% Crack / 0% Seam) */}
         {!isTearing && (
@@ -335,7 +332,9 @@ export default function LoadingScreen({
                 ease: [0.16, 1, 0.3, 1],
               }}
               onAnimationComplete={() => {
+                document.body.style.overflow = "";
                 setIsVisible(false);
+                if (onFinish) onFinish();
               }}
               className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-auto transform-gpu"
             >
