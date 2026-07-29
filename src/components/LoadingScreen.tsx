@@ -254,7 +254,7 @@ function LoaderContent({ progress }: { progress: number }) {
 
 export default function LoadingScreen({
   onFinish,
-  minDurationMs = 2200,
+  minDurationMs = 3800,
 }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
   const [isTearing, setIsTearing] = useState(false);
@@ -271,20 +271,19 @@ export default function LoadingScreen({
       const elapsed = now - startTime;
       const progressRatio = Math.min(1, elapsed / minDurationMs);
 
-      // Smooth cubic ease out
-      const easedProgress = Math.floor(
-        (1 - Math.pow(1 - progressRatio, 3)) * 100
-      );
-      setProgress(easedProgress);
+      // Smooth continuous ease-out progress calculation
+      const easedRatio = 1 - Math.pow(1 - progressRatio, 2.2);
+      const currentVal = Math.min(100, Math.round(easedRatio * 100));
+      setProgress(currentVal);
 
       if (progressRatio < 1) {
         animationFrameId = requestAnimationFrame(updateProgress);
       } else {
         setProgress(100);
-        // Beat at 100% before starting tear split
+        // Clear beat pause at 100% before starting tear split
         setTimeout(() => {
           setIsTearing(true);
-        }, 400);
+        }, 500);
       }
     };
 
@@ -320,7 +319,7 @@ export default function LoadingScreen({
             <motion.div
               initial={{ opacity: 1, scale: 1 }}
               animate={{ opacity: 0, scale: 0.94 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
               className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
             >
               <LoaderContent progress={progress} />
@@ -330,10 +329,10 @@ export default function LoadingScreen({
             <motion.div
               key="curtain-left"
               initial={{ x: "0%" }}
-              animate={{ x: "-105%", rotate: -4 }}
+              animate={{ x: "-105%", rotate: -3 }}
               transition={{
-                duration: 2.5,
-                ease: [0.25, 1, 0.35, 1],
+                duration: 2.8,
+                ease: [0.16, 1, 0.3, 1],
               }}
               onAnimationComplete={() => {
                 setIsVisible(false);
@@ -354,10 +353,10 @@ export default function LoadingScreen({
             <motion.div
               key="curtain-right"
               initial={{ x: "0%" }}
-              animate={{ x: "105%", rotate: 4 }}
+              animate={{ x: "105%", rotate: 3 }}
               transition={{
-                duration: 2.5,
-                ease: [0.25, 1, 0.35, 1],
+                duration: 2.8,
+                ease: [0.16, 1, 0.3, 1],
               }}
               className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-auto transform-gpu"
             >
