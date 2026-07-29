@@ -294,7 +294,7 @@ export default function LoadingScreen({
                 to={100}
                 separator=""
                 direction="up"
-                duration={4.5}
+                duration={1.5}
                 startWhen={true}
                 onEnd={handleCountEnd}
               />

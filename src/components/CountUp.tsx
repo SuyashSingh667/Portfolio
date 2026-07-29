@@ -43,6 +43,19 @@ export default function CountUp({
 
   const maxDecimals = Math.max(getDecimalPlaces(from), getDecimalPlaces(to));
 
+  const digitMap: Record<string, string> = {
+    "1": "⇂",
+    "2": "ᘔ",
+    "3": "Ɛ",
+    "4": "߈",
+    "5": "ဌ",
+    "6": "9",
+    "7": "ㄥ",
+    "8": "8",
+    "9": "6",
+    "0": "0"
+  };
+
   const formatValue = useCallback(
     (latest: number) => {
       const hasDecimals = maxDecimals > 0;
@@ -53,7 +66,8 @@ export default function CountUp({
       };
 
       const formattedNumber = Intl.NumberFormat("en-US", options).format(latest);
-      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
+      let mapped = separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
+      return mapped.split('').map(char => digitMap[char] || char).join('');
     },
     [maxDecimals, separator]
   );
@@ -80,7 +94,8 @@ export default function CountUp({
         ease: "linear", // Smooth linear curve so it doesn't slow down at 90%
         onUpdate(latest) {
           if (ref.current) {
-            ref.current.textContent = formatValue(Math.round(latest));
+            // Explicitly round to increments of 3 to create a skipping effect
+            ref.current.textContent = formatValue(Math.round(latest / 3) * 3);
           }
         },
         onComplete() {
