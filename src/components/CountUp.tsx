@@ -115,5 +115,5 @@ export default function CountUp({
     };
   }, [startWhen, direction, from, to, duration, delay, formatValue, onStart, onEnd]);
 
-  return <span className={className} ref={ref}>{direction === "down" ? to : from}</span>;
+  return <span className={className} ref={ref}>{formatValue(direction === "down" ? to : from)}</span>;
 }
