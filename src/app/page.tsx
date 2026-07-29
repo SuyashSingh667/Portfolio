@@ -750,7 +750,7 @@ export default function Home() {
 
       <section
         id="experiences"
-        className="relative z-20 h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex items-center"
+        className="relative z-20 min-h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex items-center"
       >
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
@@ -816,11 +816,12 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
-      <Chapter num="03" eyebrow="Skills" title="Skills." />
+      <div className="relative z-30 -mt-[15vh]">
+        <Chapter num="03" eyebrow="Skills" title="Skills." />
 
-      <section
-        id="skillset"
-        className="relative bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-12 md:pt-20 pb-4 md:pb-8"
+        <section
+          id="skillset"
+          className="relative bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-4 md:pt-8 pb-4 md:pb-8"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)`,
           backgroundSize: "40px 40px",
@@ -864,6 +865,7 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      </div>
 
       {/* ════════════════════════════════════════════════════════════════════════
           04 — ABOUT (full-screen 3D model)
