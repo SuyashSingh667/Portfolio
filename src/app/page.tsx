@@ -20,6 +20,9 @@ import InteractiveAvatar3D from "@/components/InteractiveAvatar3D";
 import { CinematicFooter } from "@/components/CinematicFooter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import ImageTrail from "@/components/ImageTrail";
+import LoadingScreen from "@/components/LoadingScreen";
+
+
 
 const STICKY_NOTES: StickyNoteItem[] = [
   {
@@ -605,6 +608,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen w-full bg-[#fafafa] text-[#171717] transition-colors duration-500 dark:bg-[#0a0a0a] dark:text-[#ededed] overflow-x-hidden">
+      <LoadingScreen />
+
 
       {/* Scroll progress */}
       <motion.div
