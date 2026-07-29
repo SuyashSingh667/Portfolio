@@ -808,7 +808,7 @@ export default function Home() {
             ))}
 
             {/* Clean Blank White Space Buffer after Bennett University */}
-            <div className="w-[70vw] md:w-[80vw] shrink-0 pointer-events-none" />
+            <div style={{ minWidth: "50vw", height: "1px" }} className="shrink-0 pointer-events-none opacity-0" />
           </div>
         </div>
       </section>
