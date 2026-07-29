@@ -813,6 +813,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Vertical Dead Space between Experiences and Skills */}
+      <div className="h-[25vh] md:h-[35vh] w-full bg-white dark:bg-[#0a0a0a]" />
+
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
