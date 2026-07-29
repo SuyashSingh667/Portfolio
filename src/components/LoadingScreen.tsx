@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "./CountUp";
-import InkBleed from "./InkBleed";
 import "./LoadingScreen.css";
 
 interface LoadingScreenProps {
@@ -250,7 +249,6 @@ function CreatureLoader() {
 export default function LoadingScreen({
   onFinish,
 }: LoadingScreenProps) {
-  const [progressText, setProgressText] = useState("0");
   const [isTearing, setIsTearing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -288,35 +286,19 @@ export default function LoadingScreen({
           <div className="absolute inset-0 bg-[#fafafa] z-10 flex flex-col items-center justify-center pointer-events-auto">
             <CreatureLoader />
 
-            {/* Reliable CountUp Engine */}
-            <CountUp
-              from={0}
-              to={100}
-              separator=""
-              direction="up"
-              duration={2.2}
-              delay={0.1}
-              startWhen={true}
-              onEnd={handleCountEnd}
-              onUpdate={(val) => setProgressText(val)}
-            />
-
-            {/* Large Crystal Clear InkBleed Number Counter Fixed to Bottom-Right */}
-            <div className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-center justify-end pointer-events-none">
-              <InkBleed
-                text={`${progressText}%`}
-                intensity={40}
-                alwaysBleed={true}
-                color="#171717"
-                font={{
-                  fontFamily: "Inter, sans-serif",
-                  variant: "Bold",
-                  fontSize: "110px",
-                  fontWeight: 700,
-                  lineHeight: "1em",
-                  letterSpacing: "-0.02em",
-                }}
+            {/* React Bits CountUp Display at Bottom Right with % Sign */}
+            <div className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-baseline font-bold text-7xl md:text-[120px] text-[#171717] tracking-tight font-sans select-none pointer-events-none leading-none">
+              <CountUp
+                from={0}
+                to={100}
+                separator=""
+                direction="up"
+                duration={2.2}
+                delay={0.1}
+                startWhen={true}
+                onEnd={handleCountEnd}
               />
+              <span className="text-5xl md:text-[90px] ml-1">%</span>
             </div>
           </div>
         )}
@@ -324,11 +306,11 @@ export default function LoadingScreen({
         {/* TEAR SPLIT PANELS (Fast, snappy paper tear transition) */}
         {isTearing && (
           <>
-            {/* CENTRALLY POSITIONED LOADER CONTENT (Fades out quickly) */}
+            {/* CENTRALLY POSITIONED LOADER CONTENT */}
             <motion.div
               initial={{ opacity: 1 }}
               animate={{ opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
             >
               <CreatureLoader />

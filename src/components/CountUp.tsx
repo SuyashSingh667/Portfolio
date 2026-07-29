@@ -1,6 +1,6 @@
 "use client";
 
-import { useMotionValue, useSpring } from "framer-motion";
+import { useInView, useMotionValue, useSpring } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
 interface CountUpProps {
@@ -14,7 +14,6 @@ interface CountUpProps {
   separator?: string;
   onStart?: () => void;
   onEnd?: () => void;
-  onUpdate?: (latestText: string) => void;
 }
 
 export default function CountUp({
@@ -28,7 +27,6 @@ export default function CountUp({
   separator = "",
   onStart,
   onEnd,
-  onUpdate,
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === "down" ? to : from);
@@ -41,14 +39,19 @@ export default function CountUp({
     stiffness,
   });
 
+  const isInView = useInView(ref, { once: true, margin: "0px" });
+
   const getDecimalPlaces = (num: number) => {
     const str = num.toString();
+
     if (str.includes(".")) {
       const decimals = str.split(".")[1];
+
       if (parseInt(decimals) !== 0) {
         return decimals.length;
       }
     }
+
     return 0;
   };
 
@@ -57,6 +60,7 @@ export default function CountUp({
   const formatValue = useCallback(
     (latest: number) => {
       const hasDecimals = maxDecimals > 0;
+
       const options = {
         useGrouping: !!separator,
         minimumFractionDigits: hasDecimals ? maxDecimals : 0,
@@ -64,20 +68,20 @@ export default function CountUp({
       };
 
       const formattedNumber = Intl.NumberFormat("en-US", options).format(latest);
+
       return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
     },
     [maxDecimals, separator]
   );
 
   useEffect(() => {
-    const initialText = formatValue(direction === "down" ? to : from);
     if (ref.current) {
-      ref.current.textContent = initialText;
+      ref.current.textContent = formatValue(direction === "down" ? to : from);
     }
-    if (onUpdate) onUpdate(initialText);
-  }, [from, to, direction, formatValue, onUpdate]);
+  }, [from, to, direction, formatValue]);
 
   useEffect(() => {
+    // If startWhen is true, start counting up (whether in view or triggered directly)
     if (startWhen) {
       if (typeof onStart === "function") onStart();
 
@@ -97,21 +101,17 @@ export default function CountUp({
         clearTimeout(durationTimeoutId);
       };
     }
-  }, [startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
+  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
 
   useEffect(() => {
     const unsubscribe = springValue.on("change", (latest: number) => {
-      const text = formatValue(latest);
       if (ref.current) {
-        ref.current.textContent = text;
-      }
-      if (onUpdate) {
-        onUpdate(text);
+        ref.current.textContent = formatValue(latest);
       }
     });
 
     return () => unsubscribe();
-  }, [springValue, formatValue, onUpdate]);
+  }, [springValue, formatValue]);
 
   return <span className={className} ref={ref} />;
 }
