@@ -9,48 +9,8 @@ interface LoadingScreenProps {
   minDurationMs?: number;
 }
 
-// High-definition organic paper tear clip paths
-const TEAR_JAGGED_PATH_LEFT = `polygon(
-  0% 0%, 
-  51.5% 0%, 
-  48.5% 7%, 
-  52% 14%, 
-  47.5% 21%, 
-  53% 28%, 
-  46.5% 35%, 
-  52.5% 42%, 
-  47.5% 49%, 
-  53% 56%, 
-  46.5% 63%, 
-  52% 70%, 
-  47.5% 77%, 
-  52.5% 84%, 
-  48.5% 91%, 
-  51% 97%, 
-  50% 100%, 
-  0% 100%
-)`;
-
-const TEAR_JAGGED_PATH_RIGHT = `polygon(
-  51.5% 0%, 
-  100% 0%, 
-  100% 100%, 
-  50% 100%, 
-  51% 97%, 
-  48.5% 91%, 
-  52.5% 84%, 
-  47.5% 77%, 
-  52% 70%, 
-  46.5% 63%, 
-  53% 56%, 
-  47.5% 49%, 
-  52.5% 42%, 
-  46.5% 35%, 
-  53% 28%, 
-  47.5% 21%, 
-  52% 14%, 
-  48.5% 7%
-)`;
+// Jagged SVG path for organic paper tear
+const TORN_PATH = "M 0,0 L 0,1000 L 14,980 L 4,940 L 24,900 L 8,860 L 26,820 L 6,780 L 22,740 L 4,700 L 25,660 L 8,620 L 27,580 L 6,540 L 23,500 L 5,460 L 26,420 L 8,380 L 24,340 L 6,300 L 25,260 L 7,220 L 24,180 L 5,140 L 22,100 L 8,60 L 20,20 L 12,0 Z";
 
 function LoaderContent({ progress }: { progress: number }) {
   return (
@@ -297,6 +257,7 @@ export default function LoadingScreen({
   minDurationMs = 2200,
 }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
+  const [isTearing, setIsTearing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -320,11 +281,10 @@ export default function LoadingScreen({
         animationFrameId = requestAnimationFrame(updateProgress);
       } else {
         setProgress(100);
-        // Clear 350ms pause at 100% so user sees full counter before tear split
+        // Brief beat at 100% before triggering tear split
         setTimeout(() => {
-          setIsVisible(false);
-          document.body.style.overflow = "";
-        }, 350);
+          setIsTearing(true);
+        }, 300);
       }
     };
 
@@ -336,61 +296,70 @@ export default function LoadingScreen({
     };
   }, [minDurationMs]);
 
+  if (!isVisible) return null;
+
   return (
     <AnimatePresence
       onExitComplete={() => {
+        document.body.style.overflow = "";
         if (onFinish) onFinish();
       }}
     >
-      {isVisible && (
-        <div className="fixed inset-0 z-[99999] pointer-events-none overflow-hidden select-none">
-          {/* LEFT HALF OF TEAR */}
-          <motion.div
-            key="tear-left"
-            initial={{ x: "0%", rotate: 0, scale: 1 }}
-            exit={{
-              x: "-108%",
-              rotate: -5,
-              scale: 0.98,
-            }}
-            transition={{
-              duration: 1.6,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            style={{
-              clipPath: TEAR_JAGGED_PATH_LEFT,
-              WebkitClipPath: TEAR_JAGGED_PATH_LEFT,
-              willChange: "transform",
-            }}
-            className="absolute inset-0 bg-[#fafafa] flex items-center justify-center pointer-events-auto transform-gpu filter drop-shadow-[12px_0_25px_rgba(0,0,0,0.18)]"
-          >
-            <LoaderContent progress={progress} />
-          </motion.div>
+      {/* CENTRALLY POSITIONED LOADER CONTENT (Fades out when tearing starts) */}
+      <div className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none select-none">
+        <motion.div
+          animate={{ opacity: isTearing ? 0 : 1, scale: isTearing ? 0.95 : 1 }}
+          transition={{ duration: 0.35 }}
+          className="z-20"
+        >
+          <LoaderContent progress={progress} />
+        </motion.div>
 
-          {/* RIGHT HALF OF TEAR */}
-          <motion.div
-            key="tear-right"
-            initial={{ x: "0%", rotate: 0, scale: 1 }}
-            exit={{
-              x: "108%",
-              rotate: 5,
-              scale: 0.98,
-            }}
-            transition={{
-              duration: 1.6,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            style={{
-              clipPath: TEAR_JAGGED_PATH_RIGHT,
-              WebkitClipPath: TEAR_JAGGED_PATH_RIGHT,
-              willChange: "transform",
-            }}
-            className="absolute inset-0 bg-[#fafafa] flex items-center justify-center pointer-events-auto transform-gpu filter drop-shadow-[-12px_0_25px_rgba(0,0,0,0.18)]"
+        {/* LEFT TEAR CURTAIN */}
+        <motion.div
+          key="curtain-left"
+          initial={{ x: "0%" }}
+          animate={{ x: isTearing ? "-105%" : "0%", rotate: isTearing ? -4 : 0 }}
+          transition={{
+            duration: 1.4,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          onAnimationComplete={() => {
+            if (isTearing) setIsVisible(false);
+          }}
+          className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-10 shadow-2xl overflow-visible pointer-events-auto transform-gpu"
+        >
+          {/* Jagged Torn Edge SVG on Right Border */}
+          <svg
+            className="absolute top-0 bottom-0 left-[99.5%] h-full w-8 pointer-events-none drop-shadow-[6px_0_12px_rgba(0,0,0,0.12)]"
+            viewBox="0 0 30 1000"
+            preserveAspectRatio="none"
           >
-            <LoaderContent progress={progress} />
-          </motion.div>
-        </div>
-      )}
+            <path d={TORN_PATH} fill="#fafafa" />
+          </svg>
+        </motion.div>
+
+        {/* RIGHT TEAR CURTAIN */}
+        <motion.div
+          key="curtain-right"
+          initial={{ x: "0%" }}
+          animate={{ x: isTearing ? "105%" : "0%", rotate: isTearing ? 4 : 0 }}
+          transition={{
+            duration: 1.4,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-10 shadow-2xl overflow-visible pointer-events-auto transform-gpu"
+        >
+          {/* Jagged Torn Edge SVG on Left Border */}
+          <svg
+            className="absolute top-0 bottom-0 right-[99.5%] h-full w-8 pointer-events-none transform -scale-x-100 drop-shadow-[-6px_0_12px_rgba(0,0,0,0.12)]"
+            viewBox="0 0 30 1000"
+            preserveAspectRatio="none"
+          >
+            <path d={TORN_PATH} fill="#fafafa" />
+          </svg>
+        </motion.div>
+      </div>
     </AnimatePresence>
   );
 }
