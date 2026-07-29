@@ -806,10 +806,10 @@ export default function Home() {
               </div>
             ))}
 
-            {/* Generous White Space Buffer after Bennett University */}
-            <div className="w-[50vw] md:w-[65vw] shrink-0 pointer-events-none flex flex-col justify-center items-start pl-8">
-              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-zinc-400 dark:text-zinc-600">
-                End of Journey — Scroll down for Skills
+            {/* Balanced White Space Buffer after Bennett University */}
+            <div className="w-[18vw] md:w-[22vw] shrink-0 pointer-events-none flex flex-col justify-center items-start pl-8 pr-6">
+              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-600 whitespace-nowrap opacity-60">
+                End of Journey
               </span>
             </div>
           </div>
