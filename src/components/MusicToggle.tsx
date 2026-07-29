@@ -17,7 +17,7 @@ export const MusicToggleButton = () => {
 
   useEffect(() => {
     setMounted(true);
-    const audio = new Audio("/audio/audio.m4a");
+    const audio = new Audio("/audio/audio.mp3");
     audio.loop = true;
     audioRef.current = audio;
 
