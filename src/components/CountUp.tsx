@@ -77,10 +77,10 @@ export default function CountUp({
 
       controls = animate(startVal, endVal, {
         duration,
-        ease: [0.25, 0.1, 0.25, 1], // Smooth curve without spring deceleration after 90%
+        ease: "linear", // Smooth linear curve so it doesn't slow down at 90%
         onUpdate(latest) {
           if (ref.current) {
-            ref.current.textContent = formatValue(Math.floor(latest));
+            ref.current.textContent = formatValue(Math.round(latest));
           }
         },
         onComplete() {

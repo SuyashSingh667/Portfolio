@@ -271,10 +271,10 @@ export default function LoadingScreen({
 
   const handleCountEnd = () => {
     forceEnableScroll();
-    // Brief 200ms hold on 100% before starting tear transition
+    // Hold on 100% before starting tear transition
     setTimeout(() => {
       setIsTearing(true);
-    }, 200);
+    }, 800);
   };
 
   if (!isVisible) return null;
@@ -294,8 +294,7 @@ export default function LoadingScreen({
                 to={100}
                 separator=""
                 direction="up"
-                duration={3.0}
-                delay={0.1}
+                duration={4.5}
                 startWhen={true}
                 onEnd={handleCountEnd}
               />
