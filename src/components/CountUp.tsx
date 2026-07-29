@@ -21,7 +21,7 @@ export default function CountUp({
   from = 0,
   direction = "up",
   delay = 0,
-  duration = 4.5,
+  duration = 4,
   className = "",
   startWhen = true,
   separator = "",
@@ -31,8 +31,9 @@ export default function CountUp({
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === "down" ? to : from);
 
-  const damping = 20 + 40 * (1 / duration);
-  const stiffness = 100 * (1 / duration);
+  // Configure spring parameters so it moves smoothly and reaches 100 cleanly
+  const damping = 20 + 30 * (1 / duration);
+  const stiffness = 80 * (1 / duration);
 
   const springValue = useSpring(motionValue, {
     damping,
@@ -88,30 +89,35 @@ export default function CountUp({
         motionValue.set(direction === "down" ? from : to);
       }, delay * 1000);
 
-      const durationTimeoutId = setTimeout(
-        () => {
-          if (typeof onEnd === "function") onEnd();
-        },
-        delay * 1000 + duration * 1000
-      );
-
-      return () => {
-        clearTimeout(timeoutId);
-        clearTimeout(durationTimeoutId);
-      };
+      return () => clearTimeout(timeoutId);
     }
-  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
+  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart]);
 
   useEffect(() => {
+    let hasEnded = false;
+
     const unsubscribe = springValue.on("change", (latest: number) => {
+      const targetVal = direction === "down" ? from : to;
+      const currentInt = Math.round(latest);
+
       if (ref.current) {
         ref.current.textContent = formatValue(latest);
+      }
+
+      // Trigger onEnd strictly when the target number (e.g. 100) is reached
+      if (!hasEnded && currentInt === targetVal) {
+        hasEnded = true;
+        if (ref.current) {
+          ref.current.textContent = formatValue(targetVal);
+        }
+        if (typeof onEnd === "function") {
+          onEnd();
+        }
       }
     });
 
     return () => unsubscribe();
-  }, [springValue, formatValue]);
+  }, [springValue, formatValue, direction, from, to, onEnd]);
 
-  // Initial text rendered inside <span> ensures 0 is displayed immediately from the first frame
   return <span className={className} ref={ref}>{direction === "down" ? to : from}</span>;
 }

@@ -273,7 +273,7 @@ export default function LoadingScreen({
     forceEnableScroll();
     setTimeout(() => {
       setIsTearing(true);
-    }, 100);
+    }, 250);
   };
 
   if (!isVisible) return null;
@@ -286,14 +286,14 @@ export default function LoadingScreen({
           <div className="absolute inset-0 bg-[#fafafa] z-10 flex flex-col items-center justify-center pointer-events-auto">
             <CreatureLoader />
 
-            {/* React Bits CountUp Display at Bottom Right with % Sign, 4.5s smooth duration */}
+            {/* React Bits CountUp Display at Bottom Right with % Sign */}
             <div className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-baseline font-bold text-7xl md:text-[120px] text-[#171717] tracking-tight font-sans select-none pointer-events-none leading-none">
               <CountUp
                 from={0}
                 to={100}
                 separator=""
                 direction="up"
-                duration={4.5}
+                duration={4.0}
                 delay={0.1}
                 startWhen={true}
                 onEnd={handleCountEnd}
