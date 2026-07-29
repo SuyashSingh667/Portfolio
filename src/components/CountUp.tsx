@@ -21,7 +21,7 @@ export default function CountUp({
   from = 0,
   direction = "up",
   delay = 0,
-  duration = 2,
+  duration = 4.5,
   className = "",
   startWhen = true,
   separator = "",
@@ -81,7 +81,6 @@ export default function CountUp({
   }, [from, to, direction, formatValue]);
 
   useEffect(() => {
-    // If startWhen is true, start counting up (whether in view or triggered directly)
     if (startWhen) {
       if (typeof onStart === "function") onStart();
 
@@ -113,5 +112,6 @@ export default function CountUp({
     return () => unsubscribe();
   }, [springValue, formatValue]);
 
-  return <span className={className} ref={ref} />;
+  // Initial text rendered inside <span> ensures 0 is displayed immediately from the first frame
+  return <span className={className} ref={ref}>{direction === "down" ? to : from}</span>;
 }
