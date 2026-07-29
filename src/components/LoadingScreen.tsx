@@ -15,24 +15,9 @@ interface LoadingScreenProps {
 // Jagged SVG path for organic paper tear
 const TORN_PATH = "M 0,0 L 0,1000 L 14,980 L 4,940 L 24,900 L 8,860 L 26,820 L 6,780 L 22,740 L 4,700 L 25,660 L 8,620 L 27,580 L 6,540 L 23,500 L 5,460 L 26,420 L 8,380 L 24,340 L 6,300 L 25,260 L 7,220 L 24,180 L 5,140 L 22,100 L 8,60 L 20,20 L 12,0 Z";
 
-function LoaderContent({ onCountEnd }: { onCountEnd?: () => void }) {
-  const [progressText, setProgressText] = useState("0");
-
+function CenterLoader() {
   return (
     <div className="loader-container relative flex flex-col items-center select-none">
-      {/* Hidden CountUp Engine */}
-      <CountUp
-        from={0}
-        to={100}
-        separator=""
-        direction="up"
-        duration={2.5}
-        delay={0.2}
-        className="hidden"
-        onEnd={onCountEnd}
-        onUpdate={(val) => setProgressText(val)}
-      />
-
       {/* Interactive Dot Scatter Font Branding */}
       <div className="w-[300px] h-[64px] mb-4">
         <ScatterText
@@ -270,23 +255,6 @@ function LoaderContent({ onCountEnd }: { onCountEnd?: () => void }) {
           </g>
         </svg>
       </div>
-
-      {/* InkBleed Number Counter driven by CountUp */}
-      <div className="mt-8 flex flex-col items-center justify-center w-[240px] h-[90px]">
-        <InkBleed
-          text={`${progressText}%`}
-          intensity={25}
-          color="#171717"
-          font={{
-            fontFamily: "Inter, sans-serif",
-            variant: "Bold",
-            fontSize: "64px",
-            fontWeight: 700,
-            lineHeight: "1em",
-            letterSpacing: "0em",
-          }}
-        />
-      </div>
     </div>
   );
 }
@@ -294,6 +262,7 @@ function LoaderContent({ onCountEnd }: { onCountEnd?: () => void }) {
 export default function LoadingScreen({
   onFinish,
 }: LoadingScreenProps) {
+  const [progressText, setProgressText] = useState("0");
   const [isTearing, setIsTearing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -318,7 +287,7 @@ export default function LoadingScreen({
     forceEnableScroll();
     setTimeout(() => {
       setIsTearing(true);
-    }, 400);
+    }, 300);
   };
 
   if (!isVisible) return null;
@@ -329,42 +298,72 @@ export default function LoadingScreen({
         {/* SOLID SEAMLESS BACKGROUND DURING LOADING (0% Crack / 0% Seam) */}
         {!isTearing && (
           <div className="absolute inset-0 bg-[#fafafa] z-10 flex items-center justify-center pointer-events-auto">
-            <LoaderContent onCountEnd={handleCountEnd} />
+            <CenterLoader />
+
+            {/* Hidden CountUp Engine */}
+            <CountUp
+              from={0}
+              to={100}
+              separator=""
+              direction="up"
+              duration={2.5}
+              delay={0.2}
+              className="hidden"
+              onEnd={handleCountEnd}
+              onUpdate={(val) => setProgressText(val)}
+            />
+
+            {/* Prominent Large InkBleed Number Counter at Bottom-Right */}
+            <div className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-center justify-end pointer-events-none">
+              <InkBleed
+                text={`${progressText}%`}
+                intensity={25}
+                color="#171717"
+                font={{
+                  fontFamily: "Inter, sans-serif",
+                  variant: "Bold",
+                  fontSize: "110px",
+                  fontWeight: 700,
+                  lineHeight: "1em",
+                  letterSpacing: "-0.02em",
+                }}
+              />
+            </div>
           </div>
         )}
 
-        {/* TEAR SPLIT PANELS (Only render torn edge SVG when tearing starts) */}
+        {/* TEAR SPLIT PANELS (Fast, GPU-accelerated 60fps tear transition) */}
         {isTearing && (
           <>
-            {/* CENTRALLY POSITIONED LOADER CONTENT (Smoothly fades out during tear) */}
+            {/* CENTRALLY POSITIONED LOADER CONTENT (Quickly fades out in place) */}
             <motion.div
-              initial={{ opacity: 1, scale: 1 }}
-              animate={{ opacity: 0, scale: 0.94 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
               className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
             >
-              <LoaderContent />
+              <CenterLoader />
             </motion.div>
 
             {/* LEFT TEAR CURTAIN */}
             <motion.div
               key="curtain-left"
               initial={{ x: "0%" }}
-              animate={{ x: "-105%", rotate: -3 }}
+              animate={{ x: "-105%", rotate: -2 }}
               transition={{
-                duration: 2.8,
-                ease: [0.16, 1, 0.3, 1],
+                duration: 2.2,
+                ease: [0.22, 1, 0.36, 1],
               }}
               onAnimationComplete={() => {
                 forceEnableScroll();
                 setIsVisible(false);
                 if (onFinish) onFinish();
               }}
-              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu"
+              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"
             >
               {/* Jagged Torn Edge SVG on Right Border */}
               <svg
-                className="absolute top-0 bottom-0 left-[99.5%] h-full w-8 pointer-events-none drop-shadow-[8px_0_15px_rgba(0,0,0,0.15)]"
+                className="absolute top-0 bottom-0 left-[99.5%] h-full w-8 pointer-events-none drop-shadow-[8px_0_15px_rgba(0,0,0,0.12)]"
                 viewBox="0 0 30 1000"
                 preserveAspectRatio="none"
               >
@@ -376,16 +375,16 @@ export default function LoadingScreen({
             <motion.div
               key="curtain-right"
               initial={{ x: "0%" }}
-              animate={{ x: "105%", rotate: 3 }}
+              animate={{ x: "105%", rotate: 2 }}
               transition={{
                 duration: 2.8,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.22, 1, 0.36, 1],
               }}
-              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu"
+              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"
             >
               {/* Jagged Torn Edge SVG on Left Border */}
               <svg
-                className="absolute top-0 bottom-0 right-[99.5%] h-full w-8 pointer-events-none transform -scale-x-100 drop-shadow-[-8px_0_15px_rgba(0,0,0,0.15)]"
+                className="absolute top-0 bottom-0 right-[99.5%] h-full w-8 pointer-events-none transform -scale-x-100 drop-shadow-[-8px_0_15px_rgba(0,0,0,0.12)]"
                 viewBox="0 0 30 1000"
                 preserveAspectRatio="none"
               >
