@@ -806,12 +806,8 @@ export default function Home() {
               </div>
             ))}
 
-            {/* Balanced White Space Buffer after Bennett University */}
-            <div className="w-[18vw] md:w-[22vw] shrink-0 pointer-events-none flex flex-col justify-center items-start pl-8 pr-6">
-              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 dark:text-zinc-600 whitespace-nowrap opacity-60">
-                End of Journey
-              </span>
-            </div>
+            {/* Clean Blank White Space Buffer after Bennett University */}
+            <div className="w-[18vw] md:w-[22vw] shrink-0 pointer-events-none" />
           </div>
         </div>
       </section>
