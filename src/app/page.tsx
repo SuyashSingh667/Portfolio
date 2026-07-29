@@ -537,6 +537,7 @@ export default function Home() {
         const anim = gsap.to(container, {
           x: getXTranslation,
           ease: "none",
+          force3D: true, // Hardware acceleration
         });
 
         ScrollTrigger.create({
@@ -548,7 +549,7 @@ export default function Home() {
             return `+=${Math.max(dist, 400)}`;
           },
           pin: true,
-          scrub: 0.5,
+          scrub: 1.5, // Increased scrub smoothing to eliminate jitter
           anticipatePin: 1,
           fastScrollEnd: true,
           preventOverlaps: true,
