@@ -14,11 +14,11 @@ interface LoadingScreenProps {
 // Jagged SVG path for organic paper tear
 const TORN_PATH = "M 0,0 L 0,1000 L 14,980 L 4,940 L 24,900 L 8,860 L 26,820 L 6,780 L 22,740 L 4,700 L 25,660 L 8,620 L 27,580 L 6,540 L 23,500 L 5,460 L 26,420 L 8,380 L 24,340 L 6,300 L 25,260 L 7,220 L 24,180 L 5,140 L 22,100 L 8,60 L 20,20 L 12,0 Z";
 
-function CreatureLoader() {
+function CreatureLoader({ progressText }: { progressText: string }) {
   return (
     <div className="loader-container relative flex flex-col items-center select-none">
       {/* Walking Creature Loader */}
-      <div className="loader mb-2">
+      <div className="loader mb-4">
         <svg
           className="legl"
           version="1.1"
@@ -243,6 +243,24 @@ function CreatureLoader() {
           </g>
         </svg>
       </div>
+
+      {/* Prominent InkBleed Number Counter Centered Under Bird */}
+      <div className="mt-6 flex flex-col items-center justify-center min-w-[200px] h-[80px]">
+        <InkBleed
+          text={`${progressText}%`}
+          intensity={40}
+          alwaysBleed={true}
+          color="#171717"
+          font={{
+            fontFamily: "Inter, sans-serif",
+            variant: "Bold",
+            fontSize: "72px",
+            fontWeight: 700,
+            lineHeight: "1em",
+            letterSpacing: "0em",
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -275,7 +293,7 @@ export default function LoadingScreen({
     forceEnableScroll();
     setTimeout(() => {
       setIsTearing(true);
-    }, 300);
+    }, 400);
   };
 
   if (!isVisible) return null;
@@ -283,10 +301,10 @@ export default function LoadingScreen({
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[99999] pointer-events-none overflow-hidden select-none">
-        {/* SOLID SEAMLESS BACKGROUND DURING LOADING (0% Crack / 0% Seam) */}
+        {/* SOLID SEAMLESS BACKGROUND DURING LOADING */}
         {!isTearing && (
-          <div className="absolute inset-0 bg-[#fafafa] z-10 flex items-center justify-center pointer-events-auto">
-            <CreatureLoader />
+          <div className="absolute inset-0 bg-[#fafafa] z-10 flex flex-col items-center justify-center pointer-events-auto">
+            <CreatureLoader progressText={progressText} />
 
             {/* Reliable CountUp Engine */}
             <CountUp
@@ -294,43 +312,26 @@ export default function LoadingScreen({
               to={100}
               separator=""
               direction="up"
-              duration={2.5}
+              duration={3.0}
               delay={0.2}
               startWhen={true}
               onEnd={handleCountEnd}
               onUpdate={(val) => setProgressText(val)}
             />
-
-            {/* Prominent Large InkBleed Number Counter at Bottom-Right */}
-            <div className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-center justify-end pointer-events-none">
-              <InkBleed
-                text={`${progressText}%`}
-                intensity={25}
-                color="#171717"
-                font={{
-                  fontFamily: "Inter, sans-serif",
-                  variant: "Bold",
-                  fontSize: "110px",
-                  fontWeight: 700,
-                  lineHeight: "1em",
-                  letterSpacing: "-0.02em",
-                }}
-              />
-            </div>
           </div>
         )}
 
-        {/* TEAR SPLIT PANELS (Fast, GPU-accelerated 60fps tear transition) */}
+        {/* TEAR SPLIT PANELS */}
         {isTearing && (
           <>
-            {/* CENTRALLY POSITIONED LOADER CONTENT (Quickly fades out in place) */}
+            {/* CENTRALLY POSITIONED LOADER CONTENT */}
             <motion.div
               initial={{ opacity: 1 }}
               animate={{ opacity: 0 }}
               transition={{ duration: 0.35, ease: "easeOut" }}
               className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
             >
-              <CreatureLoader />
+              <CreatureLoader progressText={progressText} />
             </motion.div>
 
             {/* LEFT TEAR CURTAIN */}

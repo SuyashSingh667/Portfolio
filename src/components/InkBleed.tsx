@@ -4,24 +4,22 @@ import React, { useEffect, useId, useLayoutEffect, useMemo, useRef } from "react
 
 // Spot blur — AE-style parameters.
 const MAIN_RADIUS = 0;
-const SECONDARY_RADIUS = 35;
+const SECONDARY_RADIUS = 45;
 const INVERT = true;
 const BLUR_AMOUNT = 8;
-const FRINGE = 4;
 
 // Choker offsets
-const LEFT_CHOKER_OFFSET = -6;
-const RIGHT_CHOKER_OFFSET = 6;
+const LEFT_CHOKER_OFFSET = -8;
+const RIGHT_CHOKER_OFFSET = 8;
 
-// Goo pipeline - refined for crisp legibility
-const GOO_BLUR = 3;
+// Goo pipeline - refined for crisp liquid ink bleed feel
+const GOO_BLUR = 4;
 const THRESHOLD = 35;
 const CUTOFF = -12;
 
 // Cursor smoothing.
 const FOLLOW = 0.3;
 const INTENSITY_FOLLOW = 0.25;
-const SETTLE_EPSILON = 0.4;
 
 interface InkBleedProps {
   text?: string;
@@ -30,21 +28,21 @@ interface InkBleedProps {
   intensity?: number;
   tag?: string;
   className?: string;
+  alwaysBleed?: boolean;
 }
 
 export default function InkBleed(props: InkBleedProps) {
   const mergedProps = { ...COMPONENT_DEFAULTS, ...props };
-  const { text, color, font, intensity, tag, className } = mergedProps;
+  const { text, color, font, intensity, tag, className, alwaysBleed } = mergedProps;
   const Tag = (tag ?? "div") as any;
 
-  const intensityFactor = Math.max(0, Math.min(100, intensity ?? 25)) / 16.67;
+  const intensityFactor = Math.max(0, Math.min(100, intensity ?? 40)) / 16.67;
   const intensityRef = useRef(intensityFactor);
   intensityRef.current = intensityFactor;
 
   const rawId = useId();
   const safeId = rawId.replace(/[:]/g, "");
   const filterGooId = `ink-goo-${safeId}`;
-  const filterFringeId = `ink-fringe-${safeId}`;
 
   const chars = useMemo(() => Array.from((text as string) ?? ""), [text]);
 
@@ -91,21 +89,22 @@ export default function InkBleed(props: InkBleedProps) {
     };
   }, [text]);
 
-  const target = useRef({ x: -9999, y: -9999, on: 0 });
-  const smooth = useRef({ x: -9999, y: -9999, on: 0 });
+  const target = useRef({ x: -9999, y: -9999, on: alwaysBleed ? 1 : 0 });
+  const smooth = useRef({ x: -9999, y: -9999, on: alwaysBleed ? 1 : 0 });
   const rafRef = useRef<number | null>(null);
+  const timeRef = useRef(0);
 
   const render = () => {
-    const { x: cx, y: cy, on } = smooth.current;
     const container = containerRef.current;
     if (container) {
-      container.style.setProperty(
-        "--spot-on",
-        (on * intensityRef.current).toFixed(3)
-      );
+      const wave = alwaysBleed ? Math.sin(timeRef.current * 0.05) * 0.15 + 1.1 : smooth.current.on;
+      const spotVal = wave * intensityRef.current;
+      container.style.setProperty("--spot-on", spotVal.toFixed(3));
     }
 
     const ms = metrics.current;
+    const { x: cx, y: cy } = smooth.current;
+
     for (let i = 0; i < ms.length; i++) {
       const wrapEl = wrapRefs.current[i];
       const leftEl = leftRefs.current[i];
@@ -113,77 +112,56 @@ export default function InkBleed(props: InkBleedProps) {
       const m = ms[i];
       if (!m || m.w === 0) continue;
 
-      const mxBase = cx - m.left;
-      const myActual = cy - m.top;
+      const mxBase = cx !== -9999 ? cx - m.left : m.w / 2;
+      const myActual = cy !== -9999 ? cy - m.top : m.h / 2;
+
       if (wrapEl) {
         wrapEl.style.setProperty("--mx", `${mxBase.toFixed(1)}px`);
         wrapEl.style.setProperty("--my", `${myActual.toFixed(1)}px`);
       }
       if (leftEl) {
-        leftEl.style.setProperty(
-          "--mx",
-          `${(mxBase - LEFT_CHOKER_OFFSET).toFixed(1)}px`
-        );
+        leftEl.style.setProperty("--mx", `${(mxBase - LEFT_CHOKER_OFFSET).toFixed(1)}px`);
         leftEl.style.setProperty("--my", `${myActual.toFixed(1)}px`);
       }
       if (rightEl) {
-        rightEl.style.setProperty(
-          "--mx",
-          `${(mxBase - RIGHT_CHOKER_OFFSET).toFixed(1)}px`
-        );
+        rightEl.style.setProperty("--mx", `${(mxBase - RIGHT_CHOKER_OFFSET).toFixed(1)}px`);
         rightEl.style.setProperty("--my", `${myActual.toFixed(1)}px`);
       }
     }
   };
 
-  const stopLoop = () => {
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-  };
-
   const tick = () => {
+    timeRef.current += 1;
     const t = target.current;
     const s = smooth.current;
-    s.x += (t.x - s.x) * FOLLOW;
-    s.y += (t.y - s.y) * FOLLOW;
-    s.on += (t.on - s.on) * INTENSITY_FOLLOW;
-    render();
-    const settled =
-      Math.abs(t.x - s.x) < SETTLE_EPSILON &&
-      Math.abs(t.y - s.y) < SETTLE_EPSILON &&
-      Math.abs(t.on - s.on) < 0.005;
-    if (settled && t.on === 0) {
-      s.on = 0;
-      render();
-      rafRef.current = null;
-      return;
+
+    if (t.x !== -9999) {
+      s.x += (t.x - s.x) * FOLLOW;
+      s.y += (t.y - s.y) * FOLLOW;
     }
+    s.on += (t.on - s.on) * INTENSITY_FOLLOW;
+
+    render();
     rafRef.current = requestAnimationFrame(tick);
   };
 
-  const startLoop = () => {
-    if (rafRef.current !== null) return;
+  useEffect(() => {
     rafRef.current = requestAnimationFrame(tick);
-  };
-
-  useEffect(() => () => stopLoop(), []);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (target.current.on === 0) {
-      smooth.current.x = e.clientX;
-      smooth.current.y = e.clientY;
-    }
     target.current.x = e.clientX;
     target.current.y = e.clientY;
     target.current.on = 1;
-    startLoop();
   };
 
   const handleLeave = () => {
-    target.current.on = 0;
-    startLoop();
+    target.current.x = -9999;
+    target.current.y = -9999;
+    target.current.on = alwaysBleed ? 1 : 0;
   };
 
   const typeface = font ?? {};
@@ -193,11 +171,11 @@ export default function InkBleed(props: InkBleedProps) {
 
   const innerPct = (MAIN_RADIUS / SECONDARY_RADIUS) * 100;
   const sharpMask = INVERT
-    ? `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 0)) at var(--mx, -9999px) var(--my, -9999px), transparent 0%, transparent ${innerPct}%, rgba(0,0,0,1) 100%)`
-    : `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 0)) at var(--mx, -9999px) var(--my, -9999px), rgba(0,0,0,1) 0%, rgba(0,0,0,1) ${innerPct}%, transparent 100%)`;
+    ? `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 1)) at var(--mx, 50%) var(--my, 50%), transparent 0%, transparent ${innerPct}%, rgba(0,0,0,1) 100%)`
+    : `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 1)) at var(--mx, 50%) var(--my, 50%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) ${innerPct}%, transparent 100%)`;
   const spotMask = INVERT
-    ? `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 0)) at var(--mx, -9999px) var(--my, -9999px), rgba(0,0,0,1) 0%, rgba(0,0,0,1) ${innerPct}%, transparent 100%)`
-    : `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 0)) at var(--mx, -9999px) var(--my, -9999px), transparent 0%, transparent ${innerPct}%, rgba(0,0,0,1) 100%)`;
+    ? `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 1)) at var(--mx, 50%) var(--my, 50%), rgba(0,0,0,1) 0%, rgba(0,0,0,1) ${innerPct}%, transparent 100%)`
+    : `radial-gradient(circle calc(${SECONDARY_RADIUS}px * var(--spot-on, 1)) at var(--mx, 50%) var(--my, 50%), transparent 0%, transparent ${innerPct}%, rgba(0,0,0,1) 100%)`;
 
   const baseLayer: React.CSSProperties = {
     display: "inline-block",
@@ -216,7 +194,7 @@ export default function InkBleed(props: InkBleedProps) {
       className={className}
       style={{
         position: "relative",
-        display: "flex",
+        display: "inline-flex",
         justifyContent: "center",
         alignItems: "center",
         overflow: "visible",
@@ -252,66 +230,6 @@ export default function InkBleed(props: InkBleedProps) {
               in="SourceGraphic"
               in2="goo"
               operator="atop"
-            />
-          </filter>
-
-          <filter
-            id={filterFringeId}
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
-            <feColorMatrix
-              in="SourceGraphic"
-              type="matrix"
-              values={`1 0 0 0 0
-                       0 0 0 0 0
-                       0 0 0 0 0
-                       0 0 0 1 0`}
-              result="rOnly"
-            />
-            <feOffset
-              in="rOnly"
-              dx={-FRINGE}
-              dy="0"
-              result="rShift"
-            />
-            <feColorMatrix
-              in="SourceGraphic"
-              type="matrix"
-              values={`0 0 0 0 0
-                       0 1 0 0 0
-                       0 0 0 0 0
-                       0 0 0 1 0`}
-              result="gOnly"
-            />
-            <feColorMatrix
-              in="SourceGraphic"
-              type="matrix"
-              values={`0 0 0 0 0
-                       0 0 0 0 0
-                       0 0 1 0 0
-                       0 0 0 1 0`}
-              result="bOnly"
-            />
-            <feOffset
-              in="bOnly"
-              dx={FRINGE}
-              dy="0"
-              result="bShift"
-            />
-            <feBlend
-              in="rShift"
-              in2="gOnly"
-              mode="screen"
-              result="rg"
-            />
-            <feBlend
-              in="rg"
-              in2="bShift"
-              mode="screen"
-              result="rgb"
             />
           </filter>
         </defs>
@@ -407,15 +325,16 @@ export default function InkBleed(props: InkBleedProps) {
 
 const COMPONENT_DEFAULTS = {
   text: "0%",
-  intensity: 25,
+  intensity: 40,
   color: "#171717",
   font: {
     fontFamily: "Inter, sans-serif",
     variant: "Bold",
-    fontSize: "96px",
+    fontSize: "72px",
     fontWeight: 700,
     lineHeight: "1em",
     letterSpacing: "0em",
   } as any,
   tag: "div",
+  alwaysBleed: true,
 };
