@@ -281,10 +281,10 @@ export default function LoadingScreen({
         animationFrameId = requestAnimationFrame(updateProgress);
       } else {
         setProgress(100);
-        // Brief beat at 100% before triggering tear split
+        // Beat at 100% before starting tear split
         setTimeout(() => {
           setIsTearing(true);
-        }, 300);
+        }, 400);
       }
     };
 
@@ -305,61 +305,74 @@ export default function LoadingScreen({
         if (onFinish) onFinish();
       }}
     >
-        {/* CENTRALLY POSITIONED LOADER CONTENT (Fades out when tearing starts) */}
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center pointer-events-none select-none">
-          <motion.div
-            animate={{ opacity: isTearing ? 0 : 1, scale: isTearing ? 0.94 : 1 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="z-20"
-          >
+      <div className="fixed inset-0 z-[99999] pointer-events-none overflow-hidden select-none">
+        {/* SOLID SEAMLESS BACKGROUND DURING LOADING (0% Crack / 0% Seam) */}
+        {!isTearing && (
+          <div className="absolute inset-0 bg-[#fafafa] z-10 flex items-center justify-center pointer-events-auto">
             <LoaderContent progress={progress} />
-          </motion.div>
+          </div>
+        )}
 
-          {/* LEFT TEAR CURTAIN */}
-          <motion.div
-            key="curtain-left"
-            initial={{ x: "0%" }}
-            animate={{ x: isTearing ? "-105%" : "0%", rotate: isTearing ? -4 : 0 }}
-            transition={{
-              duration: 2.5,
-              ease: [0.25, 1, 0.35, 1],
-            }}
-            onAnimationComplete={() => {
-              if (isTearing) setIsVisible(false);
-            }}
-            className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-10 shadow-2xl overflow-visible pointer-events-auto transform-gpu"
-          >
-            {/* Jagged Torn Edge SVG on Right Border */}
-            <svg
-              className="absolute top-0 bottom-0 left-[99.5%] h-full w-8 pointer-events-none drop-shadow-[8px_0_15px_rgba(0,0,0,0.15)]"
-              viewBox="0 0 30 1000"
-              preserveAspectRatio="none"
+        {/* TEAR SPLIT PANELS (Only render torn edge SVG when tearing starts) */}
+        {isTearing && (
+          <>
+            {/* CENTRALLY POSITIONED LOADER CONTENT (Smoothly fades out during tear) */}
+            <motion.div
+              initial={{ opacity: 1, scale: 1 }}
+              animate={{ opacity: 0, scale: 0.94 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
             >
-              <path d={TORN_PATH} fill="#fafafa" />
-            </svg>
-          </motion.div>
+              <LoaderContent progress={progress} />
+            </motion.div>
 
-          {/* RIGHT TEAR CURTAIN */}
-          <motion.div
-            key="curtain-right"
-            initial={{ x: "0%" }}
-            animate={{ x: isTearing ? "105%" : "0%", rotate: isTearing ? 4 : 0 }}
-            transition={{
-              duration: 2.5,
-              ease: [0.25, 1, 0.35, 1],
-            }}
-            className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-10 shadow-2xl overflow-visible pointer-events-auto transform-gpu"
-          >
-            {/* Jagged Torn Edge SVG on Left Border */}
-            <svg
-              className="absolute top-0 bottom-0 right-[99.5%] h-full w-8 pointer-events-none transform -scale-x-100 drop-shadow-[-8px_0_15px_rgba(0,0,0,0.15)]"
-              viewBox="0 0 30 1000"
-              preserveAspectRatio="none"
+            {/* LEFT TEAR CURTAIN */}
+            <motion.div
+              key="curtain-left"
+              initial={{ x: "0%" }}
+              animate={{ x: "-105%", rotate: -4 }}
+              transition={{
+                duration: 2.5,
+                ease: [0.25, 1, 0.35, 1],
+              }}
+              onAnimationComplete={() => {
+                setIsVisible(false);
+              }}
+              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-auto transform-gpu"
             >
-              <path d={TORN_PATH} fill="#fafafa" />
-            </svg>
-          </motion.div>
-        </div>
+              {/* Jagged Torn Edge SVG on Right Border */}
+              <svg
+                className="absolute top-0 bottom-0 left-[99.5%] h-full w-8 pointer-events-none drop-shadow-[8px_0_15px_rgba(0,0,0,0.15)]"
+                viewBox="0 0 30 1000"
+                preserveAspectRatio="none"
+              >
+                <path d={TORN_PATH} fill="#fafafa" />
+              </svg>
+            </motion.div>
+
+            {/* RIGHT TEAR CURTAIN */}
+            <motion.div
+              key="curtain-right"
+              initial={{ x: "0%" }}
+              animate={{ x: "105%", rotate: 4 }}
+              transition={{
+                duration: 2.5,
+                ease: [0.25, 1, 0.35, 1],
+              }}
+              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-auto transform-gpu"
+            >
+              {/* Jagged Torn Edge SVG on Left Border */}
+              <svg
+                className="absolute top-0 bottom-0 right-[99.5%] h-full w-8 pointer-events-none transform -scale-x-100 drop-shadow-[-8px_0_15px_rgba(0,0,0,0.15)]"
+                viewBox="0 0 30 1000"
+                preserveAspectRatio="none"
+              >
+                <path d={TORN_PATH} fill="#fafafa" />
+              </svg>
+            </motion.div>
+          </>
+        )}
+      </div>
     </AnimatePresence>
   );
 }
