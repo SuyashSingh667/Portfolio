@@ -288,7 +288,10 @@ export default function LoadingScreen({
             <CreatureLoader />
 
             {/* React Bits CountUp Display at Bottom Right with % Sign */}
-            <div className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-baseline font-bold text-7xl md:text-[120px] text-[#171717] tracking-tight font-sans select-none pointer-events-none leading-none">
+            <div 
+              className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-baseline font-bold text-7xl md:text-[120px] text-[#171717] tracking-tight select-none pointer-events-none leading-none"
+              style={{ fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" }}
+            >
               <CountUp
                 from={0}
                 to={100}

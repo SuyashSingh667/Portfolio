@@ -816,7 +816,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
-      <div className="relative z-30 -mt-[15vh]">
+      <div className="relative z-30 -mt-[25vh] md:-mt-[28vh]">
         <Chapter num="03" eyebrow="Skills" title="Skills." />
 
         <section
