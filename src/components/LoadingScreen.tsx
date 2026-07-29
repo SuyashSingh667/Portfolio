@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import CountUp from "./CountUp";
+import ScatterText from "./ScatterText";
 import "./LoadingScreen.css";
 
 interface LoadingScreenProps {
@@ -12,9 +14,20 @@ interface LoadingScreenProps {
 // Jagged SVG path for organic paper tear
 const TORN_PATH = "M 0,0 L 0,1000 L 14,980 L 4,940 L 24,900 L 8,860 L 26,820 L 6,780 L 22,740 L 4,700 L 25,660 L 8,620 L 27,580 L 6,540 L 23,500 L 5,460 L 26,420 L 8,380 L 24,340 L 6,300 L 25,260 L 7,220 L 24,180 L 5,140 L 22,100 L 8,60 L 20,20 L 12,0 Z";
 
-function LoaderContent({ progress }: { progress: number }) {
+function LoaderContent({ onCountEnd }: { onCountEnd?: () => void }) {
   return (
     <div className="loader-container relative flex flex-col items-center select-none">
+      {/* Interactive Dot Scatter Font Branding */}
+      <div className="w-[300px] h-[64px] mb-4">
+        <ScatterText
+          text="suyash"
+          color="#171717"
+          letterGap={1.2}
+          cursorRadius={115}
+          variant="cursorRadius"
+        />
+      </div>
+
       {/* Walking Creature Loader */}
       <div className="loader mb-2">
         <svg
@@ -242,10 +255,20 @@ function LoaderContent({ progress }: { progress: number }) {
         </svg>
       </div>
 
-      {/* Clean Numerical Counter */}
+      {/* React Bits CountUp Component */}
       <div className="mt-8 flex flex-col items-center gap-1">
-        <div className="text-4xl font-mono font-light text-zinc-900 tracking-wider">
-          {progress.toString().padStart(2, "0")}%
+        <div className="text-4xl font-mono font-light text-zinc-900 tracking-wider flex items-center">
+          <CountUp
+            from={0}
+            to={100}
+            separator=""
+            direction="up"
+            duration={2.5}
+            className="count-up-text"
+            delay={0.2}
+            onEnd={onCountEnd}
+          />
+          <span>%</span>
         </div>
       </div>
     </div>
@@ -254,9 +277,7 @@ function LoaderContent({ progress }: { progress: number }) {
 
 export default function LoadingScreen({
   onFinish,
-  minDurationMs = 3800,
 }: LoadingScreenProps) {
-  const [progress, setProgress] = useState(0);
   const [isTearing, setIsTearing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
@@ -272,37 +293,17 @@ export default function LoadingScreen({
     // Lock scroll ONLY while 0% -> 100% loader is active
     document.body.style.overflow = "hidden";
 
-    let animationFrameId: number;
-    const startTime = performance.now();
-
-    const updateProgress = (now: number) => {
-      const elapsed = now - startTime;
-      const progressRatio = Math.min(1, elapsed / minDurationMs);
-
-      // Smooth continuous ease-out progress calculation
-      const easedRatio = 1 - Math.pow(1 - progressRatio, 2.2);
-      const currentVal = Math.min(100, Math.round(easedRatio * 100));
-      setProgress(currentVal);
-
-      if (progressRatio < 1) {
-        animationFrameId = requestAnimationFrame(updateProgress);
-      } else {
-        setProgress(100);
-        // Instantly unlock body & document scroll as soon as loader completes
-        forceEnableScroll();
-        setTimeout(() => {
-          setIsTearing(true);
-        }, 500);
-      }
-    };
-
-    animationFrameId = requestAnimationFrame(updateProgress);
-
     return () => {
-      cancelAnimationFrame(animationFrameId);
       forceEnableScroll();
     };
-  }, [minDurationMs]);
+  }, []);
+
+  const handleCountEnd = () => {
+    forceEnableScroll();
+    setTimeout(() => {
+      setIsTearing(true);
+    }, 400);
+  };
 
   if (!isVisible) return null;
 
@@ -312,7 +313,7 @@ export default function LoadingScreen({
         {/* SOLID SEAMLESS BACKGROUND DURING LOADING (0% Crack / 0% Seam) */}
         {!isTearing && (
           <div className="absolute inset-0 bg-[#fafafa] z-10 flex items-center justify-center pointer-events-auto">
-            <LoaderContent progress={progress} />
+            <LoaderContent onCountEnd={handleCountEnd} />
           </div>
         )}
 
@@ -326,7 +327,7 @@ export default function LoadingScreen({
               transition={{ duration: 0.6, ease: "easeInOut" }}
               className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
             >
-              <LoaderContent progress={progress} />
+              <LoaderContent />
             </motion.div>
 
             {/* LEFT TEAR CURTAIN */}
