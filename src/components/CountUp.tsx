@@ -14,6 +14,7 @@ interface CountUpProps {
   separator?: string;
   onStart?: () => void;
   onEnd?: () => void;
+  onUpdate?: (latestText: string) => void;
 }
 
 export default function CountUp({
@@ -27,6 +28,7 @@ export default function CountUp({
   separator = "",
   onStart,
   onEnd,
+  onUpdate,
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === "down" ? to : from);
@@ -76,9 +78,11 @@ export default function CountUp({
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.textContent = formatValue(direction === "down" ? to : from);
+      const initialText = formatValue(direction === "down" ? to : from);
+      ref.current.textContent = initialText;
+      if (onUpdate) onUpdate(initialText);
     }
-  }, [from, to, direction, formatValue]);
+  }, [from, to, direction, formatValue, onUpdate]);
 
   useEffect(() => {
     if (isInView && startWhen) {
@@ -104,13 +108,17 @@ export default function CountUp({
 
   useEffect(() => {
     const unsubscribe = springValue.on("change", (latest: number) => {
+      const text = formatValue(latest);
       if (ref.current) {
-        ref.current.textContent = formatValue(latest);
+        ref.current.textContent = text;
+      }
+      if (onUpdate) {
+        onUpdate(text);
       }
     });
 
     return () => unsubscribe();
-  }, [springValue, formatValue]);
+  }, [springValue, formatValue, onUpdate]);
 
   return <span className={className} ref={ref} />;
 }

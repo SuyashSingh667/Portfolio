@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "./CountUp";
 import ScatterText from "./ScatterText";
+import InkBleed from "./InkBleed";
 import "./LoadingScreen.css";
 
 interface LoadingScreenProps {
@@ -15,8 +16,23 @@ interface LoadingScreenProps {
 const TORN_PATH = "M 0,0 L 0,1000 L 14,980 L 4,940 L 24,900 L 8,860 L 26,820 L 6,780 L 22,740 L 4,700 L 25,660 L 8,620 L 27,580 L 6,540 L 23,500 L 5,460 L 26,420 L 8,380 L 24,340 L 6,300 L 25,260 L 7,220 L 24,180 L 5,140 L 22,100 L 8,60 L 20,20 L 12,0 Z";
 
 function LoaderContent({ onCountEnd }: { onCountEnd?: () => void }) {
+  const [progressText, setProgressText] = useState("0");
+
   return (
     <div className="loader-container relative flex flex-col items-center select-none">
+      {/* Hidden CountUp Engine */}
+      <CountUp
+        from={0}
+        to={100}
+        separator=""
+        direction="up"
+        duration={2.5}
+        delay={0.2}
+        className="hidden"
+        onEnd={onCountEnd}
+        onUpdate={(val) => setProgressText(val)}
+      />
+
       {/* Interactive Dot Scatter Font Branding */}
       <div className="w-[300px] h-[64px] mb-4">
         <ScatterText
@@ -255,21 +271,21 @@ function LoaderContent({ onCountEnd }: { onCountEnd?: () => void }) {
         </svg>
       </div>
 
-      {/* React Bits CountUp Component */}
-      <div className="mt-8 flex flex-col items-center gap-1">
-        <div className="text-4xl font-mono font-light text-zinc-900 tracking-wider flex items-center">
-          <CountUp
-            from={0}
-            to={100}
-            separator=""
-            direction="up"
-            duration={2.5}
-            className="count-up-text"
-            delay={0.2}
-            onEnd={onCountEnd}
-          />
-          <span>%</span>
-        </div>
+      {/* InkBleed Number Counter driven by CountUp */}
+      <div className="mt-8 flex flex-col items-center justify-center w-[240px] h-[90px]">
+        <InkBleed
+          text={`${progressText}%`}
+          intensity={25}
+          color="#171717"
+          font={{
+            fontFamily: "Inter, sans-serif",
+            variant: "Bold",
+            fontSize: "64px",
+            fontWeight: 700,
+            lineHeight: "1em",
+            letterSpacing: "0em",
+          }}
+        />
       </div>
     </div>
   );
