@@ -260,8 +260,16 @@ export default function LoadingScreen({
   const [isTearing, setIsTearing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
+  // Helper to ensure scroll is always 100% enabled
+  const forceEnableScroll = () => {
+    document.body.style.overflow = "";
+    document.body.style.overflowY = "";
+    document.documentElement.style.overflow = "";
+    document.documentElement.style.overflowY = "";
+  };
+
   useEffect(() => {
-    // Disable scroll on body while loading
+    // Lock scroll ONLY while 0% -> 100% loader is active
     document.body.style.overflow = "hidden";
 
     let animationFrameId: number;
@@ -280,11 +288,10 @@ export default function LoadingScreen({
         animationFrameId = requestAnimationFrame(updateProgress);
       } else {
         setProgress(100);
-        // Clear beat pause at 100% before starting tear split
+        // Instantly unlock body & document scroll as soon as loader completes
+        forceEnableScroll();
         setTimeout(() => {
           setIsTearing(true);
-          // Immediately unlock body scroll so page is scrollable as tear opens
-          document.body.style.overflow = "";
         }, 500);
       }
     };
@@ -293,7 +300,7 @@ export default function LoadingScreen({
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      document.body.style.overflow = "";
+      forceEnableScroll();
     };
   }, [minDurationMs]);
 
@@ -332,11 +339,11 @@ export default function LoadingScreen({
                 ease: [0.16, 1, 0.3, 1],
               }}
               onAnimationComplete={() => {
-                document.body.style.overflow = "";
+                forceEnableScroll();
                 setIsVisible(false);
                 if (onFinish) onFinish();
               }}
-              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-auto transform-gpu"
+              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu"
             >
               {/* Jagged Torn Edge SVG on Right Border */}
               <svg
@@ -357,7 +364,7 @@ export default function LoadingScreen({
                 duration: 2.8,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-auto transform-gpu"
+              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu"
             >
               {/* Jagged Torn Edge SVG on Left Border */}
               <svg
