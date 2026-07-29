@@ -348,7 +348,7 @@ export function CinematicFooter() {
                 <MagneticButton as="a" href="https://www.linkedin.com/in/suyash-singh-/" target="_blank" rel="noopener noreferrer" className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground">
                   LinkedIn
                 </MagneticButton>
-                <MagneticButton as="a" href="/suyash_singh_resume.pdf" download="Suyash_Singh_Resume.pdf" className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground">
+                <MagneticButton as="a" href="/suyash_singh_resume_v2.pdf" download="Suyash_Singh_Resume.pdf" className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground">
                   Resume
                 </MagneticButton>
               </div>
