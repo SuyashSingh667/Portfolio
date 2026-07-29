@@ -4,18 +4,13 @@ import React, { useEffect, useId, useLayoutEffect, useMemo, useRef } from "react
 
 // Spot blur — AE-style parameters.
 const MAIN_RADIUS = 0;
-const SECONDARY_RADIUS = 45;
+const SECONDARY_RADIUS = 50;
 const INVERT = true;
-const BLUR_AMOUNT = 8;
+const BLUR_AMOUNT = 6;
 
 // Choker offsets
 const LEFT_CHOKER_OFFSET = -8;
 const RIGHT_CHOKER_OFFSET = 8;
-
-// Goo pipeline - refined for crisp liquid ink bleed feel
-const GOO_BLUR = 4;
-const THRESHOLD = 35;
-const CUTOFF = -12;
 
 // Cursor smoothing.
 const FOLLOW = 0.3;
@@ -39,10 +34,6 @@ export default function InkBleed(props: InkBleedProps) {
   const intensityFactor = Math.max(0, Math.min(100, intensity ?? 40)) / 16.67;
   const intensityRef = useRef(intensityFactor);
   intensityRef.current = intensityFactor;
-
-  const rawId = useId();
-  const safeId = rawId.replace(/[:]/g, "");
-  const filterGooId = `ink-goo-${safeId}`;
 
   const chars = useMemo(() => Array.from((text as string) ?? ""), [text]);
 
@@ -201,47 +192,12 @@ export default function InkBleed(props: InkBleedProps) {
         userSelect: "none",
       }}
     >
-      <svg
-        style={{
-          position: "absolute",
-          width: 0,
-          height: 0,
-          pointerEvents: "none",
-        }}
-        aria-hidden
-      >
-        <defs>
-          <filter id={filterGooId}>
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation={GOO_BLUR}
-              result="blur"
-            />
-            <feColorMatrix
-              in="blur"
-              type="matrix"
-              values={`1 0 0 0 0
-                       0 1 0 0 0
-                       0 0 1 0 0
-                       0 0 0 ${THRESHOLD} ${CUTOFF}`}
-              result="goo"
-            />
-            <feComposite
-              in="SourceGraphic"
-              in2="goo"
-              operator="atop"
-            />
-          </filter>
-        </defs>
-      </svg>
-
       <div
         ref={containerRef}
         onMouseMove={handleMove}
         onMouseLeave={handleLeave}
         style={{
           position: "relative",
-          filter: `url(#${filterGooId})`,
           display: "inline-flex",
           justifyContent: "center",
           alignItems: "center",
@@ -263,6 +219,7 @@ export default function InkBleed(props: InkBleedProps) {
               overflow: "visible",
             }}
           >
+            {/* Sharp base layer */}
             <span
               style={{
                 ...baseLayer,
@@ -273,6 +230,7 @@ export default function InkBleed(props: InkBleedProps) {
               {ch === " " ? " " : ch}
             </span>
 
+            {/* Blur ink bleed layer */}
             <span
               aria-hidden
               style={{
@@ -280,11 +238,13 @@ export default function InkBleed(props: InkBleedProps) {
                 filter: `blur(${BLUR_AMOUNT}px)`,
                 maskImage: spotMask,
                 WebkitMaskImage: spotMask,
+                opacity: 0.8,
               }}
             >
               {ch === " " ? " " : ch}
             </span>
 
+            {/* Left choker layer */}
             <span
               ref={(el) => {
                 leftRefs.current[i] = el;
@@ -295,12 +255,14 @@ export default function InkBleed(props: InkBleedProps) {
                 left: LEFT_CHOKER_OFFSET,
                 maskImage: spotMask,
                 WebkitMaskImage: spotMask,
+                opacity: 0.6,
                 willChange: "mask-image",
               }}
             >
               {ch === " " ? " " : ch}
             </span>
 
+            {/* Right choker layer */}
             <span
               ref={(el) => {
                 rightRefs.current[i] = el;
@@ -311,6 +273,7 @@ export default function InkBleed(props: InkBleedProps) {
                 left: RIGHT_CHOKER_OFFSET,
                 maskImage: spotMask,
                 WebkitMaskImage: spotMask,
+                opacity: 0.6,
                 willChange: "mask-image",
               }}
             >
@@ -330,7 +293,7 @@ const COMPONENT_DEFAULTS = {
   font: {
     fontFamily: "Inter, sans-serif",
     variant: "Bold",
-    fontSize: "72px",
+    fontSize: "96px",
     fontWeight: 700,
     lineHeight: "1em",
     letterSpacing: "0em",
