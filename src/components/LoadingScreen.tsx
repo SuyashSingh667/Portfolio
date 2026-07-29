@@ -9,7 +9,7 @@ interface LoadingScreenProps {
   minDurationMs?: number;
 }
 
-// Organic ragged torn paper polygon clip-path coordinates
+// High-definition organic paper tear clip paths
 const TEAR_JAGGED_PATH_LEFT = `polygon(
   0% 0%, 
   51.5% 0%, 
@@ -320,11 +320,11 @@ export default function LoadingScreen({
         animationFrameId = requestAnimationFrame(updateProgress);
       } else {
         setProgress(100);
-        // Delay slightly at 100% before triggering tear split transition
+        // Clear 350ms pause at 100% so user sees full counter before tear split
         setTimeout(() => {
           setIsVisible(false);
           document.body.style.overflow = "";
-        }, 200);
+        }, 350);
       }
     };
 
@@ -349,19 +349,20 @@ export default function LoadingScreen({
             key="tear-left"
             initial={{ x: "0%", rotate: 0, scale: 1 }}
             exit={{
-              x: "-105%",
-              rotate: -6,
+              x: "-108%",
+              rotate: -5,
               scale: 0.98,
             }}
             transition={{
-              duration: 0.95,
-              ease: [0.16, 1, 0.3, 1],
+              duration: 1.6,
+              ease: [0.22, 1, 0.36, 1],
             }}
             style={{
               clipPath: TEAR_JAGGED_PATH_LEFT,
               WebkitClipPath: TEAR_JAGGED_PATH_LEFT,
+              willChange: "transform",
             }}
-            className="absolute inset-0 bg-[#fafafa] flex items-center justify-center pointer-events-auto filter drop-shadow-[4px_0_15px_rgba(0,0,0,0.15)]"
+            className="absolute inset-0 bg-[#fafafa] flex items-center justify-center pointer-events-auto transform-gpu filter drop-shadow-[12px_0_25px_rgba(0,0,0,0.18)]"
           >
             <LoaderContent progress={progress} />
           </motion.div>
@@ -371,19 +372,20 @@ export default function LoadingScreen({
             key="tear-right"
             initial={{ x: "0%", rotate: 0, scale: 1 }}
             exit={{
-              x: "105%",
-              rotate: 6,
+              x: "108%",
+              rotate: 5,
               scale: 0.98,
             }}
             transition={{
-              duration: 0.95,
-              ease: [0.16, 1, 0.3, 1],
+              duration: 1.6,
+              ease: [0.22, 1, 0.36, 1],
             }}
             style={{
               clipPath: TEAR_JAGGED_PATH_RIGHT,
               WebkitClipPath: TEAR_JAGGED_PATH_RIGHT,
+              willChange: "transform",
             }}
-            className="absolute inset-0 bg-[#fafafa] flex items-center justify-center pointer-events-auto filter drop-shadow-[-4px_0_15px_rgba(0,0,0,0.15)]"
+            className="absolute inset-0 bg-[#fafafa] flex items-center justify-center pointer-events-auto transform-gpu filter drop-shadow-[-12px_0_25px_rgba(0,0,0,0.18)]"
           >
             <LoaderContent progress={progress} />
           </motion.div>
