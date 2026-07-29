@@ -773,7 +773,7 @@ export default function Home() {
             className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
             style={{ 
               willChange: "transform",
-              paddingRight: "10vw" // Just a small amount of breathing room at the end
+              paddingRight: "0vw" // No extra space at the end
             }}
           >
             {experiences.map((item, idx) => (
