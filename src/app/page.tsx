@@ -549,7 +549,7 @@ export default function Home() {
             return `+=${Math.max(dist, 400)}`;
           },
           pin: true,
-          scrub: true, // Set to true (instant) to remove inertia lag that feels sluggish
+          scrub: 1, // 1 second smoothing provides the most butter-smooth experience
           anticipatePin: 1,
           animation: anim,
           invalidateOnRefresh: true,
@@ -770,8 +770,9 @@ export default function Home() {
         <div className="w-full overflow-hidden relative z-10">
           <div
             ref={cardsContainerRef}
-            className="flex gap-0 pl-6 md:pl-16 items-center"
+            className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
             style={{ 
+              willChange: "transform",
               paddingRight: "50vw" // This guarantees 50vw of horizontal dead space at the end
             }}
           >
