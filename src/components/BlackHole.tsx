@@ -20,6 +20,7 @@ type Centre = {
 }
 
 type Props = {
+    // Intersection Observer prop to ensure we don't render when out of view
     // Center (Event Horizon)
     showCenter?: boolean
     centre?: Centre // grouped in a modal, shown only when showCenter is on
@@ -197,6 +198,21 @@ export default function BlackHole(props: Props) {
     ])
 
     // ─── Resize Observer ─────────────────────────────────────
+
+    const isIntersectingRef = useRef(false)
+
+    // Handle intersection observer
+    useEffect(() => {
+        if (!containerRef.current) return
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isIntersectingRef.current = entry.isIntersecting
+            },
+            { threshold: 0 }
+        )
+        observer.observe(containerRef.current)
+        return () => observer.disconnect()
+    }, [])
 
     useEffect(() => {
         const container = containerRef.current

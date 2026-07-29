@@ -376,7 +376,7 @@ export function ScrollDissolveReveal({
       className={`relative h-[300vh] w-full ${containerClassName || ""}`}
     >
       <div className={`sticky top-0 h-screen w-full ${className || ""}`}>
-        <Canvas>
+        <Canvas dpr={[1, 1.5]}>
           <OrthographicCamera
             makeDefault
             manual

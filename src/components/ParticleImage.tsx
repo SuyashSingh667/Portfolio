@@ -246,6 +246,20 @@ export default function ParticleImage(__props: any) {
     const roamFadeFromRef = useRef(1);
     const roamFadeToRef = useRef(1);
     
+    const isIntersectingRef = useRef(false);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isIntersectingRef.current = entry.isIntersecting;
+            },
+            { threshold: 0 }
+        );
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
     const startAnimRef = useRef<any>(null);
     startAnimRef.current = (newState: string) => {
         const { particles } = sceneRef.current;

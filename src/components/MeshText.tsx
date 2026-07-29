@@ -227,6 +227,16 @@ export default function MeshText(props: any) {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
     const wrapperRef = useRef<HTMLDivElement | null>(null)
+    const isIntersectingRef = useRef(false)
+
+    useEffect(() => {
+        if (!wrapperRef.current) return
+        const observer = new IntersectionObserver(([entry]) => {
+            isIntersectingRef.current = entry.isIntersecting
+        })
+        observer.observe(wrapperRef.current)
+        return () => observer.disconnect()
+    }, [])
 
     useEffect(() => {
         const canvas = canvasRef.current
@@ -420,6 +430,10 @@ export default function MeshText(props: any) {
 
         let rafId = 0
         const tick = () => {
+            if (!isIntersectingRef.current) {
+                rafId = requestAnimationFrame(tick)
+                return
+            }
             cursor.vx = cursor.x - cursor.px
             cursor.vy = cursor.y - cursor.py
             const vmag = Math.hypot(cursor.vx, cursor.vy)

@@ -505,10 +505,13 @@ class ArcballControl {
     canvas.addEventListener('pointerleave', () => {
       this.isPointerDown = false;
     });
+    let lastMoveTime = 0;
     canvas.addEventListener('pointermove', e => {
-      if (this.isPointerDown) {
-        vec2.set(this.pointerPos, e.clientX, e.clientY);
-      }
+      if (!this.isPointerDown) return;
+      const now = performance.now();
+      if (now - lastMoveTime < 16) return;
+      lastMoveTime = now;
+      vec2.set(this.pointerPos, e.clientX, e.clientY);
     });
 
     canvas.style.touchAction = 'none';
@@ -679,14 +682,17 @@ class InfiniteGridMenu {
   scaleFactor = 1.0;
   movementActive = false;
   animFrameId: number | null = null;
+  private onInit?: ((menu: InfiniteGridMenu) => void) | null;
+  private isIntersectingRef?: React.RefObject<boolean>;
 
   constructor(
     canvas: HTMLCanvasElement,
     items: MenuItem[],
-    onActiveItemChange?: (index: number) => void,
-    onMovementChange?: (isMoving: boolean) => void,
+    onActiveItemChange: (index: number) => void,
+    onMovementChange: (isMoving: boolean) => void,
     onInit?: ((menu: InfiniteGridMenu) => void) | null,
-    scale = 1.0
+    scale: number = 1.0,
+    isIntersectingRef?: React.RefObject<boolean>
   ) {
     this.canvas = canvas;
     this.items = items || [];
@@ -694,6 +700,9 @@ class InfiniteGridMenu {
     this.onMovementChange = onMovementChange || (() => {});
     this.scaleFactor = scale;
     this.camera.position[2] = 2.3 * scale;
+    this.onInit = onInit;
+    this.isIntersectingRef = isIntersectingRef;
+
     this.#init(onInit);
   }
 
@@ -719,7 +728,13 @@ class InfiniteGridMenu {
     this.#animate(this.#deltaTime);
     this.#render();
 
-    this.animFrameId = requestAnimationFrame(t => this.run(t));
+    this.animFrameId = requestAnimationFrame(t => {
+      if (this.isIntersectingRef && !this.isIntersectingRef.current) {
+        this.run(t);
+        return;
+      }
+      this.run(t);
+    });
   }
 
   destroy() {
@@ -1027,8 +1042,19 @@ export interface InfiniteMenuProps {
 
 export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const isIntersectingRef = useRef(false);
   const [activeItem, setActiveItem] = useState<MenuItem | null>(null);
   const [isMoving, setIsMoving] = useState(false);
+
+  useEffect(() => {
+    if (!wrapperRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      isIntersectingRef.current = entry.isIntersecting;
+    });
+    observer.observe(wrapperRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -1047,7 +1073,8 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
         handleActiveItem,
         setIsMoving,
         sk => sk.run(),
-        scale
+        scale,
+        isIntersectingRef
       );
     }
 
@@ -1073,7 +1100,7 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
   const fallbackUrl = activeItem?.link;
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div ref={wrapperRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas id="infinite-grid-menu-canvas" ref={canvasRef} />
 
       {activeItem && (

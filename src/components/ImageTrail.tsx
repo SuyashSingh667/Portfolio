@@ -95,8 +95,12 @@ class ImageTrailVariant1 implements TrailVariant {
     this.images = Array.from(container.querySelectorAll('.content__img')).map(img => new ImageItem(img as HTMLElement));
     this.imagesTotal = this.images.length;
 
+    let lastMoveTime = 0;
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
+      const now = performance.now();
+      if (now - lastMoveTime < 16) return;
+      lastMoveTime = now;
       const rect = this.container.getBoundingClientRect();
       this.mousePos = getLocalPointerPos(ev, rect);
     };

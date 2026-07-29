@@ -121,7 +121,14 @@ export default function InkBleed(props: InkBleedProps) {
     }
   };
 
+  const isIntersectingRef = useRef(false);
+
   const tick = () => {
+    if (!isIntersectingRef.current) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+    }
+
     timeRef.current += 1;
     const t = target.current;
     const s = smooth.current;
@@ -137,8 +144,18 @@ export default function InkBleed(props: InkBleedProps) {
   };
 
   useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new IntersectionObserver(
+        ([entry]) => {
+            isIntersectingRef.current = entry.isIntersecting;
+        },
+        { threshold: 0 }
+    );
+    observer.observe(containerRef.current);
+
     rafRef.current = requestAnimationFrame(tick);
     return () => {
+      observer.disconnect();
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
