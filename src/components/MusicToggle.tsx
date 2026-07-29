@@ -21,11 +21,9 @@ export const MusicToggleButton = () => {
     audio.loop = true;
     audioRef.current = audio;
 
-    audio.addEventListener("error", () => {
-      if (audioRef.current) {
-        audioRef.current.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
-        audioRef.current.load();
-      }
+    audio.addEventListener("error", (e) => {
+      console.error("Audio failed to load:", e);
+      setIsPlaying(false);
     });
 
     return () => {
@@ -53,14 +51,8 @@ export const MusicToggleButton = () => {
     } else {
       setIsPlaying(true);
       audioRef.current.play().catch((err) => {
-        console.warn("Audio play failed or was blocked, trying fallback silent WAV:", err);
-        if (audioRef.current) {
-          audioRef.current.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
-          audioRef.current.load();
-          audioRef.current.play().catch(() => {
-            setIsPlaying(false);
-          });
-        }
+        console.warn("Audio play failed or was blocked:", err);
+        setIsPlaying(false);
       });
     }
   };
