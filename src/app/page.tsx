@@ -773,7 +773,7 @@ export default function Home() {
             className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
             style={{ 
               willChange: "transform",
-              paddingRight: "80vw" // This guarantees horizontal dead space at the end
+              paddingRight: "100vw" // This guarantees horizontal dead space at the end
             }}
           >
             {experiences.map((item, idx) => (
@@ -811,8 +811,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Vertical Dead Space between Experiences and Skills */}
-      <div className="h-[40vh] md:h-[60vh] w-full bg-white dark:bg-[#0a0a0a]" />
+      {/* Removed Vertical Dead Space between Experiences and Skills */}
 
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
