@@ -768,14 +768,14 @@ export default function Home() {
         </div>
 
         <div className="w-full overflow-hidden relative z-10">
-          <div
-            ref={cardsContainerRef}
-            className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
-            style={{ 
-              willChange: "transform",
-              paddingRight: "0vw" // No extra space at the end
-            }}
-          >
+            <div
+              ref={cardsContainerRef}
+              className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
+              style={{ 
+                willChange: "transform",
+                paddingRight: "30vw" // Added horizontal space after the 4th experience
+              }}
+            >
             {experiences.map((item, idx) => (
               <div
                 key={idx}
