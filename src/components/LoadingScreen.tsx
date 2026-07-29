@@ -322,8 +322,8 @@ export default function LoadingScreen({
               initial={{ x: "0%" }}
               animate={{ x: "-105%", rotate: -2 }}
               transition={{
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
+                duration: 1.8,
+                ease: [0.22, 1, 0.36, 1],
               }}
               onAnimationComplete={() => {
                 forceEnableScroll();
@@ -348,8 +348,8 @@ export default function LoadingScreen({
               initial={{ x: "0%" }}
               animate={{ x: "105%", rotate: 2 }}
               transition={{
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
+                duration: 1.8,
+                ease: [0.22, 1, 0.36, 1],
               }}
               className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"
             >
