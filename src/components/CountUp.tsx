@@ -1,6 +1,6 @@
 "use client";
 
-import { useInView, useMotionValue, useSpring } from "framer-motion";
+import { animate } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
 interface CountUpProps {
@@ -21,7 +21,7 @@ export default function CountUp({
   from = 0,
   direction = "up",
   delay = 0,
-  duration = 4,
+  duration = 3.2,
   className = "",
   startWhen = true,
   separator = "",
@@ -29,30 +29,15 @@ export default function CountUp({
   onEnd,
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const motionValue = useMotionValue(direction === "down" ? to : from);
-
-  // Configure spring parameters so it moves smoothly and reaches 100 cleanly
-  const damping = 20 + 30 * (1 / duration);
-  const stiffness = 80 * (1 / duration);
-
-  const springValue = useSpring(motionValue, {
-    damping,
-    stiffness,
-  });
-
-  const isInView = useInView(ref, { once: true, margin: "0px" });
 
   const getDecimalPlaces = (num: number) => {
     const str = num.toString();
-
     if (str.includes(".")) {
       const decimals = str.split(".")[1];
-
       if (parseInt(decimals) !== 0) {
         return decimals.length;
       }
     }
-
     return 0;
   };
 
@@ -61,7 +46,6 @@ export default function CountUp({
   const formatValue = useCallback(
     (latest: number) => {
       const hasDecimals = maxDecimals > 0;
-
       const options = {
         useGrouping: !!separator,
         minimumFractionDigits: hasDecimals ? maxDecimals : 0,
@@ -69,7 +53,6 @@ export default function CountUp({
       };
 
       const formattedNumber = Intl.NumberFormat("en-US", options).format(latest);
-
       return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
     },
     [maxDecimals, separator]
@@ -82,42 +65,40 @@ export default function CountUp({
   }, [from, to, direction, formatValue]);
 
   useEffect(() => {
-    if (startWhen) {
+    if (!startWhen) return;
+
+    let controls: ReturnType<typeof animate> | null = null;
+
+    const startTimeout = setTimeout(() => {
       if (typeof onStart === "function") onStart();
 
-      const timeoutId = setTimeout(() => {
-        motionValue.set(direction === "down" ? from : to);
-      }, delay * 1000);
+      const startVal = direction === "down" ? to : from;
+      const endVal = direction === "down" ? from : to;
 
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart]);
+      controls = animate(startVal, endVal, {
+        duration,
+        ease: [0.25, 0.1, 0.25, 1], // Smooth curve without spring deceleration after 90%
+        onUpdate(latest) {
+          if (ref.current) {
+            ref.current.textContent = formatValue(Math.floor(latest));
+          }
+        },
+        onComplete() {
+          if (ref.current) {
+            ref.current.textContent = formatValue(endVal);
+          }
+          if (typeof onEnd === "function") {
+            onEnd();
+          }
+        },
+      });
+    }, delay * 1000);
 
-  useEffect(() => {
-    let hasEnded = false;
-
-    const unsubscribe = springValue.on("change", (latest: number) => {
-      const targetVal = direction === "down" ? from : to;
-      const currentInt = Math.round(latest);
-
-      if (ref.current) {
-        ref.current.textContent = formatValue(latest);
-      }
-
-      // Trigger onEnd strictly when the target number (e.g. 100) is reached
-      if (!hasEnded && currentInt === targetVal) {
-        hasEnded = true;
-        if (ref.current) {
-          ref.current.textContent = formatValue(targetVal);
-        }
-        if (typeof onEnd === "function") {
-          onEnd();
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, [springValue, formatValue, direction, from, to, onEnd]);
+    return () => {
+      clearTimeout(startTimeout);
+      if (controls) controls.stop();
+    };
+  }, [startWhen, direction, from, to, duration, delay, formatValue, onStart, onEnd]);
 
   return <span className={className} ref={ref}>{direction === "down" ? to : from}</span>;
 }
