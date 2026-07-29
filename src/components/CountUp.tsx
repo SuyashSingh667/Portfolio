@@ -1,6 +1,6 @@
 "use client";
 
-import { useInView, useMotionValue, useSpring } from "framer-motion";
+import { useMotionValue, useSpring } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
 interface CountUpProps {
@@ -41,19 +41,14 @@ export default function CountUp({
     stiffness,
   });
 
-  const isInView = useInView(ref, { once: true, margin: "0px" });
-
   const getDecimalPlaces = (num: number) => {
     const str = num.toString();
-
     if (str.includes(".")) {
       const decimals = str.split(".")[1];
-
       if (parseInt(decimals) !== 0) {
         return decimals.length;
       }
     }
-
     return 0;
   };
 
@@ -62,7 +57,6 @@ export default function CountUp({
   const formatValue = useCallback(
     (latest: number) => {
       const hasDecimals = maxDecimals > 0;
-
       const options = {
         useGrouping: !!separator,
         minimumFractionDigits: hasDecimals ? maxDecimals : 0,
@@ -70,22 +64,21 @@ export default function CountUp({
       };
 
       const formattedNumber = Intl.NumberFormat("en-US", options).format(latest);
-
       return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
     },
     [maxDecimals, separator]
   );
 
   useEffect(() => {
+    const initialText = formatValue(direction === "down" ? to : from);
     if (ref.current) {
-      const initialText = formatValue(direction === "down" ? to : from);
       ref.current.textContent = initialText;
-      if (onUpdate) onUpdate(initialText);
     }
+    if (onUpdate) onUpdate(initialText);
   }, [from, to, direction, formatValue, onUpdate]);
 
   useEffect(() => {
-    if (isInView && startWhen) {
+    if (startWhen) {
       if (typeof onStart === "function") onStart();
 
       const timeoutId = setTimeout(() => {
@@ -104,7 +97,7 @@ export default function CountUp({
         clearTimeout(durationTimeoutId);
       };
     }
-  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
+  }, [startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
 
   useEffect(() => {
     const unsubscribe = springValue.on("change", (latest: number) => {

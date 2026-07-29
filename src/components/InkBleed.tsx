@@ -6,17 +6,17 @@ import React, { useEffect, useId, useLayoutEffect, useMemo, useRef } from "react
 const MAIN_RADIUS = 0;
 const SECONDARY_RADIUS = 35;
 const INVERT = true;
-const BLUR_AMOUNT = 10;
-const FRINGE = 5;
+const BLUR_AMOUNT = 8;
+const FRINGE = 4;
 
 // Choker offsets
-const LEFT_CHOKER_OFFSET = -10;
-const RIGHT_CHOKER_OFFSET = 10;
+const LEFT_CHOKER_OFFSET = -6;
+const RIGHT_CHOKER_OFFSET = 6;
 
-// Goo pipeline
-const GOO_BLUR = 6;
-const THRESHOLD = 40;
-const CUTOFF = -15;
+// Goo pipeline - refined for crisp legibility
+const GOO_BLUR = 3;
+const THRESHOLD = 35;
+const CUTOFF = -12;
 
 // Cursor smoothing.
 const FOLLOW = 0.3;
@@ -29,11 +29,12 @@ interface InkBleedProps {
   font?: React.CSSProperties & { variant?: string; fontSize?: string | number; fontWeight?: number | string };
   intensity?: number;
   tag?: string;
+  className?: string;
 }
 
 export default function InkBleed(props: InkBleedProps) {
   const mergedProps = { ...COMPONENT_DEFAULTS, ...props };
-  const { text, color, font, intensity, tag } = mergedProps;
+  const { text, color, font, intensity, tag, className } = mergedProps;
   const Tag = (tag ?? "div") as any;
 
   const intensityFactor = Math.max(0, Math.min(100, intensity ?? 25)) / 16.67;
@@ -88,7 +89,7 @@ export default function InkBleed(props: InkBleedProps) {
       window.removeEventListener("scroll", measure);
       window.removeEventListener("resize", measure);
     };
-  }, [chars.length]);
+  }, [text]);
 
   const target = useRef({ x: -9999, y: -9999, on: 0 });
   const smooth = useRef({ x: -9999, y: -9999, on: 0 });
@@ -212,14 +213,13 @@ export default function InkBleed(props: InkBleedProps) {
 
   return (
     <Tag
+      className={className}
       style={{
         position: "relative",
-        width: "100%",
-        height: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        overflow: "hidden",
+        overflow: "visible",
         userSelect: "none",
       }}
     >
@@ -412,7 +412,7 @@ const COMPONENT_DEFAULTS = {
   font: {
     fontFamily: "Inter, sans-serif",
     variant: "Bold",
-    fontSize: "56px",
+    fontSize: "96px",
     fontWeight: 700,
     lineHeight: "1em",
     letterSpacing: "0em",
