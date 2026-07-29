@@ -24,6 +24,17 @@ function getLocalPointerPos(e: MouseEvent | TouchEvent, rect: DOMRect) {
   };
 }
 
+let globalCachedRect: DOMRect | null = null;
+let lastRectTime = 0;
+function getContainerRect(container: HTMLElement) {
+  const now = performance.now();
+  if (!globalCachedRect || now - lastRectTime > 200) {
+    globalCachedRect = container.getBoundingClientRect();
+    lastRectTime = now;
+  }
+  return globalCachedRect;
+}
+
 let globalClientX = typeof window !== 'undefined' ? window.innerWidth / 2 : 0;
 let globalClientY = typeof window !== 'undefined' ? window.innerHeight / 2 : 0;
 
@@ -71,6 +82,7 @@ class ImageItem {
 
 interface TrailVariant {
   cleanup(): void;
+  isIntersecting?: boolean;
 }
 
 class ImageTrailVariant1 implements TrailVariant {
@@ -87,6 +99,7 @@ class ImageTrailVariant1 implements TrailVariant {
   lastMousePos = { x: 0, y: 0 };
   cacheMousePos = { x: 0, y: 0 };
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
 
@@ -101,7 +114,7 @@ class ImageTrailVariant1 implements TrailVariant {
       const now = performance.now();
       if (now - lastMoveTime < 16) return;
       lastMoveTime = now;
-      const rect = this.container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     window.addEventListener('mousemove', this.handlePointerMove);
@@ -121,6 +134,10 @@ class ImageTrailVariant1 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     this.cacheMousePos.x = lerp(this.cacheMousePos.x, this.mousePos.x, 0.1);
     this.cacheMousePos.y = lerp(this.cacheMousePos.y, this.mousePos.y, 0.1);
@@ -137,7 +154,7 @@ class ImageTrailVariant1 implements TrailVariant {
 
   triggerSample() {
     if (this.destroyed || this.imagesTotal === 0) return;
-    const rect = this.container.getBoundingClientRect();
+    const rect = getContainerRect(this.container);
 
     const targetX = globalClientX - rect.left;
     const targetY = globalClientY - rect.top;
@@ -219,6 +236,7 @@ class ImageTrailVariant2 implements TrailVariant {
   lastMousePos = { x: 0, y: 0 };
   cacheMousePos = { x: 0, y: 0 };
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
   initRender: (ev: MouseEvent | TouchEvent) => void;
@@ -230,7 +248,7 @@ class ImageTrailVariant2 implements TrailVariant {
 
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     container.addEventListener('mousemove', this.handlePointerMove);
@@ -238,7 +256,7 @@ class ImageTrailVariant2 implements TrailVariant {
 
     this.initRender = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
       this.cacheMousePos = { ...this.mousePos };
 
@@ -262,6 +280,10 @@ class ImageTrailVariant2 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     this.cacheMousePos.x = lerp(this.cacheMousePos.x, this.mousePos.x, 0.1);
     this.cacheMousePos.y = lerp(this.cacheMousePos.y, this.mousePos.y, 0.1);
@@ -355,6 +377,7 @@ class ImageTrailVariant3 implements TrailVariant {
   lastMousePos = { x: 0, y: 0 };
   cacheMousePos = { x: 0, y: 0 };
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
   initRender: (ev: MouseEvent | TouchEvent) => void;
@@ -366,7 +389,7 @@ class ImageTrailVariant3 implements TrailVariant {
 
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     container.addEventListener('mousemove', this.handlePointerMove);
@@ -374,7 +397,7 @@ class ImageTrailVariant3 implements TrailVariant {
 
     this.initRender = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
       this.cacheMousePos = { ...this.mousePos };
 
@@ -397,6 +420,10 @@ class ImageTrailVariant3 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     this.cacheMousePos.x = lerp(this.cacheMousePos.x, this.mousePos.x, 0.1);
     this.cacheMousePos.y = lerp(this.cacheMousePos.y, this.mousePos.y, 0.1);
@@ -492,6 +519,7 @@ class ImageTrailVariant4 implements TrailVariant {
   lastMousePos = { x: 0, y: 0 };
   cacheMousePos = { x: 0, y: 0 };
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
   initRender: (ev: MouseEvent | TouchEvent) => void;
@@ -503,7 +531,7 @@ class ImageTrailVariant4 implements TrailVariant {
 
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     container.addEventListener('mousemove', this.handlePointerMove);
@@ -511,7 +539,7 @@ class ImageTrailVariant4 implements TrailVariant {
 
     this.initRender = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
       this.cacheMousePos = { ...this.mousePos };
       requestAnimationFrame(() => this.render());
@@ -533,6 +561,10 @@ class ImageTrailVariant4 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     if (distance > this.threshold) {
       this.showNextImage();
@@ -644,6 +676,7 @@ class ImageTrailVariant5 implements TrailVariant {
   cacheMousePos = { x: 0, y: 0 };
   lastAngle = 0;
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
   initRender: (ev: MouseEvent | TouchEvent) => void;
@@ -655,7 +688,7 @@ class ImageTrailVariant5 implements TrailVariant {
 
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     container.addEventListener('mousemove', this.handlePointerMove);
@@ -663,7 +696,7 @@ class ImageTrailVariant5 implements TrailVariant {
 
     this.initRender = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
       this.cacheMousePos = { ...this.mousePos };
       requestAnimationFrame(() => this.render());
@@ -685,6 +718,10 @@ class ImageTrailVariant5 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     if (distance > this.threshold) {
       this.showNextImage();
@@ -790,6 +827,7 @@ class ImageTrailVariant6 implements TrailVariant {
   lastMousePos = { x: 0, y: 0 };
   cacheMousePos = { x: 0, y: 0 };
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
   initRender: (ev: MouseEvent | TouchEvent) => void;
@@ -801,7 +839,7 @@ class ImageTrailVariant6 implements TrailVariant {
 
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     container.addEventListener('mousemove', this.handlePointerMove);
@@ -809,7 +847,7 @@ class ImageTrailVariant6 implements TrailVariant {
 
     this.initRender = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
       this.cacheMousePos = { ...this.mousePos };
       requestAnimationFrame(() => this.render());
@@ -831,6 +869,10 @@ class ImageTrailVariant6 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     this.cacheMousePos.x = lerp(this.cacheMousePos.x, this.mousePos.x, 0.3);
     this.cacheMousePos.y = lerp(this.cacheMousePos.y, this.mousePos.y, 0.3);
@@ -963,6 +1005,7 @@ class ImageTrailVariant7 implements TrailVariant {
   visibleImagesCount = 0;
   visibleImagesTotal = 9;
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
   initRender: (ev: MouseEvent | TouchEvent) => void;
@@ -975,7 +1018,7 @@ class ImageTrailVariant7 implements TrailVariant {
 
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     container.addEventListener('mousemove', this.handlePointerMove);
@@ -983,7 +1026,7 @@ class ImageTrailVariant7 implements TrailVariant {
 
     this.initRender = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
       this.cacheMousePos = { ...this.mousePos };
       requestAnimationFrame(() => this.render());
@@ -1005,6 +1048,10 @@ class ImageTrailVariant7 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     this.cacheMousePos.x = lerp(this.cacheMousePos.x, this.mousePos.x, 0.3);
     this.cacheMousePos.y = lerp(this.cacheMousePos.y, this.mousePos.y, 0.3);
@@ -1099,6 +1146,7 @@ class ImageTrailVariant8 implements TrailVariant {
   zValue = 0;
   cachedZValue = 0;
   destroyed = false;
+  isIntersecting = false;
 
   handlePointerMove: (ev: MouseEvent | TouchEvent) => void;
   initRender: (ev: MouseEvent | TouchEvent) => void;
@@ -1111,7 +1159,7 @@ class ImageTrailVariant8 implements TrailVariant {
 
     this.handlePointerMove = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
     };
     container.addEventListener('mousemove', this.handlePointerMove);
@@ -1119,7 +1167,7 @@ class ImageTrailVariant8 implements TrailVariant {
 
     this.initRender = ev => {
       if (this.destroyed) return;
-      const rect = container.getBoundingClientRect();
+      const rect = getContainerRect(container);
       this.mousePos = getLocalPointerPos(ev, rect);
       this.cacheMousePos = { ...this.mousePos };
       requestAnimationFrame(() => this.render());
@@ -1141,6 +1189,10 @@ class ImageTrailVariant8 implements TrailVariant {
 
   render() {
     if (this.destroyed) return;
+    if (!this.isIntersecting) {
+      requestAnimationFrame(() => this.render());
+      return;
+    }
     let distance = getMouseDistance(this.mousePos, this.lastMousePos);
     this.cacheMousePos.x = lerp(this.cacheMousePos.x, this.mousePos.x, 0.1);
     this.cacheMousePos.y = lerp(this.cacheMousePos.y, this.mousePos.y, 0.1);
@@ -1156,7 +1208,7 @@ class ImageTrailVariant8 implements TrailVariant {
   }
 
   showNextImage() {
-    const rect = this.container.getBoundingClientRect();
+    const rect = getContainerRect(this.container);
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     const relX = this.mousePos.x - centerX;
@@ -1264,13 +1316,13 @@ export default function ImageTrail({ items = [], variant = 1 }: ImageTrailProps)
     const trailInstance = new Cls(parent);
 
     const observer = new IntersectionObserver(([entry]) => {
+      trailInstance.isIntersecting = entry.isIntersecting;
       if (entry.isIntersecting) {
         setTimeout(() => {
           if (!trailInstance.destroyed && typeof (trailInstance as any).triggerSample === 'function') {
             (trailInstance as any).triggerSample();
           }
         }, 400);
-        observer.disconnect();
       }
     }, { threshold: 0.15 });
 

@@ -606,8 +606,20 @@ export default function ParticleText(props: Props) {
             }
         }
 
+        const observer = new IntersectionObserver(([entry]) => {
+            if (hiddenRef.current === undefined) hiddenRef.current = false;
+        });
+        
+        const isIntersectingRef = { current: false };
+        const visibilityObserver = new IntersectionObserver(([entry]) => {
+            isIntersectingRef.current = entry.isIntersecting;
+        });
+        visibilityObserver.observe(container);
+
         const loop = () => {
-            drawFrame()
+            if (isIntersectingRef.current) {
+                drawFrame()
+            }
             rafRef.current = requestAnimationFrame(loop)
         }
         rafRef.current = requestAnimationFrame(loop)

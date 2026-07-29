@@ -144,53 +144,32 @@ function GradualBlur(props: GradualBlurProps) {
   const isVisible = useIntersectionObserver(containerRef, config.animated === 'scroll');
 
   const blurDivs = useMemo(() => {
-    const divs = [];
-    const increment = 100 / config.divCount;
-    const currentStrength =
-      isHovered && config.hoverIntensity ? config.strength * config.hoverIntensity : config.strength;
-
+    const currentStrength = isHovered && config.hoverIntensity ? config.strength * config.hoverIntensity : config.strength;
     const curveFunc = CURVE_FUNCTIONS[config.curve as keyof typeof CURVE_FUNCTIONS] || CURVE_FUNCTIONS.linear;
 
-    for (let i = 1; i <= config.divCount; i++) {
-      let progress = i / config.divCount;
-      progress = curveFunc(progress);
-
-      let blurValue;
-      if (config.exponential) {
-        blurValue = Math.pow(2, progress * 4) * 0.0625 * currentStrength;
-      } else {
-        blurValue = 0.0625 * (progress * config.divCount + 1) * currentStrength;
-      }
-
-      const p1 = Math.round((increment * i - increment) * 10) / 10;
-      const p2 = Math.round(increment * i * 10) / 10;
-      const p3 = Math.round((increment * i + increment) * 10) / 10;
-      const p4 = Math.round((increment * i + increment * 2) * 10) / 10;
-
-      let gradient = `transparent ${p1}%, black ${p2}%`;
-      if (p3 <= 100) gradient += `, black ${p3}%`;
-      if (p4 <= 100) gradient += `, transparent ${p4}%`;
-
-      const direction = getGradientDirection(config.position);
-
-      const divStyle: React.CSSProperties = {
-        position: 'absolute',
-        inset: '0',
-        maskImage: `linear-gradient(${direction}, ${gradient})`,
-        WebkitMaskImage: `linear-gradient(${direction}, ${gradient})`,
-        backdropFilter: `blur(${blurValue.toFixed(3)}rem)`,
-        WebkitBackdropFilter: `blur(${blurValue.toFixed(3)}rem)`,
-        opacity: config.opacity,
-        transition:
-          config.animated && config.animated !== 'scroll'
-            ? `backdrop-filter ${config.duration} ${config.easing}`
-            : undefined
-      };
-
-      divs.push(<div key={i} style={divStyle} />);
+    // Generate gradient stops for a smooth, single-layer mask
+    const stops = [];
+    for (let i = 0; i <= 20; i++) {
+      const progress = i / 20;
+      const opacity = 1 - curveFunc(progress);
+      stops.push(`rgba(0,0,0,${opacity}) ${progress * 100}%`);
     }
 
-    return divs;
+    const direction = getGradientDirection(config.position);
+    const maskGradient = `linear-gradient(${direction}, ${stops.join(', ')})`;
+
+    const divStyle: React.CSSProperties = {
+      position: 'absolute',
+      inset: '0',
+      maskImage: maskGradient,
+      WebkitMaskImage: maskGradient,
+      backdropFilter: `blur(${currentStrength}rem)`,
+      WebkitBackdropFilter: `blur(${currentStrength}rem)`,
+      opacity: config.opacity,
+      transition: config.animated && config.animated !== 'scroll' ? `backdrop-filter ${config.duration} ${config.easing}` : undefined
+    };
+
+    return [<div key="1" style={divStyle} className="transform-gpu" />];
   }, [config, isHovered]);
 
   const containerStyle = useMemo(() => {

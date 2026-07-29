@@ -134,7 +134,19 @@ export default function TextPressure({
 
   useEffect(() => {
     let rafId: number;
+    let isIntersecting = false;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isIntersecting = entry.isIntersecting;
+    });
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
     const animate = () => {
+      rafId = requestAnimationFrame(animate);
+      if (!isIntersecting) return;
+
       mouseRef.current.x += (cursorRef.current.x - mouseRef.current.x) / 15;
       mouseRef.current.y += (cursorRef.current.y - mouseRef.current.y) / 15;
 
@@ -168,12 +180,13 @@ export default function TextPressure({
           }
         });
       }
-
-      rafId = requestAnimationFrame(animate);
     };
 
     animate();
-    return () => cancelAnimationFrame(rafId);
+    return () => {
+      cancelAnimationFrame(rafId);
+      observer.disconnect();
+    };
   }, [width, weight, italic, alpha]);
 
   const styleElement = useMemo(() => {

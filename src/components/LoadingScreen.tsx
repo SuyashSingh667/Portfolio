@@ -271,10 +271,8 @@ export default function LoadingScreen({
 
   const handleCountEnd = () => {
     forceEnableScroll();
-    // Hold on 100% before starting tear transition
-    setTimeout(() => {
-      setIsTearing(true);
-    }, 800);
+    // Start tear transition immediately
+    setIsTearing(true);
   };
 
   if (!isVisible) return null;
@@ -294,7 +292,7 @@ export default function LoadingScreen({
                 to={100}
                 separator=""
                 direction="up"
-                duration={1.5}
+                duration={0.3}
                 startWhen={true}
                 onEnd={handleCountEnd}
               />
@@ -322,7 +320,7 @@ export default function LoadingScreen({
               initial={{ x: "0%" }}
               animate={{ x: "-105%", rotate: -2 }}
               transition={{
-                duration: 1.8,
+                duration: 0.4,
                 ease: [0.22, 1, 0.36, 1],
               }}
               onAnimationComplete={() => {
@@ -348,7 +346,7 @@ export default function LoadingScreen({
               initial={{ x: "0%" }}
               animate={{ x: "105%", rotate: 2 }}
               transition={{
-                duration: 1.8,
+                duration: 0.4,
                 ease: [0.22, 1, 0.36, 1],
               }}
               className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"

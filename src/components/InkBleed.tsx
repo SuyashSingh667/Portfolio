@@ -71,11 +71,23 @@ export default function InkBleed(props: InkBleedProps) {
     measure();
     const ro = new ResizeObserver(measure);
     if (containerRef.current) ro.observe(containerRef.current);
-    window.addEventListener("scroll", measure, { passive: true });
+    
+    let scrollTimeout: NodeJS.Timeout | null = null;
+    const throttledMeasure = () => {
+      if (!scrollTimeout) {
+        scrollTimeout = setTimeout(() => {
+          measure();
+          scrollTimeout = null;
+        }, 100);
+      }
+    };
+
+    window.addEventListener("scroll", throttledMeasure, { passive: true });
     window.addEventListener("resize", measure);
     return () => {
       ro.disconnect();
-      window.removeEventListener("scroll", measure);
+      if (scrollTimeout) clearTimeout(scrollTimeout);
+      window.removeEventListener("scroll", throttledMeasure);
       window.removeEventListener("resize", measure);
     };
   }, [text]);

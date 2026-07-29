@@ -310,11 +310,7 @@ export default function InteractiveAvatar3D({
         mouseX = 0;
         mouseY = 0;
         wasIntersecting = false;
-        if (isNearNeutral || (window as any).isThemeTransitioning) {
-          // If we are at neutral, stop rendering to save performance/battery
-          renderer.render(scene, camera);
-          return;
-        }
+        return;
       } else if ((window as any).isThemeTransitioning) {
         return;
       }

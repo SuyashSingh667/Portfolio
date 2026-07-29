@@ -5,9 +5,9 @@ import Matter from "matter-js";
 import * as THREE from "three";
 
 const SKILL_ITEMS = [
-  "React", "Next.js", "TypeScript", "WebGL", "Three.js", "Tailwind",
-  "GSAP", "Framer", "Node.js", "Figma", "Shaders",
-  "PostgreSQL", "Docker", "Python", "Git",
+  "REST API", "MySQL", "DBMS", "Spring Boot", "GitHub", "AWS",
+  "React", "Three.js", "C++", "HTML", "JavaScript",
+  "Framer", "Docker", "GSAP"
 ];
 const M = Matter;
 const N = SKILL_ITEMS.length;

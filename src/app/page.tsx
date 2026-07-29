@@ -773,7 +773,7 @@ export default function Home() {
             className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
             style={{ 
               willChange: "transform",
-              paddingRight: "50vw" // This guarantees 50vw of horizontal dead space at the end
+              paddingRight: "80vw" // This guarantees horizontal dead space at the end
             }}
           >
             {experiences.map((item, idx) => (
@@ -812,7 +812,7 @@ export default function Home() {
       </section>
 
       {/* Vertical Dead Space between Experiences and Skills */}
-      <div className="h-[25vh] md:h-[35vh] w-full bg-white dark:bg-[#0a0a0a]" />
+      <div className="h-[40vh] md:h-[60vh] w-full bg-white dark:bg-[#0a0a0a]" />
 
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
@@ -828,7 +828,10 @@ export default function Home() {
         }}
       >
         {/* Warm glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-zinc-500/8 rounded-full blur-[140px] pointer-events-none" />
+        <div 
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] pointer-events-none transform-gpu"
+          style={{ background: 'radial-gradient(circle, rgba(113, 113, 122, 0.12) 0%, transparent 60%)' }} 
+        />
 
         {/* Top fade — softens the hard edge between the Skills heading and the grid */}
         <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent pointer-events-none z-20" />

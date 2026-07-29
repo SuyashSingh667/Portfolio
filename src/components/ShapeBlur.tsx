@@ -232,8 +232,17 @@ const ShapeBlur = ({
     });
     ro.observe(mount);
 
+    let isIntersecting = false;
+    const io = new IntersectionObserver(([entry]) => {
+      isIntersecting = entry.isIntersecting;
+    });
+    io.observe(mount);
+
     const update = () => {
       if (!active) return;
+      animationFrameId = requestAnimationFrame(update);
+      if (!isIntersecting) return;
+
       time = performance.now() * 0.001;
       const dt = time - lastTime;
       lastTime = time;
@@ -244,7 +253,6 @@ const ShapeBlur = ({
       });
 
       renderer.render(scene, camera);
-      animationFrameId = requestAnimationFrame(update);
     };
     update();
 
@@ -254,6 +262,7 @@ const ShapeBlur = ({
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', resize);
       ro.disconnect();
+      io.disconnect();
       document.removeEventListener('mousemove', onPointerMove);
       document.removeEventListener('pointermove', onPointerMove);
       if (mount.contains(renderer.domElement)) {

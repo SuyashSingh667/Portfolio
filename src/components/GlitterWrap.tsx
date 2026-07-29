@@ -87,6 +87,7 @@ export default function GlitterWrap(incomingProps: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number | null>(null);
+  const isIntersectingRef = useRef(false);
   const sizeRef = useRef({ w: 0, h: 0, dpr: 1 });
   const renderTarget = RenderTarget.current();
   const isStatic =
@@ -402,10 +403,17 @@ export default function GlitterWrap(incomingProps: Props) {
       };
     }
 
+    const observer = new IntersectionObserver(([entry]) => {
+      isIntersectingRef.current = entry.isIntersecting;
+    });
+    if (containerRef.current) observer.observe(containerRef.current);
+
     const loop = (t: number) => {
       const deltaSec = (t - lastT) / 1000;
       lastT = t;
-      drawFrame(deltaSec);
+      if (isIntersectingRef.current) {
+        drawFrame(deltaSec);
+      }
       rafRef.current = requestAnimationFrame(loop);
     };
     rafRef.current = requestAnimationFrame(loop);

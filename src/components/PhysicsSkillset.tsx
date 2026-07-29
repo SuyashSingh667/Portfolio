@@ -11,22 +11,20 @@ interface SkillItem {
 }
 
 const SKILL_ITEMS: SkillItem[] = [
+  { name: "REST API", bg: "#0096D6", fg: "#ffffff" },
+  { name: "MySQL", bg: "#4479A1", fg: "#ffffff" },
+  { name: "DBMS", bg: "#F29111", fg: "#ffffff" },
+  { name: "Spring Boot", bg: "#6DB33F", fg: "#ffffff" },
+  { name: "GitHub", bg: "#181717", fg: "#ffffff", border: "#333333" },
+  { name: "AWS", bg: "#FF9900", fg: "#000000" },
   { name: "React", bg: "#61DAFB", fg: "#000000" },
-  { name: "Next.js", bg: "#000000", fg: "#ffffff", border: "#ffffff" },
-  { name: "TypeScript", bg: "#3178C6", fg: "#ffffff" },
-  { name: "WebGL", bg: "#990000", fg: "#ffffff" },
   { name: "Three.js", bg: "#1a1a1a", fg: "#ffffff", border: "#666666" },
-  { name: "Tailwind", bg: "#38BDF8", fg: "#000000" },
-  { name: "GSAP", bg: "#88CE02", fg: "#000000" },
+  { name: "C++", bg: "#00599C", fg: "#ffffff" },
+  { name: "HTML", bg: "#E34F26", fg: "#ffffff" },
+  { name: "JavaScript", bg: "#F7DF1E", fg: "#000000" },
   { name: "Framer", bg: "#FF007F", fg: "#ffffff" },
-  { name: "HTML5", bg: "#E34F26", fg: "#ffffff" },
-  { name: "CSS3", bg: "#1572B6", fg: "#ffffff" },
-  { name: "Node.js", bg: "#339933", fg: "#ffffff" },
-  { name: "Git", bg: "#F05032", fg: "#ffffff" },
-  { name: "Figma", bg: "#F24E1E", fg: "#ffffff" },
-  { name: "UI/UX", bg: "#a78bfa", fg: "#000000" },
-  { name: "Shaders", bg: "#8b5cf6", fg: "#ffffff" },
-  { name: "Canvas", bg: "#ec4899", fg: "#ffffff" },
+  { name: "Docker", bg: "#2496ED", fg: "#ffffff" },
+  { name: "GSAP", bg: "#88CE02", fg: "#000000" },
 ];
 
 const M = Matter;
@@ -55,6 +53,7 @@ export default function PhysicsSkillset({ theme }: { theme?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const engineRef    = useRef<Matter.Engine | null>(null);
   const rafRef       = useRef(0);
+  const isIntersectingRef = useRef(false);
 
   const [skillImages, setSkillImages] = useState<{ src: string }[]>([]);
   const [size,        setSize]        = useState(126);
@@ -194,8 +193,15 @@ export default function PhysicsSkillset({ theme }: { theme?: string }) {
       container.querySelectorAll<HTMLElement>("[data-physics-body]")
     );
 
+    const observer = new IntersectionObserver(([entry]) => {
+      isIntersectingRef.current = entry.isIntersecting;
+    });
+    observer.observe(container);
+
     const update = () => {
       rafRef.current = requestAnimationFrame(update);
+      if (!isIntersectingRef.current) return;
+      
       for (let i = 0; i < made.length; i++) {
         const el = els[i];
         if (!el) continue;
@@ -210,6 +216,7 @@ export default function PhysicsSkillset({ theme }: { theme?: string }) {
     update();
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(rafRef.current);
       if (mouseEnable)
         container.removeEventListener("mouseleave", onLeave);
