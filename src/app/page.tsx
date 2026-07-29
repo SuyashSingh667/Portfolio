@@ -551,8 +551,6 @@ export default function Home() {
           pin: true,
           scrub: 1.5, // Increased scrub smoothing to eliminate jitter
           anticipatePin: 1,
-          fastScrollEnd: true,
-          preventOverlaps: true,
           animation: anim,
           invalidateOnRefresh: true,
         });
@@ -772,8 +770,12 @@ export default function Home() {
         <div className="w-full overflow-hidden relative z-10">
           <div
             ref={cardsContainerRef}
-            className="flex gap-0 px-6 md:px-16 transform-gpu items-center"
-            style={{ willChange: "transform", transform: "translate3d(0, 0, 0)" }}
+            className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
+            style={{ 
+              willChange: "transform", 
+              transform: "translate3d(0, 0, 0)",
+              paddingRight: "50vw" // This guarantees 50vw of horizontal dead space at the end
+            }}
           >
             {experiences.map((item, idx) => (
               <div
@@ -806,9 +808,6 @@ export default function Home() {
                 </div>
               </div>
             ))}
-
-            {/* Clean Blank White Space Buffer after Bennett University */}
-            <div style={{ minWidth: "50vw", height: "1px" }} className="shrink-0 pointer-events-none opacity-0" />
           </div>
         </div>
       </section>
