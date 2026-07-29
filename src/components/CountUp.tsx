@@ -1,6 +1,6 @@
 "use client";
 
-import { animate } from "framer-motion";
+import { useInView, useMotionValue, useSpring } from "framer-motion";
 import { useCallback, useEffect, useRef } from "react";
 
 interface CountUpProps {
@@ -21,14 +21,25 @@ export default function CountUp({
   from = 0,
   direction = "up",
   delay = 0,
-  duration = 3.2,
+  duration = 2,
   className = "",
   startWhen = true,
   separator = "",
   onStart,
-  onEnd,
+  onEnd
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
+  const motionValue = useMotionValue(direction === "down" ? to : from);
+
+  const damping = 20 + 40 * (1 / duration);
+  const stiffness = 100 * (1 / duration);
+
+  const springValue = useSpring(motionValue, {
+    damping,
+    stiffness
+  });
+
+  const isInView = useInView(ref, { once: true, margin: "0px" });
 
   const getDecimalPlaces = (num: number) => {
     const str = num.toString();
@@ -58,14 +69,17 @@ export default function CountUp({
 
   const formatValue = useCallback(
     (latest: number) => {
+      // Use Math.round to ensure it shows every whole number cleanly.
+      const rounded = Math.round(latest);
       const hasDecimals = maxDecimals > 0;
+
       const options = {
         useGrouping: !!separator,
         minimumFractionDigits: hasDecimals ? maxDecimals : 0,
-        maximumFractionDigits: hasDecimals ? maxDecimals : 0,
+        maximumFractionDigits: hasDecimals ? maxDecimals : 0
       };
 
-      const formattedNumber = Intl.NumberFormat("en-US", options).format(latest);
+      const formattedNumber = Intl.NumberFormat("en-US", options).format(rounded);
       let mapped = separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
       return mapped.split('').map(char => digitMap[char] || char).join('');
     },
@@ -79,40 +93,36 @@ export default function CountUp({
   }, [from, to, direction, formatValue]);
 
   useEffect(() => {
-    if (!startWhen) return;
-
-    let controls: ReturnType<typeof animate> | null = null;
-
-    const startTimeout = setTimeout(() => {
+    if (isInView && startWhen) {
       if (typeof onStart === "function") onStart();
 
-      const startVal = direction === "down" ? to : from;
-      const endVal = direction === "down" ? from : to;
+      const timeoutId = setTimeout(() => {
+        motionValue.set(direction === "down" ? from : to);
+      }, delay * 1000);
 
-      controls = animate(startVal, endVal, {
-        duration,
-        ease: "linear", // Smooth linear curve so it doesn't slow down at 90%
-        onUpdate(latest) {
-          if (ref.current) {
-            ref.current.textContent = formatValue(Math.round(latest));
-          }
+      const durationTimeoutId = setTimeout(
+        () => {
+          if (typeof onEnd === "function") onEnd();
         },
-        onComplete() {
-          if (ref.current) {
-            ref.current.textContent = formatValue(endVal);
-          }
-          if (typeof onEnd === "function") {
-            onEnd();
-          }
-        },
-      });
-    }, delay * 1000);
+        delay * 1000 + duration * 1000
+      );
 
-    return () => {
-      clearTimeout(startTimeout);
-      if (controls) controls.stop();
-    };
-  }, [startWhen, direction, from, to, duration, delay, formatValue, onStart, onEnd]);
+      return () => {
+        clearTimeout(timeoutId);
+        clearTimeout(durationTimeoutId);
+      };
+    }
+  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
+
+  useEffect(() => {
+    const unsubscribe = springValue.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = formatValue(latest);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [springValue, formatValue]);
 
   return <span className={className} ref={ref}>{formatValue(direction === "down" ? to : from)}</span>;
 }
