@@ -103,6 +103,14 @@ const projects: Project[] = [
     github: "https://github.com/SuyashSingh667/VoteSamvidhan",
     live: "https://votesamvidhan2.vercel.app",
   },
+  {
+    title: "Pram Engine",
+    description: "A custom project engine providing VCR-style aesthetics and functionality. [Update this description with more details about what Pram Engine does!]",
+    image: "/images/projects/pram_engine_poster.png",
+    link: "#",
+    github: "#",
+    live: "#",
+  },
 ];
 
 const experiences = [
