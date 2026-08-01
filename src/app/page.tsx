@@ -106,10 +106,10 @@ const projects: Project[] = [
   {
     title: "Pram Engine",
     description: "A custom project engine providing VCR-style aesthetics and functionality. [Update this description with more details about what Pram Engine does!]",
-    image: "/images/projects/pram_engine_poster.png",
-    link: "#",
-    github: "#",
-    live: "#",
+    image: "/images/projectPosters/in_this_blue_vhs_style_image_remove_the_adobe_stock_watermark_and_the_vertical.png",
+    link: "https://pram-engine.vercel.app/",
+    github: "https://github.com/SuyashSingh667/PRAM-Engine",
+    live: "https://pram-engine.vercel.app/",
   },
 ];
 
