@@ -35,7 +35,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-2",
-    content: "I've written code for one of India's largest steel plants (Bokaro). The servers there were almost as hot as the furnaces.",
+    content: "I've written code for one of India's largest steel plants (Bokaro). Proving that software is just as heavy-duty as hardware.",
     paperType: 2,
     rotation: 0,
     positionClass: "top-[-2%] right-[-6%] sm:right-[-12%] md:right-[-18%] lg:right-[-24%]",
