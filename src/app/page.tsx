@@ -27,6 +27,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 const STICKY_NOTES: StickyNoteItem[] = [
   {
     id: "note-1",
+    title: "SPACE JUNK TRACKER",
     content: "I built SkySentinel to track satellites in Earth's orbit. No aliens found yet, but we are keeping a close eye on the space debris.",
     paperType: 1,
     rotation: 0,
