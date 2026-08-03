@@ -80,20 +80,20 @@ interface Project {
 
 const projects: Project[] = [
   {
-    title: "SkySentinel",
-    description: "Space situational awareness platform monitoring satellite risks in Earth's orbit, integrating live TLE data with interactive 3D visualisation.",
-    image: "/images/projects/skysentinel_yellow.png",
-    link: "https://sky-sentinal.vercel.app",
-    live: "https://sky-sentinal.vercel.app",
-    github: "https://github.com/SuyashSingh667/SkySentinel",
-  },
-  {
     title: "Tribe",
     description: "Centralised campus clubs and events hub with custom calendar-based planning, event discovery, and light AI recommendations.",
     image: "/images/projects/tribe_poster.png?v=10",
     link: "https://tribe-bennett.vercel.app/",
     github: "https://github.com/SuyashSingh667/Tribe",
     live: "https://tribe-bennett.vercel.app/",
+  },
+  {
+    title: "SkySentinel",
+    description: "Space situational awareness platform monitoring satellite risks in Earth's orbit, integrating live TLE data with interactive 3D visualisation.",
+    image: "/images/projects/skysentinel_yellow.png",
+    link: "https://sky-sentinal.vercel.app",
+    live: "https://sky-sentinal.vercel.app",
+    github: "https://github.com/SuyashSingh667/SkySentinel",
   },
   {
     title: "VoteSamvidhan",
