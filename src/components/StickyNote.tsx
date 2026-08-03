@@ -32,7 +32,7 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
     },
     3: {
       width: "w-60 sm:w-72 md:w-[340px]",
-      containerClass: "top-[35%] left-[28%] right-[8%] bottom-[6%] rotate-[5deg]",
+      containerClass: "top-[35%] left-[28%] right-[8%] bottom-[6%] rotate-[-6deg]",
       titleColor: "text-rose-950 font-sans font-black text-[9px] sm:text-[10px] md:text-xs tracking-wider mb-1",
       textColor: "text-slate-950 font-['Patrick_Hand',cursive] text-sm sm:text-base md:text-lg font-bold leading-tight md:leading-snug",
     },
