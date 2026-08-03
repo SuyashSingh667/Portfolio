@@ -606,11 +606,12 @@ export default function Home() {
     }));
     
     // Create a larger array so adjacent instances on the 3D sphere don't repeat the same project
+    // Putting baseItems[0] (Tribe) at index 9 ensures it is exactly in the center by default!
     return [
-      baseItems[0], baseItems[1], baseItems[2], baseItems[3],
-      baseItems[2], baseItems[0], baseItems[3], baseItems[1],
-      baseItems[1], baseItems[3], baseItems[0], baseItems[2],
-      baseItems[3], baseItems[2], baseItems[1], baseItems[0],
+      baseItems[1], baseItems[2], baseItems[3], baseItems[0],
+      baseItems[3], baseItems[1], baseItems[0], baseItems[2],
+      baseItems[2], baseItems[0], baseItems[1], baseItems[3],
+      baseItems[0], baseItems[3], baseItems[2], baseItems[1],
     ];
   }, []);
 
