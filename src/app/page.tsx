@@ -45,8 +45,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-3",
-    title: "THE VADA PAV BUDGET",
-    content: "As CodeChef President, I organized coding events for over 1,000 developers. The hardest part wasn't the algorithms; it was managing the vada pavs budget.",
+    title: "FUN FACT",
+    content: "I once built a blockchain voting system (VoteSamvidhan). Because paper ballots are so last century.",
     paperType: 3,
     rotation: 0,
     positionClass: "top-[44%] left-[-8%] sm:left-[-14%] md:left-[-20%] lg:left-[-26%] hidden sm:block",
@@ -54,8 +54,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-4",
-    title: "FUN FACT",
-    content: "I once built a blockchain voting system (VoteSamvidhan). Because paper ballots are so last century.",
+    title: "THE VADA PAV BUDGET",
+    content: "As CodeChef President, I organized coding events for over 1,000 developers. The hardest part wasn't the algorithms; it was managing the vada pavs budget.",
     paperType: 4,
     rotation: 0,
     positionClass: "top-[44%] right-[-8%] sm:right-[-14%] md:right-[-20%] lg:right-[-26%] hidden sm:block",
