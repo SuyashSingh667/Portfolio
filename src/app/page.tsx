@@ -27,8 +27,8 @@ import LoadingScreen from "@/components/LoadingScreen";
 const STICKY_NOTES: StickyNoteItem[] = [
   {
     id: "note-1",
-    title: "IIT KANPUR & BOKARO",
-    content: "Completed internships at both IIT Kanpur and Bokaro Steel Plant back to back.",
+    title: "SPACE JUNK TRACKER",
+    content: "I built SkySentinel to track satellites in Earth's orbit. No aliens found yet, but we are keeping a close eye on the space debris.",
     paperType: 1,
     rotation: 0,
     positionClass: "top-[-4%] left-[-6%] sm:left-[-12%] md:left-[-18%] lg:left-[-24%]",
@@ -36,8 +36,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-2",
-    title: "SYSTEM BUILDER",
-    content: "Built software across space-tech, enterprise systems, and industrial automation.",
+    title: "STEEL & CODE",
+    content: "I've written code for one of India's largest steel plants (Bokaro). The servers there were almost as hot as the furnaces.",
     paperType: 2,
     rotation: 0,
     positionClass: "top-[-2%] right-[-6%] sm:right-[-12%] md:right-[-18%] lg:right-[-24%]",
@@ -45,8 +45,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-3",
-    title: "LEADERSHIP",
-    content: "Led the CodeChef Bennett University Chapter as President.",
+    title: "THE VADA PAV BUDGET",
+    content: "As CodeChef President, I organized coding events for over 1,000 developers. The hardest part wasn't the algorithms; it was managing the vada pavs budget.",
     paperType: 3,
     rotation: 0,
     positionClass: "top-[44%] left-[-8%] sm:left-[-14%] md:left-[-20%] lg:left-[-26%] hidden sm:block",
@@ -54,8 +54,8 @@ const STICKY_NOTES: StickyNoteItem[] = [
   },
   {
     id: "note-4",
-    title: "PRODUCT FOCUS",
-    content: "Building purposeful products that connect people, solve meaningful challenges, and create lasting impact through technology.",
+    title: "FUN FACT",
+    content: "I once built a blockchain voting system (VoteSamvidhan). Because paper ballots are so last century.",
     paperType: 4,
     rotation: 0,
     positionClass: "top-[44%] right-[-8%] sm:right-[-14%] md:right-[-20%] lg:right-[-26%] hidden sm:block",
