@@ -595,14 +595,24 @@ export default function Home() {
     };
   }, []);
 
-  const menuItems = useMemo(() => projects.map((p) => ({
-    image: p.image,
-    link: p.link,
-    github: p.github,
-    live: p.live,
-    title: p.title,
-    description: p.description,
-  })), []);
+  const menuItems = useMemo(() => {
+    const baseItems = projects.map((p) => ({
+      image: p.image,
+      link: p.link,
+      github: p.github,
+      live: p.live,
+      title: p.title,
+      description: p.description,
+    }));
+    
+    // Create a larger array so adjacent instances on the 3D sphere don't repeat the same project
+    return [
+      baseItems[0], baseItems[1], baseItems[2], baseItems[3],
+      baseItems[2], baseItems[0], baseItems[3], baseItems[1],
+      baseItems[1], baseItems[3], baseItems[0], baseItems[2],
+      baseItems[3], baseItems[2], baseItems[1], baseItems[0],
+    ];
+  }, []);
 
   const CATEGORIES: Record<string, string[]> = {
     "Creative/3D": ["WebGL", "Three.js", "Shaders"],
