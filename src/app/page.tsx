@@ -21,6 +21,7 @@ import { CinematicFooter } from "@/components/CinematicFooter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import ImageTrail from "@/components/ImageTrail";
 import LoadingScreen from "@/components/LoadingScreen";
+import { preload } from "react-dom";
 
 
 
@@ -79,7 +80,7 @@ const projects: Project[] = [
   {
     title: "Tribe",
     description: "Centralised campus clubs and events hub with custom calendar-based planning, event discovery, and light AI recommendations.",
-    image: "/images/projects/tribe_poster.png?v=10",
+    image: "/images/projects/tribe_poster.jpg?v=10",
     link: "https://tribe-bennett.vercel.app/",
     github: "https://github.com/SuyashSingh667/Tribe",
     live: "https://tribe-bennett.vercel.app/",
@@ -87,7 +88,7 @@ const projects: Project[] = [
   {
     title: "SkySentinel",
     description: "Space situational awareness platform monitoring satellite risks in Earth's orbit, integrating live TLE data with interactive 3D visualisation.",
-    image: "/images/projects/skysentinel_yellow.png",
+    image: "/images/projects/skysentinel_yellow.jpg",
     link: "https://sky-sentinal.vercel.app",
     live: "https://sky-sentinal.vercel.app",
     github: "https://github.com/SuyashSingh667/SkySentinel",
@@ -95,7 +96,7 @@ const projects: Project[] = [
   {
     title: "VoteSamvidhan",
     description: "Blockchain-backed election integrity with constitutional literacy — secure digital voting, transparent verification, and real-time dashboards.",
-    image: "/images/projects/votesamvidhan_poster.png?v=10",
+    image: "/images/projects/votesamvidhan_poster.jpg?v=10",
     link: "https://votesamvidhan2.vercel.app",
     github: "https://github.com/SuyashSingh667/VoteSamvidhan",
     live: "https://votesamvidhan2.vercel.app",
@@ -103,7 +104,7 @@ const projects: Project[] = [
   {
     title: "Pram Engine",
     description: "A custom project engine providing VCR-style aesthetics and functionality. [Update this description with more details about what Pram Engine does!]",
-    image: "/images/projectPosters/in_this_blue_vhs_style_image_remove_the_adobe_stock_watermark_and_the_vertical.png",
+    image: "/images/projectPosters/in_this_blue_vhs_style_image_remove_the_adobe_stock_watermark_and_the_vertical.jpg",
     link: "https://pram-engine.vercel.app/",
     github: "https://github.com/SuyashSingh667/PRAM-Engine",
     live: "https://pram-engine.vercel.app/",
@@ -404,6 +405,11 @@ const RadarChart = ({
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function Home() {
+  // Preload heavy assets as high priority so they load before the visual intro finishes
+  preload("/images/peeps/all-peeps.png", { as: "image", fetchPriority: "high" });
+  preload("/images/projects/tribe_poster.jpg?v=10", { as: "image", fetchPriority: "high" });
+  preload("/images/projects/skysentinel_yellow.jpg", { as: "image", fetchPriority: "high" });
+
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
