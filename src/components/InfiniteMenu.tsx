@@ -750,6 +750,8 @@ class InfiniteGridMenu {
       throw new Error('No WebGL 2 context!');
     }
     this.gl = gl;
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     this.viewportSize = vec2.fromValues(this.canvas.clientWidth, this.canvas.clientHeight);
     this.drawBufferSize = vec2.clone(this.viewportSize);
@@ -964,12 +966,29 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
-    const height = this.SPHERE_RADIUS * 0.35;
+    // Base height factor that works perfectly at 100% zoom on a standard screen
+    const baseHeight = this.SPHERE_RADIUS * 0.35;
+    
+    // Calculate zoom compensation so that the WebGL objects shrink when zooming out
+    // just like normal CSS elements would, instead of remaining locked to 100vh.
+    let referenceSize;
+    let baseSize;
+    if (this.camera.aspect > 1) {
+      referenceSize = canvasEl.clientHeight;
+      baseSize = 900; // standard desktop height
+    } else {
+      referenceSize = canvasEl.clientWidth;
+      baseSize = 450; // standard mobile width
+    }
+    
+    const zoomCompensation = Math.max(1.0, referenceSize / baseSize);
+    const dynamicHeight = baseHeight * zoomCompensation;
+    
     const distance = this.camera.position[2];
     if (this.camera.aspect > 1) {
-      this.camera.fov = 2 * Math.atan(height / distance);
+      this.camera.fov = 2 * Math.atan(dynamicHeight / distance);
     } else {
-      this.camera.fov = 2 * Math.atan(height / this.camera.aspect / distance);
+      this.camera.fov = 2 * Math.atan(dynamicHeight / this.camera.aspect / distance);
     }
     mat4.perspective(
       this.camera.matrices.projection,
