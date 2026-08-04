@@ -98,7 +98,8 @@ export default function CountUp({
         clearTimeout(durationTimeoutId);
       };
     }
-  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInView, startWhen, motionValue, direction, from, to, delay, duration]);
 
   useEffect(() => {
     const unsubscribe = springValue.on("change", (latest) => {
