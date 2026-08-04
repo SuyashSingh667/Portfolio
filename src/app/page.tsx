@@ -636,7 +636,7 @@ export default function Home() {
       <GradualBlur position="top" height="6rem" strength={2} divCount={6} curve="bezier" exponential zIndex={20} />
 
       {/* ── Nav ──────────────────────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 z-[200] flex w-full items-center justify-between px-6 py-5 md:px-16">
+      <header className="absolute top-0 left-0 z-[200] flex w-full items-center justify-between px-6 py-5 md:px-16">
         <a href="#" className="font-mono text-[11px] font-bold tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity">
           suyash.dev
         </a>
