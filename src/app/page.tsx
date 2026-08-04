@@ -507,6 +507,8 @@ export default function Home() {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [resetKey, setResetKey] = useState(0);
   const [hasClickedProject, setHasClickedProject] = useState(true);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const footerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -522,6 +524,17 @@ export default function Home() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Hide nav bar when CinematicFooter (contact section) is in view
+  useEffect(() => {
+    if (!footerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsFooterVisible(entry.isIntersecting),
+      { threshold: 0.15 }
+    );
+    observer.observe(footerRef.current);
+    return () => observer.disconnect();
+  }, [mounted]);
 
 
 
@@ -723,7 +736,7 @@ export default function Home() {
       <GradualBlur position="top" height="6rem" strength={2} divCount={6} curve="bezier" exponential zIndex={20} />
 
       {/* ── Nav ──────────────────────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 z-[200] flex w-full items-center justify-between px-6 py-5 md:px-16">
+      <header className={`fixed top-0 left-0 z-[200] flex w-full items-center justify-between px-6 py-5 md:px-16 transition-all duration-500 ${isFooterVisible ? 'opacity-0 -translate-y-full pointer-events-none' : 'opacity-100 translate-y-0'}`}>
         <a href="#" className="font-mono text-[11px] font-bold tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity">
           suyash.dev
         </a>
@@ -1288,7 +1301,9 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           05 — CONTACT / CINEMATIC FOOTER
       ════════════════════════════════════════════════════════════════════════ */}
-      <CinematicFooter />
+      <div ref={footerRef}>
+        <CinematicFooter />
+      </div>
     </main>
   );
 }
