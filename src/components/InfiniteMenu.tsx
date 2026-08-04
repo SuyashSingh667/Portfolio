@@ -829,7 +829,9 @@ class InfiniteGridMenu {
         item =>
           new Promise<HTMLImageElement>(resolve => {
             const img = new Image();
-            img.crossOrigin = 'anonymous';
+            if (item.image.startsWith('http')) {
+              img.crossOrigin = 'anonymous';
+            }
             img.onload = () => resolve(img);
             img.onerror = (err) => {
               console.error("Failed to load image:", item.image, err);
@@ -965,8 +967,8 @@ class InfiniteGridMenu {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
     // Base height factor that works perfectly at 100% zoom on a standard screen
-    // Decreased slightly from 0.35 to 0.32 to make the elements a very little bit bigger
-    const baseHeight = this.SPHERE_RADIUS * 0.32;
+    // Decreased slightly from 0.35 to 0.34 to make the elements a very little bit bigger
+    const baseHeight = this.SPHERE_RADIUS * 0.34;
     
     // Calculate zoom compensation so that the WebGL objects shrink when zooming out
     // just like normal CSS elements would, instead of remaining locked to 100vh.
