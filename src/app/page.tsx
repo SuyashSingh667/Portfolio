@@ -403,6 +403,87 @@ const RadarChart = ({
   );
 };
 
+// ─── Lightweight Markdown Renderer for Chat ──────────────────────────────────
+function renderMarkdown(text: string): React.ReactNode {
+  // Split into lines
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  let listItems: React.ReactNode[] = [];
+  let listType: 'ul' | 'ol' | null = null;
+
+  const flushList = () => {
+    if (listItems.length > 0 && listType) {
+      const ListTag = listType;
+      elements.push(
+        <ListTag key={`list-${elements.length}`} className={listType === 'ul' ? 'list-disc pl-4 space-y-1 my-1.5' : 'list-decimal pl-4 space-y-1 my-1.5'}>
+          {listItems}
+        </ListTag>
+      );
+      listItems = [];
+      listType = null;
+    }
+  };
+
+  const inlineFormat = (str: string): React.ReactNode => {
+    // Handle **bold** and *italic*
+    const parts: React.ReactNode[] = [];
+    let remaining = str;
+    let partKey = 0;
+
+    while (remaining.length > 0) {
+      // Bold: **text**
+      const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
+      if (boldMatch && boldMatch.index !== undefined) {
+        if (boldMatch.index > 0) {
+          parts.push(remaining.slice(0, boldMatch.index));
+        }
+        parts.push(<strong key={`b-${partKey++}`} className="font-semibold">{boldMatch[1]}</strong>);
+        remaining = remaining.slice(boldMatch.index + boldMatch[0].length);
+        continue;
+      }
+      // No more matches
+      parts.push(remaining);
+      break;
+    }
+    return parts.length === 1 ? parts[0] : <>{parts}</>;
+  };
+
+  lines.forEach((line, idx) => {
+    const trimmed = line.trim();
+
+    // Bullet list: * item or - item
+    const bulletMatch = trimmed.match(/^[*\-]\s+(.+)/);
+    if (bulletMatch) {
+      if (listType !== 'ul') flushList();
+      listType = 'ul';
+      listItems.push(<li key={`li-${idx}`}>{inlineFormat(bulletMatch[1])}</li>);
+      return;
+    }
+
+    // Numbered list: 1. item
+    const numMatch = trimmed.match(/^\d+\.\s+(.+)/);
+    if (numMatch) {
+      if (listType !== 'ol') flushList();
+      listType = 'ol';
+      listItems.push(<li key={`li-${idx}`}>{inlineFormat(numMatch[1])}</li>);
+      return;
+    }
+
+    // Regular line
+    flushList();
+
+    if (trimmed === '') {
+      // Blank line → small spacer
+      elements.push(<div key={`sp-${idx}`} className="h-1.5" />);
+    } else {
+      elements.push(<p key={`p-${idx}`} className="my-0.5">{inlineFormat(trimmed)}</p>);
+    }
+  });
+
+  flushList();
+  return <div className="space-y-0.5">{elements}</div>;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function Home() {
   // Preload heavy assets as high priority so they load before the visual intro finishes
@@ -1165,7 +1246,7 @@ export default function Home() {
                           : "liquid-bubble-ai text-zinc-700 dark:text-white/90"
                       }`}
                     >
-                      {msg.content}
+                      {msg.role === 'user' ? msg.content : renderMarkdown(msg.content)}
                     </div>
                   </div>
                 ))}
