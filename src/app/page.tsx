@@ -508,7 +508,9 @@ export default function Home() {
   const [resetKey, setResetKey] = useState(0);
   const [hasClickedProject, setHasClickedProject] = useState(true);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const footerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
@@ -533,6 +535,17 @@ export default function Home() {
       { threshold: 0.15 }
     );
     observer.observe(footerRef.current);
+    return () => observer.disconnect();
+  }, [mounted]);
+
+  // Show suyash.dev only while hero section is visible
+  useEffect(() => {
+    if (!heroRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsHeroVisible(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    observer.observe(heroRef.current);
     return () => observer.disconnect();
   }, [mounted]);
 
@@ -737,7 +750,7 @@ export default function Home() {
 
       {/* ── Nav ──────────────────────────────────────────────────────────────── */}
       <header className={`fixed top-0 left-0 z-[200] flex w-full items-center justify-between px-6 py-5 md:px-16 transition-all duration-500 ${isFooterVisible ? 'opacity-0 -translate-y-full pointer-events-none' : 'opacity-100 translate-y-0'}`}>
-        <a href="#" className="font-mono text-[11px] font-bold tracking-widest uppercase opacity-70 hover:opacity-100 transition-opacity">
+        <a href="#" className={`font-mono text-[11px] font-bold tracking-widest uppercase transition-all duration-500 ${isHeroVisible ? 'opacity-70 hover:opacity-100' : 'opacity-0 pointer-events-none'}`}>
           suyash.dev
         </a>
         <nav className="hidden md:flex items-center gap-7">
@@ -759,6 +772,7 @@ export default function Home() {
           HERO — cinematic dark, always
       ════════════════════════════════════════════════════════════════════════ */}
       <section
+        ref={heroRef}
         id="hero"
         className="relative min-h-screen w-full flex flex-col bg-[#fafafa] dark:bg-[#080808] text-[#171717] dark:text-white overflow-hidden transition-colors duration-500"
       >
