@@ -966,9 +966,8 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
-    // Base height factor that works perfectly at 100% zoom on a standard screen
-    // Decreased slightly from 0.35 to 0.34 to make the elements a very little bit bigger
-    const baseHeight = this.SPHERE_RADIUS * 0.34;
+    // Base height factor — lower value = bigger spheres on screen
+    const baseHeight = this.SPHERE_RADIUS * 0.30;
     
     // Calculate zoom compensation so that the WebGL objects shrink when zooming out
     // just like normal CSS elements would, instead of remaining locked to 100vh.
