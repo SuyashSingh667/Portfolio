@@ -160,11 +160,10 @@ const EXPERIENCE_IMAGES = [
 ];
 
 const SKILLS = [
-  "Python", "C++", "SQL", "React.js", "Three.js",
-  "AWS", "Lambda", "DynamoDB", "Cognito", "API Gateway",
-  "REST APIs", "MySQL", "Spring Boot", "Git", "GitHub",
-  "DSA", "Operating Systems", "Computer Networks", "Cloud Computing",
-  "Next.js", "TypeScript", "Tailwind CSS",
+  "Full-Stack Development", "Interactive WebGL", "Custom UI Design",
+  "Creative Coding", "Visual Storytelling", "Cloud Architecture",
+  "3D Web Experiences", "Systems Engineering", "API Design",
+  "Performance Optimization", "Data-Driven Solutions", "Motion Design",
 ];
 
 // ─── Reveal wrapper ───────────────────────────────────────────────────────────
