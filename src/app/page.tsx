@@ -32,7 +32,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "I built SkySentinel to track satellites in Earth's orbit. No aliens found yet, but we are keeping a close eye on the space debris.",
     paperType: 1,
     rotation: 0,
-    positionClass: "top-[-10%] left-[2%] sm:top-[-4%] sm:left-[-12%] md:left-[-18%] lg:left-[-24%]",
+    positionClass: "top-[-10%] left-[2%] sm:top-[-4%] sm:left-[-12%] md:left-[-18%] lg:left-[-24%] hidden sm:block",
     floatDelay: 0,
   },
   {
@@ -40,7 +40,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "I've written code for one of India's largest steel plants (Bokaro). Proving that software is just as heavy-duty as hardware.",
     paperType: 2,
     rotation: 0,
-    positionClass: "top-[5%] right-[2%] sm:top-[-2%] sm:right-[-12%] md:right-[-18%] lg:right-[-24%]",
+    positionClass: "top-[5%] right-[2%] sm:top-[-2%] sm:right-[-12%] md:right-[-18%] lg:right-[-24%] hidden sm:block",
     floatDelay: 0.15,
   },
   {
