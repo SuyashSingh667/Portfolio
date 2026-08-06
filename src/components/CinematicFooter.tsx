@@ -213,11 +213,12 @@ MagneticButton.displayName = "MagneticButton";
 // -------------------------------------------------------------------------
 const MarqueeItem = () => (
   <div className="flex items-center space-x-12 px-6">
-    <span>Creative Coding</span> <span className="text-zinc-500">✦</span>
-    <span>Visual Excellence</span> <span className="text-zinc-500">✦</span>
-    <span>Full Stack Development</span> <span className="text-zinc-500">✦</span>
-    <span>Interactive WebGL</span> <span className="text-zinc-500">✦</span>
-    <span>Custom UI Design</span> <span className="text-zinc-500">✦</span>
+    <span>Builds Things That Move</span> <span className="text-zinc-500">✦</span>
+    <span>React × Three.js</span> <span className="text-zinc-500">✦</span>
+    <span>Pixel-Perfect Obsessed</span> <span className="text-zinc-500">✦</span>
+    <span>Ships Fast, Breaks Nothing</span> <span className="text-zinc-500">✦</span>
+    <span>Steel Plant to Startups</span> <span className="text-zinc-500">✦</span>
+    <span>Satellite Tracker Builder</span> <span className="text-zinc-500">✦</span>
   </div>
 );
 
