@@ -754,7 +754,7 @@ export default function Home() {
           suyash.dev
         </a>
         <nav className="hidden md:flex items-center gap-7">
-          {[["#work","Work"],["#experiences","Exp"],["#skillset","Skills"],["#about","About"],["#contact","Contact"]].map(([href, label]) => (
+          {[["#top","Home"],["#work","Work"],["#experiences","Exp"],["#skillset","Skills"],["#about","About"],["#contact","Contact"]].map(([href, label]) => (
             <a key={href} href={href} className="text-[9px] font-mono uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity duration-200">
               {label}
             </a>
