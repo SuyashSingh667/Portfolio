@@ -773,7 +773,7 @@ export default function Home() {
       <section
         ref={heroRef}
         id="hero"
-        className="relative min-h-screen w-full flex flex-col bg-[#fafafa] dark:bg-[#080808] text-[#171717] dark:text-white overflow-hidden transition-colors duration-500"
+        className="relative h-[85vh] md:min-h-screen w-full flex flex-col bg-[#fafafa] dark:bg-[#080808] text-[#171717] dark:text-white overflow-hidden transition-colors duration-500"
       >
         {/* Stars */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
@@ -851,7 +851,7 @@ export default function Home() {
       <section id="work" className="relative w-full bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500">
         <Chapter num="01" eyebrow="Selected Work" title="Projects." />
 
-        <div className="relative w-full h-screen overflow-hidden">
+        <div className="relative w-full h-[60vh] md:h-screen overflow-hidden">
           {/* Instruction Badge matching Experience section */}
           <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none">
             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
@@ -972,7 +972,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[1000px] h-[72vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
+            className="w-full max-w-[1000px] h-[50vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
           >
             {/* Sticky Notes Snug & Random Around the Dustbin */}
             {STICKY_NOTES.map((note) => (

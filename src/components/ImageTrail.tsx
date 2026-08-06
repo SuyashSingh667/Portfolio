@@ -43,6 +43,12 @@ if (typeof window !== 'undefined') {
     globalClientX = e.clientX;
     globalClientY = e.clientY;
   }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches && e.touches.length > 0) {
+      globalClientX = e.touches[0].clientX;
+      globalClientY = e.touches[0].clientY;
+    }
+  }, { passive: true });
 }
 
 function getMouseDistance(p1: { x: number; y: number }, p2: { x: number; y: number }) {
