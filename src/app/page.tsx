@@ -804,8 +804,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-5xl select-none"
-            style={{ height: "clamp(90px, 14vw, 190px)" }}
+            className="w-[90%] md:w-full max-w-5xl select-none mx-auto h-[50px] md:h-[clamp(90px,14vw,190px)]"
           >
             <TextPressure
               text="SUYASH"
@@ -820,12 +819,9 @@ export default function Home() {
         </div>
 
         {/* Crowd canvas */}
-        <div className="relative w-full z-0 h-[30vh] md:h-[42vh] origin-bottom">
-          <div className="absolute inset-0 hidden md:block">
+        <div className="relative z-0 h-[25vh] md:h-[42vh] origin-bottom w-[200%] -left-[50%] md:w-full md:left-0 transform scale-[0.5] md:scale-100">
+          <div className="absolute inset-0">
             <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} />
-          </div>
-          <div className="absolute inset-0 block md:hidden">
-            <CrowdCanvas src="/images/peeps/all-peeps.png" rows={25} cols={15} />
           </div>
           {/* Fade bottom of crowd into next section */}
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-[#fafafa] dark:to-[#080808] transition-colors duration-500 pointer-events-none" />
@@ -887,7 +883,7 @@ export default function Home() {
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
         {/* Prominent Instruction Badge positioned at top-left of the Experience section */}
-        <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none">
+        <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
           <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
@@ -1006,7 +1002,7 @@ export default function Home() {
 
       <section
         id="about"
-        className="relative flex flex-row items-center justify-center gap-2 md:gap-16 lg:gap-24 px-2 md:px-16 lg:px-24 min-h-screen md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 py-24 md:py-0"
+        className="relative flex flex-row items-center justify-center gap-0 md:gap-16 lg:gap-24 px-2 md:px-16 lg:px-24 min-h-screen md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 py-24 md:py-0"
       >
         {/* Spotlight & Grid Background Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
@@ -1017,12 +1013,13 @@ export default function Home() {
           />
         </div>
         {/* Left Column: 3D Avatar Canvas */}
-        <div className="w-1/2 md:w-[48%] h-[25vh] md:h-[88vh] relative flex items-center justify-center pb-2 md:pb-20 -translate-y-[10px] transform scale-[0.8] md:scale-100">
+        <div className="w-[40%] md:w-[48%] h-[35vh] md:h-[88vh] relative flex items-center justify-center -translate-y-[10px]">
           <InteractiveAvatar3D autoRotate={false} wireframeMode={false} accentColor="#71717a" />
         </div>
 
         {/* Right Column: Liquid Glass AI Chatbox (Subtle Version) */}
-        <div className="relative z-20 w-1/2 sm:w-[420px] md:w-[430px] h-[350px] md:h-[500px] pointer-events-auto select-none liquid-glass-slab transform scale-[0.6] md:scale-100 origin-center -ml-4 md:ml-0">
+        <div className="relative z-20 w-[60%] md:w-[430px] flex justify-start items-center h-[35vh] md:h-[500px]">
+          <div className="w-[380px] md:w-[430px] h-[400px] md:h-[500px] transform scale-[0.55] md:scale-100 origin-left pointer-events-auto select-none liquid-glass-slab -ml-4 md:ml-0">
           <style dangerouslySetInnerHTML={{ __html: `
             .liquid-glass-slab {
               position: relative;
@@ -1311,6 +1308,7 @@ export default function Home() {
               </button>
             </form>
           </div>
+        </div>
         </div>
       </section>
 
