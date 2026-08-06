@@ -160,10 +160,10 @@ const EXPERIENCE_IMAGES = [
 ];
 
 const SKILLS = [
-  "Full-Stack Development", "Interactive WebGL", "Custom UI Design",
-  "Creative Coding", "Visual Storytelling", "Cloud Architecture",
-  "3D Web Experiences", "Systems Engineering", "API Design",
-  "Performance Optimization", "Data-Driven Solutions", "Motion Design",
+  "Builds Things That Move", "React × Three.js", "Pixel-Perfect Obsessed",
+  "Particle Systems Addict", "Cloud-Native Thinker", "Ships Fast, Breaks Nothing",
+  "WebGL Experiments", "Steel Plant to Startups", "CodeChef Chapter Lead",
+  "IIT Kanpur Research Intern", "Blockchain Voter Systems", "Satellite Tracker Builder",
 ];
 
 // ─── Reveal wrapper ───────────────────────────────────────────────────────────
