@@ -32,7 +32,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "I built SkySentinel to track satellites in Earth's orbit. No aliens found yet, but we are keeping a close eye on the space debris.",
     paperType: 1,
     rotation: 0,
-    positionClass: "top-[-4%] left-[-6%] sm:left-[-12%] md:left-[-18%] lg:left-[-24%]",
+    positionClass: "top-[-10%] left-[2%] sm:top-[-4%] sm:left-[-12%] md:left-[-18%] lg:left-[-24%]",
     floatDelay: 0,
   },
   {
@@ -40,7 +40,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "I've written code for one of India's largest steel plants (Bokaro). Proving that software is just as heavy-duty as hardware.",
     paperType: 2,
     rotation: 0,
-    positionClass: "top-[-2%] right-[-6%] sm:right-[-12%] md:right-[-18%] lg:right-[-24%]",
+    positionClass: "top-[5%] right-[2%] sm:top-[-2%] sm:right-[-12%] md:right-[-18%] lg:right-[-24%]",
     floatDelay: 0.15,
   },
   {
@@ -48,7 +48,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "I once built a blockchain voting system (VoteSamvidhan). Because paper ballots are so last century.",
     paperType: 3,
     rotation: 0,
-    positionClass: "top-[44%] left-[-8%] sm:left-[-14%] md:left-[-20%] lg:left-[-26%] hidden sm:block",
+    positionClass: "top-[60%] left-[2%] sm:top-[44%] sm:left-[-14%] md:left-[-20%] lg:left-[-26%] hidden sm:block",
     floatDelay: 0.3,
   },
   {
@@ -56,7 +56,7 @@ const STICKY_NOTES: StickyNoteItem[] = [
     content: "As CodeChef President, I organized coding events for over 1,000 developers. The hardest part wasn't the algorithms; it was managing the vada pavs budget.",
     paperType: 4,
     rotation: 0,
-    positionClass: "top-[44%] right-[-8%] sm:right-[-14%] md:right-[-20%] lg:right-[-26%] hidden sm:block",
+    positionClass: "top-[65%] right-[2%] sm:top-[44%] sm:right-[-14%] md:right-[-20%] lg:right-[-26%] hidden sm:block",
     floatDelay: 0.45,
   },
 ];
@@ -945,7 +945,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
-      <div className="relative z-30 -mt-[25vh] md:-mt-[28vh]">
+      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh]">
         <Chapter num="03" eyebrow="Skills" title="Skills." />
 
         <section
@@ -1003,7 +1003,7 @@ export default function Home() {
 
       <section
         id="about"
-        className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 lg:gap-24 px-6 md:px-16 lg:px-24 h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500"
+        className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 lg:gap-24 px-6 md:px-16 lg:px-24 min-h-screen md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 py-24 md:py-0"
       >
         {/* Spotlight & Grid Background Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
