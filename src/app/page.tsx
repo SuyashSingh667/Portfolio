@@ -959,11 +959,11 @@ export default function Home() {
           backgroundSize: "40px 40px",
         }}
       >
-        <div className="w-full max-w-7xl mx-auto px-4 mt-8 md:mt-24">
-        <div className="relative flex flex-row md:flex-row items-center justify-between gap-0 md:gap-16">
-          
-          {/* Decorative center glowing orb (behind everything) */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-[#171717]/5 dark:bg-white/5 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
+        {/* Warm glow */}
+        <div 
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] pointer-events-none transform-gpu"
+          style={{ background: 'radial-gradient(circle, rgba(113, 113, 122, 0.12) 0%, transparent 60%)' }} 
+        />
 
         {/* Top fade — softens the hard edge between the Skills heading and the grid */}
         <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent pointer-events-none z-20" />
