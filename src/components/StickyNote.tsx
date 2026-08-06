@@ -57,7 +57,8 @@ export function StickyNote({ item }: { item: StickyNoteItem }) {
         delay: item.floatDelay || 0,
       }}
       viewport={{ once: true }}
-      className={`absolute ${item.positionClass} ${config.width} select-none z-5 pointer-events-none filter drop-shadow-md`}
+      whileHover={{ scale: 1.05, y: -8, filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.3))" }}
+      className={`absolute ${item.positionClass} ${config.width} select-none z-5 cursor-pointer filter drop-shadow-md transition-[filter]`}
       style={{
         transformOrigin: "center center",
       }}
