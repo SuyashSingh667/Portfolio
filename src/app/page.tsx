@@ -773,12 +773,12 @@ export default function Home() {
       <section
         ref={heroRef}
         id="hero"
-        className="relative h-[85vh] md:min-h-screen w-full flex flex-col bg-[#fafafa] dark:bg-[#080808] text-[#171717] dark:text-white overflow-hidden transition-colors duration-500"
+        className="relative h-[65vh] md:min-h-screen w-full flex flex-col bg-[#fafafa] dark:bg-[#080808] text-[#171717] dark:text-white overflow-hidden transition-colors duration-500"
       >
         {/* Stars */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
           <GlitterWrap
-            particleCount={350}
+            particleCount={150}
             speed={4}
             starSize={12}
             glitterIntensity={4}
@@ -812,7 +812,7 @@ export default function Home() {
               flex width weight italic
               alpha={false} stroke={false}
               textColor={resolvedTheme === "dark" ? "#ffffff" : "#171717"}
-              minFontSize={52}
+              minFontSize={36}
             />
           </motion.div>
 
@@ -820,7 +820,7 @@ export default function Home() {
         </div>
 
         {/* Crowd canvas */}
-        <div className="relative w-full z-0" style={{ height: "42vh" }}>
+        <div className="relative w-full z-0 hidden md:block" style={{ height: "42vh" }}>
           <div className="absolute inset-0">
             <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} />
           </div>
