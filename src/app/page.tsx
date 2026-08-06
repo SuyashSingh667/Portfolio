@@ -812,7 +812,7 @@ export default function Home() {
               flex width weight italic
               alpha={false} stroke={false}
               textColor={resolvedTheme === "dark" ? "#ffffff" : "#171717"}
-              minFontSize={36}
+              minFontSize={20}
             />
           </motion.div>
 
@@ -820,7 +820,7 @@ export default function Home() {
         </div>
 
         {/* Crowd canvas */}
-        <div className="relative w-full z-0 hidden md:block" style={{ height: "42vh" }}>
+        <div className="relative w-full z-0 h-[15vh] md:h-[42vh] origin-bottom scale-[0.3] md:scale-100">
           <div className="absolute inset-0">
             <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} />
           </div>
@@ -972,7 +972,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[1000px] h-[50vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
+            className="w-full max-w-[1000px] h-[35vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
           >
             {/* Sticky Notes Snug & Random Around the Dustbin */}
             {STICKY_NOTES.map((note) => (
@@ -1014,12 +1014,12 @@ export default function Home() {
           />
         </div>
         {/* Left Column: 3D Avatar Canvas */}
-        <div className="w-full md:w-[48%] h-[60vh] md:h-[88vh] relative flex items-center justify-center pb-20 -translate-y-[10px]">
+        <div className="w-full md:w-[48%] h-[35vh] md:h-[88vh] relative flex items-center justify-center pb-10 md:pb-20 -translate-y-[10px]">
           <InteractiveAvatar3D autoRotate={false} wireframeMode={false} accentColor="#71717a" />
         </div>
 
         {/* Right Column: Liquid Glass AI Chatbox (Subtle Version) */}
-        <div className="relative z-20 w-full sm:w-[420px] md:w-[430px] h-[450px] md:h-[500px] pointer-events-auto select-none liquid-glass-slab">
+        <div className="relative z-20 w-[95%] sm:w-[420px] md:w-[430px] h-[450px] md:h-[500px] pointer-events-auto select-none liquid-glass-slab transform scale-[0.65] md:scale-100 origin-center">
           <style dangerouslySetInnerHTML={{ __html: `
             .liquid-glass-slab {
               position: relative;
