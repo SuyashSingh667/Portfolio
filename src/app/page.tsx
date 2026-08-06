@@ -812,7 +812,7 @@ export default function Home() {
               flex width weight italic
               alpha={false} stroke={false}
               textColor={resolvedTheme === "dark" ? "#ffffff" : "#171717"}
-              minFontSize={20}
+              minFontSize={12}
             />
           </motion.div>
 
@@ -820,9 +820,12 @@ export default function Home() {
         </div>
 
         {/* Crowd canvas */}
-        <div className="relative w-full z-0 h-[15vh] md:h-[42vh] origin-bottom scale-[0.3] md:scale-100">
-          <div className="absolute inset-0">
+        <div className="relative w-full z-0 h-[30vh] md:h-[42vh] origin-bottom">
+          <div className="absolute inset-0 hidden md:block">
             <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} />
+          </div>
+          <div className="absolute inset-0 block md:hidden">
+            <CrowdCanvas src="/images/peeps/all-peeps.png" rows={25} cols={15} />
           </div>
           {/* Fade bottom of crowd into next section */}
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-[#fafafa] dark:to-[#080808] transition-colors duration-500 pointer-events-none" />
@@ -908,20 +911,20 @@ export default function Home() {
             {experiences.map((item, idx) => (
               <div
                 key={idx}
-                className="experience-card w-[88vw] sm:w-[55vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-12 md:pr-16 mr-12 md:mr-16 min-h-[50vh]"
+                className="experience-card w-[65vw] sm:w-[45vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-8 md:pr-16 mr-8 md:mr-16 min-h-[35vh]"
               >
                 {/* Top */}
                 <div>
-                  <span className="card-num text-[clamp(5rem,12vw,9rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-4">
+                  <span className="card-num text-[clamp(3rem,8vw,9rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-2 md:-mb-4">
                     {item.num}
                   </span>
-                  <span className="card-role text-[9px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-3 font-semibold">
+                  <span className="card-role text-[8px] md:text-[9px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-2 md:mb-3 font-semibold">
                     {item.role}
                   </span>
-                  <h3 className="card-org text-3xl md:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-5 leading-tight">
+                  <h3 className="card-org text-xl md:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-3 md:mb-5 leading-tight">
                     {item.org}
                   </h3>
-                  <p className="card-desc text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
+                  <p className="card-desc text-[11px] md:text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
                     {item.desc}
                   </p>
                 </div>
@@ -956,11 +959,11 @@ export default function Home() {
           backgroundSize: "40px 40px",
         }}
       >
-        {/* Warm glow */}
-        <div 
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] pointer-events-none transform-gpu"
-          style={{ background: 'radial-gradient(circle, rgba(113, 113, 122, 0.12) 0%, transparent 60%)' }} 
-        />
+        <div className="w-full max-w-7xl mx-auto px-4 mt-8 md:mt-24">
+        <div className="relative flex flex-row md:flex-row items-center justify-between gap-0 md:gap-16">
+          
+          {/* Decorative center glowing orb (behind everything) */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-[#171717]/5 dark:bg-white/5 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
 
         {/* Top fade — softens the hard edge between the Skills heading and the grid */}
         <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent pointer-events-none z-20" />
@@ -1003,7 +1006,7 @@ export default function Home() {
 
       <section
         id="about"
-        className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 lg:gap-24 px-6 md:px-16 lg:px-24 min-h-screen md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 py-24 md:py-0"
+        className="relative flex flex-row items-center justify-center gap-2 md:gap-16 lg:gap-24 px-2 md:px-16 lg:px-24 min-h-screen md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 py-24 md:py-0"
       >
         {/* Spotlight & Grid Background Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
@@ -1014,12 +1017,12 @@ export default function Home() {
           />
         </div>
         {/* Left Column: 3D Avatar Canvas */}
-        <div className="w-full md:w-[48%] h-[35vh] md:h-[88vh] relative flex items-center justify-center pb-10 md:pb-20 -translate-y-[10px]">
+        <div className="w-1/2 md:w-[48%] h-[25vh] md:h-[88vh] relative flex items-center justify-center pb-2 md:pb-20 -translate-y-[10px] transform scale-[0.8] md:scale-100">
           <InteractiveAvatar3D autoRotate={false} wireframeMode={false} accentColor="#71717a" />
         </div>
 
         {/* Right Column: Liquid Glass AI Chatbox (Subtle Version) */}
-        <div className="relative z-20 w-[95%] sm:w-[420px] md:w-[430px] h-[450px] md:h-[500px] pointer-events-auto select-none liquid-glass-slab transform scale-[0.65] md:scale-100 origin-center">
+        <div className="relative z-20 w-1/2 sm:w-[420px] md:w-[430px] h-[350px] md:h-[500px] pointer-events-auto select-none liquid-glass-slab transform scale-[0.6] md:scale-100 origin-center -ml-4 md:ml-0">
           <style dangerouslySetInnerHTML={{ __html: `
             .liquid-glass-slab {
               position: relative;
