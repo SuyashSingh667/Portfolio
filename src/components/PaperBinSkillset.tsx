@@ -372,7 +372,18 @@ export default function PaperBinSkillset({
   const [ready,    setReady   ] = useState(0); // number to trigger re-init
 
   const dark   = theme === "dark";
-  const BALL_D = 25;
+  const [ballD, setBallD] = useState(25);
+
+  useEffect(() => {
+    const checkSize = () => {
+      setBallD(window.innerWidth < 768 ? 25 : 55);
+    };
+    checkSize();
+    window.addEventListener("resize", checkSize);
+    return () => window.removeEventListener("resize", checkSize);
+  }, []);
+
+  const BALL_D = ballD;
 
   // Track outer container dimensions dynamically (ResizeObserver)
   // This ensures calculations are only performed with final, settled pixel dimensions
@@ -397,7 +408,7 @@ export default function PaperBinSkillset({
     Promise.all(SKILL_ITEMS.map(s => makeBallUrl(s, BALL_D, dark)))
       .then(u => { if (live) setBallUrls(u); });
     return () => { live = false; };
-  }, [theme, dark]);
+  }, [theme, dark, BALL_D]);
 
   // Three.js Renderers & Camera Setup
   useEffect(() => {
