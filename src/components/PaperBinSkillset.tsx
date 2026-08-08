@@ -376,7 +376,7 @@ export default function PaperBinSkillset({
 
   useEffect(() => {
     const checkSize = () => {
-      setBallD(window.innerWidth < 768 ? 25 : 90);
+      setBallD(window.innerWidth < 768 ? 25 : 80);
     };
     checkSize();
     window.addEventListener("resize", checkSize);
