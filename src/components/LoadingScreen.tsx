@@ -251,6 +251,7 @@ export default function LoadingScreen({
 }: LoadingScreenProps) {
   const [isTearing, setIsTearing] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   // Helper to ensure scroll is always 100% enabled
   const forceEnableScroll = () => {
@@ -261,11 +262,17 @@ export default function LoadingScreen({
   };
 
   useEffect(() => {
+    // Check on mount and resize
+    const checkIsDesktop = () => setIsDesktop(window.innerWidth >= 768);
+    checkIsDesktop();
+    window.addEventListener('resize', checkIsDesktop);
+
     // Lock scroll ONLY while 0% -> 100% loader is active
     document.body.style.overflow = "hidden";
 
     return () => {
       forceEnableScroll();
+      window.removeEventListener('resize', checkIsDesktop);
     };
   }, []);
 
@@ -320,52 +327,75 @@ export default function LoadingScreen({
               <CreatureLoader />
             </motion.div>
 
-            {/* LEFT TEAR CURTAIN */}
-            <motion.div
-              key="curtain-left"
-              initial={{ x: "0%" }}
-              animate={{ x: "-105%", rotate: -2 }}
-              transition={{
-                duration: 1.5,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              onAnimationComplete={() => {
-                forceEnableScroll();
-                setIsVisible(false);
-                if (onFinish) onFinish();
-              }}
-              className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform border-r border-black/5"
-            >
-              {/* Jagged Torn Edge SVG on Right Border */}
-              <svg
-                className="absolute top-0 bottom-0 left-[99.5%] h-full w-12 pointer-events-none drop-shadow-[15px_0_30px_rgba(0,0,0,0.3)]"
-                viewBox="0 0 30 1000"
-                preserveAspectRatio="none"
-              >
-                <path d={TORN_PATH} fill="#fafafa" />
-              </svg>
-            </motion.div>
+            {/* DESKTOP: SLIDE UP REVEAL */}
+            {isDesktop && (
+              <motion.div
+                key="slide-up-desktop"
+                initial={{ y: "0%" }}
+                animate={{ y: "-105%" }}
+                transition={{
+                  duration: 1.4,
+                  ease: [0.76, 0, 0.24, 1],
+                }}
+                onAnimationComplete={() => {
+                  forceEnableScroll();
+                  setIsVisible(false);
+                  if (onFinish) onFinish();
+                }}
+                className="absolute inset-0 bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"
+              />
+            )}
 
-            {/* RIGHT TEAR CURTAIN */}
-            <motion.div
-              key="curtain-right"
-              initial={{ x: "0%" }}
-              animate={{ x: "105%", rotate: 2 }}
-              transition={{
-                duration: 1.5,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform border-l border-black/5"
-            >
-              {/* Jagged Torn Edge SVG on Left Border */}
-              <svg
-                className="absolute top-0 bottom-0 right-[99.5%] h-full w-12 pointer-events-none transform -scale-x-100 drop-shadow-[-15px_0_30px_rgba(0,0,0,0.3)]"
-                viewBox="0 0 30 1000"
-                preserveAspectRatio="none"
+            {/* MOBILE: LEFT TEAR CURTAIN */}
+            {!isDesktop && (
+              <motion.div
+                key="curtain-left"
+                initial={{ x: "0%" }}
+                animate={{ x: "-105%", rotate: -2 }}
+                transition={{
+                  duration: 1.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                onAnimationComplete={() => {
+                  forceEnableScroll();
+                  setIsVisible(false);
+                  if (onFinish) onFinish();
+                }}
+                className="absolute top-0 left-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform border-r border-black/5"
               >
-                <path d={TORN_PATH} fill="#fafafa" />
-              </svg>
-            </motion.div>
+                {/* Jagged Torn Edge SVG on Right Border */}
+                <svg
+                  className="absolute top-0 bottom-0 left-[99.5%] h-full w-12 pointer-events-none drop-shadow-[15px_0_30px_rgba(0,0,0,0.3)]"
+                  viewBox="0 0 30 1000"
+                  preserveAspectRatio="none"
+                >
+                  <path d={TORN_PATH} fill="#fafafa" />
+                </svg>
+              </motion.div>
+            )}
+
+            {/* MOBILE: RIGHT TEAR CURTAIN */}
+            {!isDesktop && (
+              <motion.div
+                key="curtain-right"
+                initial={{ x: "0%" }}
+                animate={{ x: "105%", rotate: 2 }}
+                transition={{
+                  duration: 1.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="absolute top-0 right-0 bottom-0 w-[50.5vw] bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform border-l border-black/5"
+              >
+                {/* Jagged Torn Edge SVG on Left Border */}
+                <svg
+                  className="absolute top-0 bottom-0 right-[99.5%] h-full w-12 pointer-events-none transform -scale-x-100 drop-shadow-[-15px_0_30px_rgba(0,0,0,0.3)]"
+                  viewBox="0 0 30 1000"
+                  preserveAspectRatio="none"
+                >
+                  <path d={TORN_PATH} fill="#fafafa" />
+                </svg>
+              </motion.div>
+            )}
           </>
         )}
       </div>

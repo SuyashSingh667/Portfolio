@@ -492,6 +492,7 @@ export default function Home() {
 
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [loadingFinished, setLoadingFinished] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
 
@@ -735,7 +736,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen w-full bg-[#fafafa] text-[#171717] transition-colors duration-500 dark:bg-[#0a0a0a] dark:text-[#ededed] overflow-x-hidden">
-      <LoadingScreen />
+      <LoadingScreen onFinish={() => setLoadingFinished(true)} />
 
 
       {/* Scroll progress */}
@@ -802,8 +803,8 @@ export default function Home() {
           </motion.span>
 
           <motion.div
-            initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 40 }} animate={loadingFinished ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="w-[90%] md:w-full max-w-5xl select-none mx-auto h-[50px] md:h-[clamp(90px,14vw,190px)]"
           >
             <TextPressure
