@@ -805,7 +805,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="w-[90%] md:w-full max-w-[1400px] select-none mx-auto h-[50px] md:h-[clamp(90px,16vw,260px)]"
+            className="w-[90%] md:w-full max-w-6xl select-none mx-auto h-[50px] md:h-[clamp(90px,15vw,220px)]"
           >
             <TextPressure
               text="SUYASH"
