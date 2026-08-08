@@ -31,8 +31,10 @@ uniform sampler2D uTex;
 uniform float uChroma;
 uniform vec3 uColorA;
 uniform vec3 uColorB;
+uniform vec3 uTextColor;
 void main() {
     vec4 base = texture(uTex, vUv);
+    base.rgb *= uTextColor;
     if (uChroma > 0.0) {
         float o = uChroma * 0.00500 * clamp(vMag * 8.0, 0.0, 1.0);
         float aOff = texture(uTex, vUv + vec2(o, 0.0)).a;
@@ -239,12 +241,9 @@ export default function MeshText(props: any) {
     }, [])
 
     const colorRef = useRef(color)
-    const rebuildTexRef = useRef<(() => void) | null>(null)
+    const currentTextColor = useRef<[number, number, number] | null>(null)
     useEffect(() => {
-        if (colorRef.current !== color) {
-            colorRef.current = color
-            if (rebuildTexRef.current) rebuildTexRef.current()
-        }
+        colorRef.current = color
     }, [color])
 
 
@@ -311,6 +310,7 @@ export default function MeshText(props: any) {
         const uChroma = gl.getUniformLocation(program, "uChroma")
         const uColorA = gl.getUniformLocation(program, "uColorA")
         const uColorB = gl.getUniformLocation(program, "uColorB")
+        const uTextColor = gl.getUniformLocation(program, "uTextColor")
 
         const vao = gl.createVertexArray()
         gl.bindVertexArray(vao)
@@ -368,7 +368,7 @@ export default function MeshText(props: any) {
             if (cancelled) return
             const c2 = renderTextToCanvas(
                 String(text ?? ""),
-                colorRef.current ?? "#ffffff",
+                "#ffffff",
                 fontFamily,
                 fontWeight,
                 fontStyle,
@@ -388,7 +388,6 @@ export default function MeshText(props: any) {
                 c2
             )
         }
-        rebuildTexRef.current = rebuildTex
 
         const resize = () => {
             const dpr = window.devicePixelRatio || 1
@@ -505,6 +504,16 @@ export default function MeshText(props: any) {
             gl.bindTexture(gl.TEXTURE_2D, tex)
             gl.uniform1i(uTex, 0)
             gl.uniform1f(uChroma, colorSplitRef.current ? 1.0 : 0.0)
+
+            const targetColor = parseColor(colorRef.current);
+            if (!currentTextColor.current) {
+                currentTextColor.current = [...targetColor] as [number, number, number];
+            } else {
+                currentTextColor.current[0] += (targetColor[0] - currentTextColor.current[0]) * 0.1;
+                currentTextColor.current[1] += (targetColor[1] - currentTextColor.current[1]) * 0.1;
+                currentTextColor.current[2] += (targetColor[2] - currentTextColor.current[2]) * 0.1;
+            }
+            if (uTextColor) gl.uniform3f(uTextColor, currentTextColor.current[0], currentTextColor.current[1], currentTextColor.current[2]);
 
             let cA: [number, number, number] = [1, 0, 0]
             let cB: [number, number, number] = [0, 0, 1]
