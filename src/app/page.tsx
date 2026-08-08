@@ -206,7 +206,7 @@ function Chapter({ num, eyebrow, title, children }: { num: string; eyebrow: stri
   const textColor = resolvedTheme === "dark" ? "#ffffff" : "#171717";
 
   return (
-    <div className="relative overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] transition-colors duration-500 px-6 md:px-16 pt-20 pb-10">
+    <div className="relative overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] transition-colors duration-500 px-6 md:px-16 pt-12 pb-4 md:pt-20 md:pb-10">
       {/* Ghost number */}
       <span
         aria-hidden
@@ -878,7 +878,7 @@ export default function Home() {
 
       <section
         id="experiences"
-        className="relative z-20 min-h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex items-center"
+        className="relative z-20 min-h-[50vh] md:min-h-screen py-12 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex items-center"
       >
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
@@ -1002,7 +1002,7 @@ export default function Home() {
 
       <section
         id="about"
-        className="relative flex flex-row items-center justify-center gap-0 md:gap-16 lg:gap-24 px-2 md:px-16 lg:px-24 min-h-screen md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 py-24 md:py-0"
+        className="relative flex flex-row items-center justify-center gap-0 md:gap-16 lg:gap-24 px-2 md:px-16 lg:px-24 py-12 md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 md:py-0"
       >
         {/* Spotlight & Grid Background Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
