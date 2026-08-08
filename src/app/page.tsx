@@ -1003,7 +1003,7 @@ export default function Home() {
 
       <section
         id="about"
-        className="relative flex flex-row items-center justify-center gap-0 md:gap-16 lg:gap-24 px-2 md:px-16 lg:px-24 py-12 md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 md:py-0"
+        className="relative flex flex-row items-center justify-center gap-0 md:gap-8 lg:gap-12 px-2 md:px-16 lg:px-24 py-12 md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 md:py-0"
       >
         {/* Spotlight & Grid Background Overlay */}
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
@@ -1019,8 +1019,8 @@ export default function Home() {
         </div>
 
         {/* Right Column: Liquid Glass AI Chatbox (Subtle Version) */}
-        <div className="relative z-20 w-[60%] md:w-[430px] flex justify-start items-center h-[35vh] md:h-[500px]">
-          <div className="w-[380px] md:w-[430px] h-[400px] md:h-[500px] transform scale-[0.55] md:scale-100 origin-left pointer-events-auto select-none liquid-glass-slab -ml-4 md:ml-0">
+        <div className="relative z-20 w-[60%] md:w-[480px] flex justify-start items-center h-[35vh] md:h-[560px]">
+          <div className="w-[380px] md:w-[480px] h-[400px] md:h-[560px] transform scale-[0.55] md:scale-100 origin-left pointer-events-auto select-none liquid-glass-slab -ml-4 md:-ml-8">
           <style dangerouslySetInnerHTML={{ __html: `
             .liquid-glass-slab {
               position: relative;
