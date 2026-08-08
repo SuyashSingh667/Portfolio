@@ -288,66 +288,59 @@ export default function LoadingScreen({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[99999] pointer-events-none overflow-hidden select-none">
-        {/* SOLID SEAMLESS BACKGROUND DURING LOADING */}
-        {!isTearing && (
-          <div className="absolute inset-0 bg-[#fafafa] z-10 flex flex-col items-center justify-center pointer-events-auto">
-            <CreatureLoader />
-
-            {/* React Bits CountUp Display at Bottom Right with % Sign */}
-            <div 
-              className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-baseline font-bold text-7xl md:text-[120px] text-[#171717] tracking-tight select-none pointer-events-none leading-none"
-              style={{ fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" }}
-            >
-              <CountUp
-                from={0}
-                to={100}
-                separator=""
-                direction="up"
-                duration={2.0}
-                delay={0}
-                startWhen={true}
-                onEnd={handleCountEnd}
-              />
-              <span className="text-5xl md:text-[90px] ml-1">%</span>
-            </div>
-          </div>
-        )}
-
-        {/* TEAR SPLIT PANELS (Fast, snappy paper tear transition) */}
-        {isTearing && (
-          <>
-            {/* CENTRALLY POSITIONED LOADER CONTENT */}
-            <motion.div
-              initial={{ opacity: 1 }}
-              animate={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
-            >
+      {isVisible && (
+        <motion.div 
+          className="fixed inset-0 z-[99999] pointer-events-none overflow-hidden select-none"
+          initial={false}
+          animate={isDesktop && isTearing ? { y: "-105%" } : { y: "0%" }}
+          transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
+          onAnimationComplete={() => {
+            if (isDesktop && isTearing) {
+              forceEnableScroll();
+              setIsVisible(false);
+              if (onFinish) onFinish();
+            }
+          }}
+        >
+          {/* SOLID SEAMLESS BACKGROUND DURING LOADING (Always on desktop, until tear on mobile) */}
+          {(!isTearing || isDesktop) && (
+            <div className="absolute inset-0 bg-[#fafafa] z-10 flex flex-col items-center justify-center pointer-events-auto">
               <CreatureLoader />
-            </motion.div>
 
-            {/* DESKTOP: SLIDE UP REVEAL */}
-            {isDesktop && (
+              {/* React Bits CountUp Display at Bottom Right with % Sign */}
+              <div 
+                className="fixed bottom-6 right-8 md:bottom-10 md:right-16 z-40 flex items-baseline font-bold text-7xl md:text-[120px] text-[#171717] tracking-tight select-none pointer-events-none leading-none"
+                style={{ fontFamily: "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" }}
+              >
+                <CountUp
+                  from={0}
+                  to={100}
+                  separator=""
+                  direction="up"
+                  duration={3.2}
+                  delay={0}
+                  startWhen={true}
+                  onEnd={handleCountEnd}
+                />
+                <span className="text-5xl md:text-[90px] ml-1">%</span>
+              </div>
+            </div>
+          )}
+
+          {/* TEAR SPLIT PANELS (Fast, snappy paper tear transition for Mobile only) */}
+          {isTearing && !isDesktop && (
+            <>
+              {/* Fade out loader content */}
               <motion.div
-                key="slide-up-desktop"
-                initial={{ y: "0%" }}
-                animate={{ y: "-105%" }}
-                transition={{
-                  duration: 1.4,
-                  ease: [0.76, 0, 0.24, 1],
-                }}
-                onAnimationComplete={() => {
-                  forceEnableScroll();
-                  setIsVisible(false);
-                  if (onFinish) onFinish();
-                }}
-                className="absolute inset-0 bg-[#fafafa] z-20 overflow-visible pointer-events-none transform-gpu will-change-transform"
-              />
-            )}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
+              >
+                <CreatureLoader />
+              </motion.div>
 
-            {/* MOBILE: LEFT TEAR CURTAIN */}
-            {!isDesktop && (
+              {/* LEFT TEAR CURTAIN */}
               <motion.div
                 key="curtain-left"
                 initial={{ x: "0%" }}
@@ -372,10 +365,8 @@ export default function LoadingScreen({
                   <path d={TORN_PATH} fill="#fafafa" />
                 </svg>
               </motion.div>
-            )}
 
-            {/* MOBILE: RIGHT TEAR CURTAIN */}
-            {!isDesktop && (
+              {/* RIGHT TEAR CURTAIN */}
               <motion.div
                 key="curtain-right"
                 initial={{ x: "0%" }}
@@ -395,10 +386,10 @@ export default function LoadingScreen({
                   <path d={TORN_PATH} fill="#fafafa" />
                 </svg>
               </motion.div>
-            )}
-          </>
-        )}
-      </div>
+            </>
+          )}
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }
