@@ -238,6 +238,16 @@ export default function MeshText(props: any) {
         return () => observer.disconnect()
     }, [])
 
+    const colorRef = useRef(color)
+    const rebuildTexRef = useRef<(() => void) | null>(null)
+    useEffect(() => {
+        if (colorRef.current !== color) {
+            colorRef.current = color
+            if (rebuildTexRef.current) rebuildTexRef.current()
+        }
+    }, [color])
+
+
     useEffect(() => {
         const canvas = canvasRef.current
         const wrapper = wrapperRef.current
@@ -337,6 +347,7 @@ export default function MeshText(props: any) {
         let cancelled = false
 
         const rebuildTex = async () => {
+            if (cancelled) return
             const w = Math.max(2, canvas.width)
             const h = Math.max(2, canvas.height)
             const dpr = window.devicePixelRatio || 1
@@ -357,7 +368,7 @@ export default function MeshText(props: any) {
             if (cancelled) return
             const c2 = renderTextToCanvas(
                 String(text ?? ""),
-                color ?? "#ffffff",
+                colorRef.current ?? "#ffffff",
                 fontFamily,
                 fontWeight,
                 fontStyle,
@@ -377,6 +388,7 @@ export default function MeshText(props: any) {
                 c2
             )
         }
+        rebuildTexRef.current = rebuildTex
 
         const resize = () => {
             const dpr = window.devicePixelRatio || 1
@@ -536,7 +548,8 @@ export default function MeshText(props: any) {
             gl.deleteShader(vs)
             gl.deleteShader(fs)
         }
-    }, [text, color, fontFamily, fontWeight, fontStyle, fontSize, textAlign])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [text, fontFamily, fontWeight, fontStyle, fontSize, textAlign])
 
     return (
         <div
