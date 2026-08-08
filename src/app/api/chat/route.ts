@@ -55,7 +55,7 @@ About Suyash:
   * Software Development & Research Analytics Intern at IIT Kanpur (June 2026 - August 2026): Re-engineered DoRA giveaway portal with React.js, built real-time analytical dashboards using JS/Fetch API for live CSR tracking, co-authored 7 infrastructure-focused project proposals.
   * Project Intern at SAIL Bokaro Steel Plant (July 2026 - August 2026): Designed and deployed an NLP-based incident classification model under the CGM to categorize plant safety hazards in real time. Built an automated reporting and audit dashboard to replace manual incident-sorting workflows across departments.
   * President of CodeChef Bennett University Chapter (August 2025 - May 2026): Led and organized 10+ coding contests/events with 1000+ cumulative participants, managed core team operations and sponsorships.
-- Key Projects:
+- Key Projects (When asked about projects, you MUST mention all of these):
   * VoteSamvidhan: A secure blockchain-backed election integrity and digital voting platform with constitutional literacy.
   * SkySentinel: A space situational awareness platform monitoring satellite collision risks in Earth's orbit with real-time TLE 3D visualization. Built with React, TypeScript, Tailwind CSS, CesiumJS, Three.js, and Flask.
   * Tribe: A student campus event discovery, organization, and club planning system with AI recommendations.
