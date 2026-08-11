@@ -94,7 +94,7 @@ export default function TerminalWindow() {
             <p className="text-purple-300 font-semibold">Connect with me:</p>
             <p>📧 Email: <span className="text-white">suyashsingh.dev@gmail.com</span></p>
             <p>🐙 GitHub: <span className="text-sky-300">github.com/SuyashSingh667</span></p>
-            <p>💼 LinkedIn: <span className="text-sky-300">linkedin.com/in/suyash-singh</span></p>
+            <p>💼 LinkedIn: <span className="text-sky-300">linkedin.com/in/suyashsingh0435</span></p>
           </div>
         );
         break;
