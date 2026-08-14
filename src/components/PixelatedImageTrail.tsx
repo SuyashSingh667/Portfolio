@@ -118,16 +118,27 @@ export function PixelatedImageTrail({
 
       pointerPosRef.current = nextPosition;
 
-      if (!pointerActiveRef.current) {
-        pointerActiveRef.current = true;
-        interpolatedPointerPosRef.current = nextPosition;
-        lastSpawnPosRef.current = nextPosition;
+      const isInside =
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+
+      if (isInside) {
+        if (!pointerActiveRef.current) {
+          pointerActiveRef.current = true;
+          interpolatedPointerPosRef.current = nextPosition;
+          lastSpawnPosRef.current = nextPosition;
+        }
+      } else {
+        pointerActiveRef.current = false;
       }
     };
 
-    const handlePointerLeave = () => {
-      pointerActiveRef.current = false;
-    };
+    // Handled by isInside logic
+    // const handlePointerLeave = () => {
+    //   pointerActiveRef.current = false;
+    // };
 
     const distanceFromLastSpawn = () => {
       const dx = interpolatedPointerPosRef.current.x - lastSpawnPosRef.current.x;
@@ -272,15 +283,11 @@ export function PixelatedImageTrail({
       animationFrameRef.current = requestAnimationFrame(render);
     };
 
-    container.addEventListener("pointerenter", updatePointer);
-    container.addEventListener("pointermove", updatePointer);
-    container.addEventListener("pointerleave", handlePointerLeave);
+    window.addEventListener("pointermove", updatePointer);
     animationFrameRef.current = requestAnimationFrame(render);
 
     return () => {
-      container.removeEventListener("pointerenter", updatePointer);
-      container.removeEventListener("pointermove", updatePointer);
-      container.removeEventListener("pointerleave", handlePointerLeave);
+      window.removeEventListener("pointermove", updatePointer);
 
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -311,7 +318,7 @@ export function PixelatedImageTrail({
     <div
       ref={containerRef}
       aria-hidden="true"
-      className={cn("absolute inset-0 overflow-hidden pointer-events-auto touch-none", className)}
+      className={cn("absolute inset-0 overflow-hidden pointer-events-none", className)}
     />
   );
 }
