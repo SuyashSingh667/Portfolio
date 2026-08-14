@@ -109,6 +109,24 @@ export function PixelatedImageTrail({
       return timeout;
     };
 
+    const leadImageElement = document.createElement("div");
+    Object.assign(leadImageElement.style, {
+      position: "absolute",
+      width: `${safeImageSize}px`,
+      height: `${safeImageSize}px`,
+      pointerEvents: "none",
+      borderRadius: "12px",
+      opacity: "0",
+      transition: "opacity 0.3s ease",
+      zIndex: "2",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      boxShadow: "0 16px 24px rgb(0 0 0 / 0.22), inset 0 0 0 1px rgb(255 255 255 / 0.08)",
+      willChange: "left, top, opacity",
+      pointerEvents: "none",
+    });
+    container.appendChild(leadImageElement);
+
     const updatePointer = (event: PointerEvent) => {
       const rect = container.getBoundingClientRect();
       const nextPosition = {
@@ -274,10 +292,20 @@ export function PixelatedImageTrail({
           y: interpolatedPointerPosRef.current.y + (pointerPosRef.current.y - interpolatedPointerPosRef.current.y) * safeSmoothing,
         };
 
+        if (validImagesRef.current.length > 0) {
+          const nextImageSource = validImagesRef.current[currentImageIndexRef.current % validImagesRef.current.length];
+          leadImageElement.style.backgroundImage = `url("${nextImageSource}")`;
+          leadImageElement.style.left = `${interpolatedPointerPosRef.current.x - safeImageSize / 2}px`;
+          leadImageElement.style.top = `${interpolatedPointerPosRef.current.y - safeImageSize / 2}px`;
+          leadImageElement.style.opacity = "1";
+        }
+
         if (distanceFromLastSpawn() > safeSpawnThreshold) {
           lastSpawnPosRef.current = { ...interpolatedPointerPosRef.current };
           createTrailImage();
         }
+      } else {
+        leadImageElement.style.opacity = "0";
       }
 
       animationFrameRef.current = requestAnimationFrame(render);
