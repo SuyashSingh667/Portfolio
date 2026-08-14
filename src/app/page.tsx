@@ -20,7 +20,6 @@ import InteractiveAvatar3D from "@/components/InteractiveAvatar3D";
 import { CinematicFooter } from "@/components/CinematicFooter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import ImageTrail from "@/components/ImageTrail";
-import PixelatedImageTrail from "@/components/PixelatedImageTrail";
 import LoadingScreen from "@/components/LoadingScreen";
 import { preload } from "react-dom";
 
@@ -882,7 +881,7 @@ export default function Home() {
         id="experiences"
         className="relative z-20 min-h-[50vh] md:min-h-screen py-12 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex items-center"
       >
-        <PixelatedImageTrail images={EXPERIENCE_IMAGES} />
+        <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
         {/* Prominent Instruction Badge positioned at top-left of the Experience section */}
         <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
