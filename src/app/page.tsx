@@ -853,7 +853,7 @@ export default function Home() {
 
         <div className="relative w-full flex-1 overflow-hidden min-h-[50vh]">
           {/* Instruction Badge matching Experience section */}
-          <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none">
+          <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
@@ -867,7 +867,7 @@ export default function Home() {
 
           <InfiniteMenu 
             items={menuItems} 
-            scale={isMobile ? 0.95 : 1.0} 
+            scale={isMobile ? 0.75 : 1.0} 
           />
         </div>
       </section>

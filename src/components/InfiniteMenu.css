@@ -218,15 +218,20 @@
 @media (max-width: 640px) {
   .face-title {
     font-size: 1.8rem;
-    top: 6%;
+    top: 12%;
+  }
+  .center-disc-shadow {
+    width: 260px;
+    height: 70px;
+    transform: translate(-50%, 150%) rotate(-5deg);
   }
   .face-description {
     font-size: 0.82rem;
-    bottom: 16%;
+    bottom: 12%;
     max-width: 92%;
   }
   .action-buttons-container {
-    bottom: 4%;
+    bottom: 3%;
     gap: 8px;
   }
   .action-button {
