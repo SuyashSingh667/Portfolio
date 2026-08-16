@@ -97,9 +97,9 @@ const projects: Project[] = [
     title: "VoteSamvidhan",
     description: "Blockchain-backed election integrity with constitutional literacy — secure digital voting, transparent verification, and real-time dashboards.",
     image: "/images/projects/votesamvidhan_poster.jpg?v=10",
-    link: "https://votesamvidhan2.vercel.app",
+    link: "https://votesamvidhan2-kpu17ol6s-suyash0435.vercel.app",
     github: "https://github.com/SuyashSingh667/VoteSamvidhan",
-    live: "https://votesamvidhan2.vercel.app",
+    live: "https://votesamvidhan2-kpu17ol6s-suyash0435.vercel.app",
   },
   {
     title: "Pram Engine",
