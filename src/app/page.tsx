@@ -201,7 +201,7 @@ function SkillsMarquee() {
 }
 
 // ─── Bold editorial section header ────────────────────────────────────────────
-function Chapter({ num, eyebrow, title, children }: { num: string; eyebrow: string; title: string; children?: React.ReactNode }) {
+function Chapter({ num, eyebrow, title, isMobile = false, children }: { num: string; eyebrow: string; title: string; isMobile?: boolean; children?: React.ReactNode }) {
   const { resolvedTheme } = useTheme();
   const textColor = resolvedTheme === "dark" ? "#ffffff" : "#171717";
 
@@ -228,7 +228,7 @@ function Chapter({ num, eyebrow, title, children }: { num: string; eyebrow: stri
             font={{
               fontFamily: "Plus Jakarta Sans",
               variant: "Bold",
-              fontSize: 160,
+              fontSize: isMobile ? 80 : 160,
               textAlign: "left",
               fontWeight: 800,
               lineHeight: "1em",
@@ -277,7 +277,7 @@ const RadarChart = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center space-y-4 select-none">
+    <div className="flex flex-col items-center justify-center space-y-4 select-none transform scale-[0.7] md:scale-100 origin-center">
       <svg width="460" height="460" className="overflow-visible">
         {/* Grid outline lines */}
         {gridLevels.map((level, i) => (
@@ -848,8 +848,8 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           01 — WORK
       ════════════════════════════════════════════════════════════════════════ */}
-      <section id="work" className="relative w-full bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500">
-        <Chapter num="01" eyebrow="Selected Work" title="Projects." />
+      <section id="work" className="relative w-full bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden">
+        <Chapter num="01" eyebrow="Selected Work" title="Projects." isMobile={isMobile} />
 
         <div className="relative w-full h-[60vh] md:h-screen overflow-hidden">
           {/* Instruction Badge matching Experience section */}
@@ -875,11 +875,11 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           02 — EXPERIENCES
       ════════════════════════════════════════════════════════════════════════ */}
-      <Chapter num="02" eyebrow="Journey" title="Experience." />
+      <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} />
 
       <section
         id="experiences"
-        className="relative z-20 min-h-[50vh] md:min-h-screen py-12 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex items-center"
+        className="relative z-20 min-h-[50vh] md:min-h-screen py-12 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden flex items-center"
       >
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
@@ -908,7 +908,7 @@ export default function Home() {
             {experiences.map((item, idx) => (
               <div
                 key={idx}
-                className="experience-card w-[65vw] sm:w-[45vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-8 md:pr-16 mr-8 md:mr-16 min-h-[35vh]"
+                className="experience-card w-[85vw] sm:w-[45vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-8 md:pr-16 mr-8 md:mr-16 min-h-[35vh]"
               >
                 {/* Top */}
                 <div>
@@ -945,8 +945,8 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
-      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh]">
-        <Chapter num="03" eyebrow="Skills" title="Skills." />
+      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh] overflow-x-hidden">
+        <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile} />
 
         <section
           id="skillset"
