@@ -350,7 +350,7 @@ export default function MeshText(props: any) {
             if (cancelled) return
             const w = Math.max(2, canvas.width)
             const h = Math.max(2, canvas.height)
-            const dpr = window.devicePixelRatio || 1
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
             const realSize = fontSize * dpr
             try {
                 if (typeof document !== "undefined") {
@@ -391,7 +391,7 @@ export default function MeshText(props: any) {
         rebuildTexRef.current = rebuildTex
 
         const resize = () => {
-            const dpr = window.devicePixelRatio || 1
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
             const rect = wrapper.getBoundingClientRect()
             const w = Math.max(2, Math.round(rect.width * dpr))
             const h = Math.max(2, Math.round(rect.height * dpr))

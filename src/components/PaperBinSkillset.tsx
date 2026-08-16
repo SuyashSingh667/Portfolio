@@ -115,7 +115,7 @@ function initBin(
   isIntersectingRef: React.RefObject<boolean>,
   onPx: (p: BinPx) => void
 ): () => void {
-  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  const dpr = Math.min(window.devicePixelRatio||1, 1.5);
 
   const mkR = (canvas: HTMLCanvasElement, clipPlane: THREE.Plane) => {
     canvas.width  = cW * dpr;

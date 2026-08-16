@@ -228,7 +228,7 @@ function Chapter({ num, eyebrow, title, isMobile = false, children }: { num: str
             font={{
               fontFamily: "Plus Jakarta Sans",
               variant: "Bold",
-              fontSize: isMobile ? 80 : 160,
+              fontSize: isMobile ? 56 : 160,
               textAlign: "left",
               fontWeight: 800,
               lineHeight: "1em",
@@ -867,7 +867,7 @@ export default function Home() {
 
           <InfiniteMenu 
             items={menuItems} 
-            scale={1.0} 
+            scale={isMobile ? 0.8 : 1.0} 
           />
         </div>
       </section>
@@ -879,7 +879,7 @@ export default function Home() {
 
       <section
         id="experiences"
-        className="relative z-20 min-h-[50vh] md:min-h-screen py-12 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden flex items-center"
+        className="relative z-20 min-h-[40vh] md:min-h-screen py-12 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden flex items-center"
       >
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
@@ -921,7 +921,7 @@ export default function Home() {
                   <h3 className="card-org text-xl md:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-3 md:mb-5 leading-tight">
                     {item.org}
                   </h3>
-                  <p className="card-desc text-[11px] md:text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
+                  <p className="card-desc text-[13px] md:text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
                     {item.desc}
                   </p>
                 </div>
