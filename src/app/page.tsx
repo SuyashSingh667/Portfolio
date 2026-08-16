@@ -220,7 +220,7 @@ function Chapter({ num, eyebrow, title, isMobile = false, children }: { num: str
           <span className="w-5 h-px bg-zinc-400 dark:bg-zinc-500 inline-block" />
           {eyebrow}
         </span>
-        <div className="w-full h-[64px] sm:h-[100px] md:h-[130px] lg:h-[160px] -ml-2 select-none">
+        <div className="w-full h-[90px] sm:h-[100px] md:h-[130px] lg:h-[160px] -ml-2 select-none">
           <MeshText
             text={title}
             color={textColor}
@@ -228,7 +228,7 @@ function Chapter({ num, eyebrow, title, isMobile = false, children }: { num: str
             font={{
               fontFamily: "Plus Jakarta Sans",
               variant: "Bold",
-              fontSize: isMobile ? 56 : 160,
+              fontSize: isMobile ? 64 : 160,
               textAlign: "left",
               fontWeight: 800,
               lineHeight: "1em",
@@ -848,10 +848,10 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           01 — WORK
       ════════════════════════════════════════════════════════════════════════ */}
-      <section id="work" className="relative w-full bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden">
+      <section id="work" className="relative w-full min-h-[100dvh] md:min-h-screen flex flex-col bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden">
         <Chapter num="01" eyebrow="Selected Work" title="Projects." isMobile={isMobile} />
 
-        <div className="relative w-full h-[60vh] md:h-screen overflow-hidden">
+        <div className="relative w-full flex-1 overflow-hidden min-h-[50vh]">
           {/* Instruction Badge matching Experience section */}
           <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none">
             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
@@ -867,7 +867,7 @@ export default function Home() {
 
           <InfiniteMenu 
             items={menuItems} 
-            scale={isMobile ? 0.8 : 1.0} 
+            scale={isMobile ? 0.95 : 1.0} 
           />
         </div>
       </section>
@@ -945,12 +945,12 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
-      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh] overflow-x-hidden">
+      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh] overflow-x-hidden min-h-[100dvh] md:min-h-0 flex flex-col md:block">
         <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile} />
 
         <section
           id="skillset"
-          className="relative bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-4 md:pt-8 pb-4 md:pb-8"
+          className="relative flex-1 bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-4 md:pt-8 pb-4 md:pb-8 flex flex-col"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)`,
           backgroundSize: "40px 40px",
@@ -965,14 +965,14 @@ export default function Home() {
         {/* Top fade — softens the hard edge between the Skills heading and the grid */}
         <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent pointer-events-none z-20" />
 
-        <div className="w-full max-w-[1380px] mx-auto px-6 md:px-16 flex justify-center items-end relative z-10">
+        <div className="w-full max-w-[1380px] mx-auto px-6 md:px-16 flex-1 flex justify-center items-end relative z-10">
           {/* Centered 3D Paper Bin / Dustbin Skillset Canvas — shifted lower */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[1000px] h-[35vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
+            className="w-full max-w-[1000px] h-[55vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
           >
             {/* Sticky Notes Snug & Random Around the Dustbin */}
             {STICKY_NOTES.map((note) => (
@@ -999,28 +999,29 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           04 — ABOUT (full-screen 3D model)
       ════════════════════════════════════════════════════════════════════════ */}
-      <Chapter num="04" eyebrow="About Me" title="Hello." />
+      <div className="min-h-[100dvh] md:min-h-0 flex flex-col md:block">
+        <Chapter num="04" eyebrow="About Me" title="Hello." isMobile={isMobile} />
 
-      <section
-        id="about"
-        className="relative flex flex-row items-center justify-center gap-0 md:gap-8 lg:gap-12 px-2 md:px-16 lg:px-24 py-12 md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 md:py-0"
-      >
-        {/* Spotlight & Grid Background Overlay */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-          <div className="absolute inset-0 [background-size:40px_40px] [background-image:linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)]" />
-          <Spotlight
-            className="-top-[60vh] left-0 md:-top-[50vh] md:left-0"
-            fill={resolvedTheme === "dark" ? "white" : "rgba(113, 113, 122, 0.25)"}
-          />
-        </div>
-        {/* Left Column: 3D Avatar Canvas */}
-        <div className="w-[40%] md:w-[48%] h-[35vh] md:h-[88vh] relative flex items-center justify-center -translate-y-[10px]">
-          <InteractiveAvatar3D autoRotate={false} wireframeMode={false} accentColor="#71717a" />
-        </div>
+        <section
+          id="about"
+          className="relative flex-1 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 lg:gap-12 px-2 md:px-16 lg:px-24 py-12 md:h-screen w-full overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 md:py-0"
+        >
+          {/* Spotlight & Grid Background Overlay */}
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+            <div className="absolute inset-0 [background-size:40px_40px] [background-image:linear-gradient(to_right,rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.04)_1px,transparent_1px)] dark:[background-image:linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)]" />
+            <Spotlight
+              className="-top-[60vh] left-0 md:-top-[50vh] md:left-0"
+              fill={resolvedTheme === "dark" ? "white" : "rgba(113, 113, 122, 0.25)"}
+            />
+          </div>
+          {/* Top Row/Left Column: 3D Avatar Canvas */}
+          <div className="w-full md:w-[48%] h-[35vh] md:h-[88vh] relative flex items-center justify-center -translate-y-[10px]">
+            <InteractiveAvatar3D autoRotate={false} wireframeMode={false} accentColor="#71717a" />
+          </div>
 
-        {/* Right Column: Liquid Glass AI Chatbox (Subtle Version) */}
-        <div className="relative z-20 w-[60%] md:w-[480px] flex justify-start items-center h-[35vh] md:h-[560px]">
-          <div className="w-[380px] md:w-[480px] h-[400px] md:h-[560px] transform scale-[0.55] md:scale-100 origin-left pointer-events-auto select-none liquid-glass-slab -ml-4 md:-ml-8">
+          {/* Bottom Row/Right Column: Liquid Glass AI Chatbox (Subtle Version) */}
+          <div className="relative z-20 w-full md:w-[480px] flex justify-center items-center h-[40vh] md:h-[560px]">
+            <div className="w-[380px] md:w-[480px] h-[400px] md:h-[560px] transform scale-[0.8] md:scale-100 origin-center pointer-events-auto select-none liquid-glass-slab">
           <style dangerouslySetInnerHTML={{ __html: `
             .liquid-glass-slab {
               position: relative;
@@ -1312,6 +1313,7 @@ export default function Home() {
         </div>
         </div>
       </section>
+      </div>
 
       {/* ════════════════════════════════════════════════════════════════════════
           05 — CONTACT / CINEMATIC FOOTER
