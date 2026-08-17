@@ -607,6 +607,9 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: newMessages })
       });
+      if (!res.ok) {
+        throw new Error(`HTTP Error: ${res.status}`);
+      }
       const data = await res.json();
       if (data.reply) {
         setChatMessages([...newMessages, { role: "assistant", content: data.reply }]);
@@ -617,6 +620,7 @@ export default function Home() {
       }
     } catch (err) {
       console.error(err);
+      setChatMessages([...newMessages, { role: "assistant", content: "Oops, network issue! Could you try sending that again?" }]);
     } finally {
       setChatLoading(false);
     }
@@ -1278,6 +1282,16 @@ export default function Home() {
                     </div>
                   </div>
                 ))}
+                
+                {chatLoading && (
+                  <div className="flex flex-col max-w-[85%] items-start">
+                    <div className="px-5 py-3.5 liquid-bubble-ai flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500 animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    </div>
+                  </div>
+                )}
 
 
               </div>

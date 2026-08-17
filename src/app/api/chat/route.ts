@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getTopMatches } from "@/lib/retrieval";
 
+export const maxDuration = 60; // Allow Vercel hobby plan to wait longer for AI API
+
 async function embedQuery(text: string, apiKey: string): Promise<number[]> {
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:embedContent?key=${apiKey}`,
@@ -107,9 +109,6 @@ Rule of Response:
           generationConfig: {
             maxOutputTokens: 1000,
             temperature: 0.7,
-            thinkingConfig: {
-              thinking_level: "low",
-            },
           },
         }),
       }
