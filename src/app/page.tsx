@@ -953,12 +953,12 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
-      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh] overflow-x-hidden min-h-[100dvh] md:min-h-0 flex flex-col md:block">
+      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh] overflow-x-hidden flex flex-col">
         <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile} />
 
         <section
           id="skillset"
-          className="relative flex-1 bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-4 md:pt-8 pb-4 md:pb-8 flex flex-col"
+          className="relative flex-1 bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-4 md:pt-8 pb-4 md:pb-8 flex flex-col h-[100dvh] md:h-screen"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)`,
           backgroundSize: "40px 40px",
@@ -980,7 +980,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[1000px] h-[55vh] md:h-[80vh] relative -translate-y-4 md:-translate-y-8"
+            className="w-full max-w-[1000px] h-[65vh] md:h-[85vh] relative -translate-y-4 md:-translate-y-8"
           >
             {/* Sticky Notes Snug & Random Around the Dustbin */}
             {STICKY_NOTES.map((note) => (
