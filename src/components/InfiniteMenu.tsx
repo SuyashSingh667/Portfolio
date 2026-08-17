@@ -693,7 +693,8 @@ class InfiniteGridMenu {
     onMovementChange: (isMoving: boolean) => void,
     onInit?: ((menu: InfiniteGridMenu) => void) | null,
     scale: number = 1.0,
-    isIntersectingRef?: React.RefObject<boolean>
+    isIntersectingRef?: React.RefObject<boolean>,
+    onLoaded?: () => void
   ) {
     this.canvas = canvas;
     this.items = items || [];
@@ -704,7 +705,7 @@ class InfiniteGridMenu {
     this.onInit = onInit;
     this.isIntersectingRef = isIntersectingRef;
 
-    this.#init(onInit);
+    this.#init(onInit, onLoaded);
   }
 
   resize() {
@@ -800,7 +801,7 @@ class InfiniteGridMenu {
     this.#initDiscInstances(this.DISC_INSTANCE_COUNT);
 
     this.worldMatrix = mat4.create();
-    this.#initTexture();
+    this.#initTexture(onLoaded);
 
     this.control = new ArcballControl(this.canvas, deltaTime => this.#onControlUpdate(deltaTime));
 
@@ -811,7 +812,7 @@ class InfiniteGridMenu {
     if (onInit) onInit(this);
   }
 
-  #initTexture() {
+  #initTexture(onLoaded?: () => void) {
     const gl = this.gl;
     this.tex = createAndSetupTexture(gl, gl.LINEAR, gl.LINEAR, gl.CLAMP_TO_EDGE, gl.CLAMP_TO_EDGE);
     gl.bindTexture(gl.TEXTURE_2D, this.tex);
@@ -857,6 +858,8 @@ class InfiniteGridMenu {
       gl.bindTexture(gl.TEXTURE_2D, this.tex);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
       gl.generateMipmap(gl.TEXTURE_2D);
+
+      if (onLoaded) onLoaded();
     });
   }
 
@@ -1073,6 +1076,7 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
   const isIntersectingRef = useRef(false);
   const [activeItem, setActiveItem] = useState<MenuItem | null>(null);
   const [isMoving, setIsMoving] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (!wrapperRef.current) return;
@@ -1101,7 +1105,8 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
         setIsMoving,
         sk => sk.run(),
         scale,
-        isIntersectingRef
+        isIntersectingRef,
+        () => setIsLoaded(true)
       );
     }
 
@@ -1128,16 +1133,27 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
 
   return (
     <div ref={wrapperRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <canvas id="infinite-grid-menu-canvas" ref={canvasRef} />
+      {!isLoaded && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none transition-opacity duration-500">
+           <div className="w-8 h-8 border-2 border-black/20 dark:border-white/20 border-t-black dark:border-t-white rounded-full animate-spin" />
+           <span className="mt-4 text-[9px] font-mono uppercase tracking-widest text-black/50 dark:text-white/50 animate-pulse">Loading WebGL</span>
+        </div>
+      )}
+      
+      <canvas 
+        id="infinite-grid-menu-canvas" 
+        ref={canvasRef} 
+        className={`transition-opacity duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`} 
+      />
 
       {activeItem && (
         <>
-          <div className={`center-disc-shadow ${isMoving ? 'inactive' : 'active'}`} />
+          <div className={`center-disc-shadow ${isMoving ? 'inactive' : 'active'} transition-opacity duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`} />
 
           <FlickerText 
             text={activeItem.title}
             tag="h2"
-            className={`face-title ${isMoving ? 'inactive' : 'active'}`}
+            className={`face-title ${isMoving ? 'inactive' : 'active'} transition-opacity duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}
             flicker={{
               duration: 1.2,
               ease: "easeInOut",
@@ -1160,9 +1176,9 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
             }}
           />
 
-          <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}>{activeItem.description}</p>
+          <p className={`face-description ${isMoving ? 'inactive' : 'active'} transition-opacity duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>{activeItem.description}</p>
 
-          <div className={`action-buttons-container ${isMoving ? 'inactive' : 'active'}`}>
+          <div className={`action-buttons-container ${isMoving ? 'inactive' : 'active'} transition-opacity duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
             {liveUrl && (
               <a
                 href={liveUrl}
