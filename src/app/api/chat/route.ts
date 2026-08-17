@@ -125,12 +125,9 @@ Rule of Response:
       );
     }
 
-    const { readable, writable } = new TransformStream();
-    response.body?.pipeTo(writable);
-
     // Return the stream directly to the client using Server-Sent Events (SSE)
     // The "no-transform" Cache-Control header is critical on Vercel to prevent buffering the stream
-    return new Response(readable, {
+    return new Response(response.body, {
       headers: {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache, no-transform",
