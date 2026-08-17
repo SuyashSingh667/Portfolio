@@ -848,10 +848,10 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           01 — WORK
       ════════════════════════════════════════════════════════════════════════ */}
-      <section id="work" className="relative w-full min-h-[100dvh] md:min-h-screen flex flex-col bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden">
+      <section id="work" className="relative w-full flex flex-col bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden">
         <Chapter num="01" eyebrow="Selected Work" title="Projects." isMobile={isMobile} />
 
-        <div className="relative w-full flex-1 overflow-hidden min-h-[50vh]">
+        <div className="relative w-full h-[100dvh] md:h-screen overflow-hidden">
           {/* Instruction Badge matching Experience section */}
           <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
@@ -867,7 +867,7 @@ export default function Home() {
 
           <InfiniteMenu 
             items={menuItems} 
-            scale={isMobile ? 0.85 : 0.65} 
+            scale={isMobile ? 0.85 : 0.95} 
           />
         </div>
       </section>
