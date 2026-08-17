@@ -607,14 +607,17 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: newMessages })
       });
-      if (!res.ok) {
-        throw new Error(`HTTP Error: ${res.status}`);
+      let data;
+      try {
+        data = await res.json();
+      } catch (e) {
+        throw new Error(`Failed to parse response: ${res.status}`);
       }
-      const data = await res.json();
-      if (data.reply) {
-        setChatMessages([...newMessages, { role: "assistant", content: data.reply }]);
-      } else if (data.error) {
+      
+      if (data.error) {
         setChatMessages([...newMessages, { role: "assistant", content: `Error: ${data.error}` }]);
+      } else if (data.reply) {
+        setChatMessages([...newMessages, { role: "assistant", content: data.reply }]);
       } else {
         setChatMessages([...newMessages, { role: "assistant", content: "Hey! I couldn't process that. Feel free to ask again!" }]);
       }
