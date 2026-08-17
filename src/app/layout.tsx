@@ -55,6 +55,13 @@ export default function RootLayout({
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&amp;family=Archivo+Narrow:wght@600;700&amp;family=Caveat:wght@600;700&amp;family=Patrick+Hand&amp;display=swap" rel="stylesheet"/>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+        
+        {/* Preload critical assets for instant loading */}
+        <link rel="preload" href="/models/model.glb" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/images/projects/tribe_poster.jpg?v=10" as="image" />
+        <link rel="preload" href="/images/projects/skysentinel_yellow.jpg" as="image" />
+        <link rel="preload" href="/images/projects/votesamvidhan_poster.jpg?v=10" as="image" />
+        <link rel="preload" href="/images/projectPosters/in_this_blue_vhs_style_image_remove_the_adobe_stock_watermark_and_the_vertical.jpg" as="image" />
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>{children}</ThemeProvider>
