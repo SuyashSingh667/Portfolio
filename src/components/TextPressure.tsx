@@ -76,7 +76,8 @@ export default function TextPressure({
 
     const { width: containerW, height: containerH } = containerRef.current.getBoundingClientRect();
 
-    let newFontSize = containerW / (chars.length / 2);
+    // Adjust font size scaling to prevent overflow, especially on smaller laptops or when wdth expands
+    let newFontSize = containerW / (chars.length / 1.3);
     newFontSize = Math.max(newFontSize, minFontSize);
 
     setFontSize(newFontSize);
