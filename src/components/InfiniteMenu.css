@@ -217,27 +217,27 @@
 
 @media (max-width: 640px) {
   .face-title {
-    font-size: 1.8rem;
-    top: 12%;
+    font-size: 2.5rem;
+    top: 18%;
   }
   .center-disc-shadow {
-    width: 260px;
-    height: 70px;
-    transform: translate(-50%, 150%) rotate(-5deg);
+    width: 240px;
+    height: 60px;
+    transform: translate(-50%, 200%) rotate(-5deg);
   }
   .face-description {
-    font-size: 0.82rem;
-    bottom: 12%;
-    max-width: 92%;
+    font-size: 0.85rem;
+    bottom: 22%;
+    max-width: 95%;
   }
   .action-buttons-container {
-    bottom: 3%;
-    gap: 8px;
+    bottom: 8%;
+    gap: 10px;
   }
   .action-button {
-    height: 40px;
-    padding: 0 16px;
-    font-size: 10px;
+    height: 44px;
+    padding: 0 20px;
+    font-size: 11px;
     letter-spacing: 0.12em;
   }
 }
