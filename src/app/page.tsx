@@ -607,19 +607,52 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: newMessages })
       });
-      let data;
-      try {
-        data = await res.json();
-      } catch (e) {
-        throw new Error(`Failed to parse response: ${res.status}`);
-      }
       
-      if (data.error) {
-        setChatMessages([...newMessages, { role: "assistant", content: `Error: ${data.error}` }]);
-      } else if (data.reply) {
-        setChatMessages([...newMessages, { role: "assistant", content: data.reply }]);
-      } else {
-        setChatMessages([...newMessages, { role: "assistant", content: "Hey! I couldn't process that. Feel free to ask again!" }]);
+      if (!res.ok) {
+        throw new Error(`Failed to fetch response: ${res.status}`);
+      }
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No readable stream available");
+      
+      const decoder = new TextDecoder("utf-8");
+      let currentReply = "";
+      let buffer = "";
+
+      // Initialize the assistant message so we can stream into it
+      setChatMessages([...newMessages, { role: "assistant", content: "" }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || ""; // Keep incomplete lines in the buffer
+        
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const dataStr = line.slice(6);
+            if (dataStr === "[DONE]") continue;
+            try {
+              const data = JSON.parse(dataStr);
+              const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+              if (text) {
+                currentReply += text;
+                setChatMessages(prev => {
+                  const updatedMsgs = [...prev];
+                  const lastMsg = updatedMsgs[updatedMsgs.length - 1];
+                  if (lastMsg.role === "assistant") {
+                    lastMsg.content = currentReply;
+                  }
+                  return updatedMsgs;
+                });
+              }
+            } catch (e) {
+              // Ignore incomplete JSON chunks (SSE can sometimes split)
+            }
+          }
+        }
       }
     } catch (err: any) {
       console.error(err);

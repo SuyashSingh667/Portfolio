@@ -95,7 +95,7 @@ Rule of Response:
     }));
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?alt=sse&key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: {
@@ -123,11 +123,14 @@ Rule of Response:
       );
     }
 
-    const data = await response.json();
-    console.log("Raw Gemini API Response:", JSON.stringify(data, null, 2));
-    const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Hey! I couldn't process that. Feel free to ask me again!";
-
-    return NextResponse.json({ reply: replyText });
+    // Return the stream directly to the client using Server-Sent Events (SSE)
+    return new Response(response.body, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive"
+      }
+    });
   } catch (error: any) {
     console.error("Chat API Route Error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
