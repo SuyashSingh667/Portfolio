@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getTopMatches } from "@/lib/retrieval";
 
+export const dynamic = 'force-dynamic';
+
 export const maxDuration = 60; // Allow Vercel hobby plan to wait longer for AI API
 
 async function embedQuery(text: string, apiKey: string): Promise<number[]> {
@@ -123,12 +125,17 @@ Rule of Response:
       );
     }
 
+    const { readable, writable } = new TransformStream();
+    response.body?.pipeTo(writable);
+
     // Return the stream directly to the client using Server-Sent Events (SSE)
-    return new Response(response.body, {
+    // The "no-transform" Cache-Control header is critical on Vercel to prevent buffering the stream
+    return new Response(readable, {
       headers: {
         "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive"
+        "Cache-Control": "no-cache, no-transform",
+        "Connection": "keep-alive",
+        "X-Content-Type-Options": "nosniff"
       }
     });
   } catch (error: any) {
