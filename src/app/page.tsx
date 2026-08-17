@@ -621,9 +621,10 @@ export default function Home() {
       } else {
         setChatMessages([...newMessages, { role: "assistant", content: "Hey! I couldn't process that. Feel free to ask again!" }]);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setChatMessages([...newMessages, { role: "assistant", content: "Oops, network issue! Could you try sending that again?" }]);
+      const errorMessage = err?.message || "Oops, network issue! Could you try sending that again?";
+      setChatMessages([...newMessages, { role: "assistant", content: `Error: ${errorMessage}` }]);
     } finally {
       setChatLoading(false);
     }
