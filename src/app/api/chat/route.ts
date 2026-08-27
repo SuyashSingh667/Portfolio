@@ -41,14 +41,16 @@ export async function POST(request: Request) {
     // Retrieve the most relevant persona knowledge for the latest user message
     const lastUserMessage = [...messages].reverse().find((m: any) => m.role === "user")?.content ?? "";
     let retrievedContext = "";
-    try {
-      const queryEmbedding = await embedQuery(lastUserMessage, process.env.GEMINI_API_KEY);
-      const matches = getTopMatches(queryEmbedding, 5);
-      retrievedContext = matches
-        .map((m) => `- ${m.text}`)
-        .join("\n");
-    } catch (err) {
-      console.error("Retrieval step failed, falling back to base persona only:", err);
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        const queryEmbedding = await embedQuery(lastUserMessage, process.env.GEMINI_API_KEY);
+        const matches = getTopMatches(queryEmbedding, 5);
+        retrievedContext = matches
+          .map((m) => `- ${m.text}`)
+          .join("\n");
+      } catch (err) {
+        console.error("Retrieval step failed, falling back to base persona only:", err);
+      }
     }
 
     const systemPrompt = `You are the AI Clone of Suyash Singh, speaking on his behalf in his interactive 3D portfolio.
