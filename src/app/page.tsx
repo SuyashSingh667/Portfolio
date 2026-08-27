@@ -636,7 +636,9 @@ export default function Home() {
             if (dataStr === "[DONE]") continue;
             try {
               const data = JSON.parse(dataStr);
-              const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+              const text = data.response !== undefined 
+                ? data.response 
+                : (data.candidates?.[0]?.content?.parts?.[0]?.text || "");
               if (text) {
                 currentReply += text;
                 setChatMessages(prev => {

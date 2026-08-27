@@ -89,32 +89,62 @@ Rule of Response:
 3. If asked about something completely unrelated to you (e.g., cooking recipes, history trivia), answer very briefly or playfully, then pivot back to your portfolio or skills (e.g. "Paris! But speaking of travel, I'm focusing my journey on WebGL right now. Want to check out SkySentinel?").
 4. Never break character.`;
 
-    // Format messages history for Gemini API
-    // Gemini roles: "user" and "model"
-    const contents = messages.map((m: any) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
-    }));
+    let response;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?alt=sse&key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents,
-          systemInstruction: {
-            parts: [{ text: systemPrompt }],
+    if (process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN) {
+      // Use Cloudflare Workers AI (Generous free tier: 10,000 requests/day)
+      const cfMessages = [
+        { role: "system", content: systemPrompt },
+        ...messages.map((m: any) => ({
+          role: m.role === "assistant" ? "assistant" : "user",
+          content: m.content
+        }))
+      ];
+      
+      response = await fetch(
+        `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/@cf/meta/llama-3.1-8b-instruct`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`
           },
-          generationConfig: {
-            maxOutputTokens: 1000,
-            temperature: 0.7,
+          body: JSON.stringify({
+            messages: cfMessages,
+            stream: true,
+            max_tokens: 1000,
+            temperature: 0.7
+          })
+        }
+      );
+    } else {
+      // Format messages history for Gemini API
+      // Gemini roles: "user" and "model"
+      const contents = messages.map((m: any) => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }],
+      }));
+
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:streamGenerateContent?alt=sse&key=${process.env.GEMINI_API_KEY}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      }
-    );
+          body: JSON.stringify({
+            contents,
+            systemInstruction: {
+              parts: [{ text: systemPrompt }],
+            },
+            generationConfig: {
+              maxOutputTokens: 1000,
+              temperature: 0.7,
+            },
+          }),
+        }
+      );
+    }
 
     if (!response.ok) {
       const errText = await response.text();
