@@ -28,9 +28,12 @@ export async function POST(request: Request) {
   try {
     const { messages } = await request.json();
 
-    if (!process.env.GEMINI_API_KEY) {
+    const hasCloudflare = !!(process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN);
+    const hasGemini = !!process.env.GEMINI_API_KEY;
+
+    if (!hasGemini && !hasCloudflare) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY environment variable is not configured on the server." },
+        { error: "No AI provider configured (missing Cloudflare or Gemini keys)." },
         { status: 500 }
       );
     }
@@ -148,15 +151,14 @@ Rule of Response:
 
     if (!response.ok) {
       const errText = await response.text();
-      console.error("Gemini API Error Response:", errText);
+      const provider = hasCloudflare ? "Cloudflare" : "Gemini";
+      console.error(`${provider} API Error Response:`, errText);
       return NextResponse.json(
-        { error: "Failed to fetch response from Gemini API" },
+        { error: `Failed to fetch response from ${provider} API`, details: errText },
         { status: response.status }
       );
     }
 
-    // Return the stream directly to the client using Server-Sent Events (SSE)
-    // The "no-transform" Cache-Control header is critical on Vercel to prevent buffering the stream
     return new Response(response.body, {
       headers: {
         "Content-Type": "text/event-stream",
@@ -167,6 +169,6 @@ Rule of Response:
     });
   } catch (error: any) {
     console.error("Chat API Route Error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error", message: error.message }, { status: 500 });
   }
 }
