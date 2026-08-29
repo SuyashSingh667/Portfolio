@@ -442,9 +442,8 @@ const RadarChart = ({
   );
 };
 
-// ─── Lightweight Markdown Renderer for Chat ──────────────────────────────────
+// ─── Rich Lightweight Markdown Renderer for Chat ─────────────────────────────
 function renderMarkdown(text: string): React.ReactNode {
-  // Split into lines
   const lines = text.split('\n');
   const elements: React.ReactNode[] = [];
   let listItems: React.ReactNode[] = [];
@@ -454,7 +453,10 @@ function renderMarkdown(text: string): React.ReactNode {
     if (listItems.length > 0 && listType) {
       const ListTag = listType;
       elements.push(
-        <ListTag key={`list-${elements.length}`} className={listType === 'ul' ? 'list-disc pl-4 space-y-1 my-1.5' : 'list-decimal pl-4 space-y-1 my-1.5'}>
+        <ListTag
+          key={`list-${elements.length}`}
+          className={listType === 'ul' ? 'list-disc pl-4 space-y-1.5 my-2 text-zinc-700 dark:text-zinc-200' : 'list-decimal pl-4 space-y-1.5 my-2 text-zinc-700 dark:text-zinc-200'}
+        >
           {listItems}
         </ListTag>
       );
@@ -464,26 +466,79 @@ function renderMarkdown(text: string): React.ReactNode {
   };
 
   const inlineFormat = (str: string): React.ReactNode => {
-    // Handle **bold** and *italic*
+    // Regex for: markdown links [text](url), bold **text**, code `text`, raw URLs, and emails
+    const regex = /(\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*|`([^`]+)`|(https?:\/\/[^\s)]+)|([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}))/g;
     const parts: React.ReactNode[] = [];
-    let remaining = str;
-    let partKey = 0;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+    let key = 0;
 
-    while (remaining.length > 0) {
-      // Bold: **text**
-      const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
-      if (boldMatch && boldMatch.index !== undefined) {
-        if (boldMatch.index > 0) {
-          parts.push(remaining.slice(0, boldMatch.index));
-        }
-        parts.push(<strong key={`b-${partKey++}`} className="font-semibold">{boldMatch[1]}</strong>);
-        remaining = remaining.slice(boldMatch.index + boldMatch[0].length);
-        continue;
+    while ((match = regex.exec(str)) !== null) {
+      // Text before match
+      if (match.index > lastIndex) {
+        parts.push(str.slice(lastIndex, match.index));
       }
-      // No more matches
-      parts.push(remaining);
-      break;
+
+      if (match[2] && match[3]) {
+        // Markdown Link: [text](url)
+        const linkText = match[2];
+        const linkUrl = match[3];
+        parts.push(
+          <a
+            key={`link-${key++}`}
+            href={linkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 dark:text-blue-400 underline underline-offset-2 hover:opacity-80 transition-opacity font-medium inline-flex items-center gap-0.5"
+          >
+            {linkText}
+          </a>
+        );
+      } else if (match[4]) {
+        // Bold: **text**
+        parts.push(<strong key={`b-${key++}`} className="font-bold text-zinc-900 dark:text-zinc-100">{match[4]}</strong>);
+      } else if (match[5]) {
+        // Code: `text`
+        parts.push(
+          <code key={`code-${key++}`} className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 font-mono text-[11px] text-zinc-800 dark:text-zinc-200 border border-black/5 dark:border-white/5">
+            {match[5]}
+          </code>
+        );
+      } else if (match[6]) {
+        // Raw URL
+        const rawUrl = match[6];
+        parts.push(
+          <a
+            key={`rawurl-${key++}`}
+            href={rawUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 dark:text-blue-400 underline underline-offset-2 hover:opacity-80 transition-opacity font-medium break-all"
+          >
+            {rawUrl}
+          </a>
+        );
+      } else if (match[7]) {
+        // Email
+        const email = match[7];
+        parts.push(
+          <a
+            key={`mail-${key++}`}
+            href={`mailto:${email}`}
+            className="text-blue-600 dark:text-blue-400 underline underline-offset-2 hover:opacity-80 transition-opacity font-medium"
+          >
+            {email}
+          </a>
+        );
+      }
+
+      lastIndex = regex.lastIndex;
     }
+
+    if (lastIndex < str.length) {
+      parts.push(str.slice(lastIndex));
+    }
+
     return parts.length === 1 ? parts[0] : <>{parts}</>;
   };
 
@@ -495,7 +550,7 @@ function renderMarkdown(text: string): React.ReactNode {
     if (bulletMatch) {
       if (listType !== 'ul') flushList();
       listType = 'ul';
-      listItems.push(<li key={`li-${idx}`}>{inlineFormat(bulletMatch[1])}</li>);
+      listItems.push(<li key={`li-${idx}`} className="leading-relaxed">{inlineFormat(bulletMatch[1])}</li>);
       return;
     }
 
@@ -504,7 +559,7 @@ function renderMarkdown(text: string): React.ReactNode {
     if (numMatch) {
       if (listType !== 'ol') flushList();
       listType = 'ol';
-      listItems.push(<li key={`li-${idx}`}>{inlineFormat(numMatch[1])}</li>);
+      listItems.push(<li key={`li-${idx}`} className="leading-relaxed">{inlineFormat(numMatch[1])}</li>);
       return;
     }
 
@@ -512,15 +567,14 @@ function renderMarkdown(text: string): React.ReactNode {
     flushList();
 
     if (trimmed === '') {
-      // Blank line → small spacer
-      elements.push(<div key={`sp-${idx}`} className="h-1.5" />);
+      elements.push(<div key={`sp-${idx}`} className="h-2" />);
     } else {
-      elements.push(<p key={`p-${idx}`} className="my-0.5">{inlineFormat(trimmed)}</p>);
+      elements.push(<p key={`p-${idx}`} className="my-1 leading-relaxed text-zinc-700 dark:text-zinc-200">{inlineFormat(trimmed)}</p>);
     }
   });
 
   flushList();
-  return <div className="space-y-0.5">{elements}</div>;
+  return <div className="space-y-1 text-[13px] md:text-sm">{elements}</div>;
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
