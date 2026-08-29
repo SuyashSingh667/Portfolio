@@ -746,9 +746,10 @@ export default function Home() {
           end: () => {
             if (!container || !container.parentElement) return "+=1000";
             const dist = container.scrollWidth - container.parentElement.clientWidth;
-            return `+=${Math.max(dist, 200)}`;
+            return `+=${Math.max(dist, 100)}`;
           },
           pin: true,
+          pinSpacing: true,
           scrub: 0.5,
           anticipatePin: 1,
           animation: anim,
@@ -957,16 +958,15 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           02 — EXPERIENCES
       ════════════════════════════════════════════════════════════════════════ */}
-      <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} />
-
       <section
         id="experiences"
-        className="relative z-20 min-h-[40vh] md:min-h-screen py-12 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden flex items-center"
+        className="relative z-20 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
       >
+        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} />
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
-        {/* Prominent Instruction Badge positioned at top-left of the Experience section */}
-        <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
+        {/* Prominent Instruction Badge positioned at top-right */}
+        <div className="absolute top-6 right-6 md:right-16 z-30 pointer-events-none select-none hidden md:block">
           <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
@@ -978,13 +978,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="w-full overflow-hidden relative z-10">
+        <div className="w-full overflow-hidden relative z-10 flex-1 flex items-center pb-6 md:pb-12">
             <div
               ref={cardsContainerRef}
               className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
               style={{ 
                 willChange: "transform",
-                paddingRight: "4vw"
+                paddingRight: "6vw"
               }}
             >
             {experiences.map((item, idx) => (
