@@ -962,21 +962,18 @@ export default function Home() {
         id="experiences"
         className="relative z-20 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
       >
-        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} />
-        <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
-
-        {/* Prominent Instruction Badge positioned at top-right */}
-        <div className="absolute top-6 right-6 md:right-16 z-30 pointer-events-none select-none hidden md:block">
-          <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
-            <span className="relative flex h-2.5 w-2.5">
+        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile}>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-2">
+            <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-650 dark:bg-zinc-250"></span>
             </span>
-            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
               Move cursor to reveal images
             </span>
           </div>
-        </div>
+        </Chapter>
+        <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
         <div className="w-full overflow-hidden relative z-10 flex-1 flex items-center pb-6 md:pb-12">
             <div
