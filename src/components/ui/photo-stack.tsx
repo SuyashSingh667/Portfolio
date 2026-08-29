@@ -19,22 +19,14 @@ export interface InteractivePhotoStackProps {
 }
 
 // Pre-defined non-overlapping layout anchors for 5 cards with generous, balanced spacing
-const BASE_SPREAD_ANCHORS = [
-  { x: 0, y: 0, r: 0 },         // Center card
-  { x: -28, y: -16, r: -4 },    // Top-Left
-  { x: 28, y: -16, r: 4 },      // Top-Right
-  { x: -26, y: 17, r: 3 },      // Bottom-Left
-  { x: 26, y: 17, r: -3 },      // Bottom-Right
+// Anchor 0 is always the active top card (front and center)
+const SPREAD_ANCHORS = [
+  { x: 0, y: 0, r: 0 },         // 0: Active Top Card (Center)
+  { x: -28, y: -16, r: -4 },    // 1: Top-Left
+  { x: 28, y: -16, r: 4 },      // 2: Top-Right
+  { x: -26, y: 17, r: 3 },      // 3: Bottom-Left
+  { x: 26, y: 17, r: -3 },      // 4: Bottom-Right
 ];
-
-const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
-  const displayedItems = items.slice(0, 5);
-
-  return displayedItems.map((_, index) => {
-    const anchor = BASE_SPREAD_ANCHORS[index % BASE_SPREAD_ANCHORS.length];
-    return `translate(${anchor.x}vw, ${anchor.y}vh) rotate(${anchor.r}deg)`;
-  });
-};
 
 const InteractivePhotoStack = React.forwardRef<
   HTMLDivElement,
@@ -42,31 +34,14 @@ const InteractivePhotoStack = React.forwardRef<
 >(({ items, title, className, ...props }, ref) => {
   const [topCardIndex, setTopCardIndex] = React.useState(0);
   const [isGroupHovered, setIsGroupHovered] = React.useState(false);
-  const [clickedIndex, setClickedIndex] = React.useState<number | null>(null);
-  // State to hold the current set of random positions
-  const [spreadTransforms, setSpreadTransforms] = React.useState<string[]>([]);
 
   const displayedItems = items.slice(0, 5);
+  const numItems = displayedItems.length;
   const baseRotations = ["rotate-2", "-rotate-2", "rotate-3", "-rotate-3", "rotate-4"];
 
-  const handleMouseEnter = () => {
-    // Generate clean non-overlapping positions every time the mouse enters
-    const newTransforms = generateNonOverlappingTransforms(items);
-    setSpreadTransforms(newTransforms);
-    setIsGroupHovered(true);
-  };
-
   const handleCardClick = (index: number) => {
-    if (isGroupHovered) {
-      setClickedIndex(index);
-      setTimeout(() => {
-        setIsGroupHovered(false);
-        setTopCardIndex(index);
-        setClickedIndex(null);
-      }, 700);
-    } else {
-      setTopCardIndex(index);
-    }
+    // Instantly bring the clicked certificate to the top/center
+    setTopCardIndex(index);
   };
 
   return (
@@ -80,20 +55,21 @@ const InteractivePhotoStack = React.forwardRef<
     >
       <div
         className="relative h-[400px] sm:h-[480px] md:h-[550px] w-full flex items-center justify-center"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={() => !clickedIndex && setIsGroupHovered(false)}
+        onMouseEnter={() => setIsGroupHovered(true)}
+        onMouseLeave={() => setIsGroupHovered(false)}
       >
         <div className="relative w-[330px] h-[235px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px]">
           {displayedItems.map((item, index) => {
             const isTopCard = index === topCardIndex;
-            const numItems = displayedItems.length;
-            let stackPosition = index - topCardIndex;
-            if (stackPosition < 0) stackPosition += numItems;
-            const isClicked = index === clickedIndex;
-            // Use the dynamically generated transforms from state
+            // Calculate relative offset from the currently active top card
+            const relIndex = (index - topCardIndex + numItems) % numItems;
+            const anchor = SPREAD_ANCHORS[relIndex % SPREAD_ANCHORS.length];
+
+            // When hovered: relIndex 0 is front & center, other cards spread to corners
+            // When stacked: relIndex 0 is on top, others stacked behind with subtle translateY & scale
             const transform = isGroupHovered
-              ? spreadTransforms[index]
-              : `translateY(${stackPosition * 0.5}rem) scale(${1 - stackPosition * 0.04})`;
+              ? `translate(${anchor.x}vw, ${anchor.y}vh) rotate(${anchor.r}deg)${isTopCard ? " scale(1.04)" : ""}`
+              : `translateY(${relIndex * 0.5}rem) scale(${1 - relIndex * 0.04})`;
 
             return (
               <div
@@ -103,14 +79,13 @@ const InteractivePhotoStack = React.forwardRef<
                   "absolute inset-0 w-[330px] h-[235px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px] cursor-pointer rounded-2xl md:rounded-3xl bg-white dark:bg-[#121214] p-3 md:p-3.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
-                    [baseRotations[stackPosition]]: !isGroupHovered && !isTopCard,
-                    "hover:scale-[1.03]": isGroupHovered && !isClicked,
-                    "animate-spin-y": isClicked,
+                    [baseRotations[relIndex]]: !isGroupHovered && !isTopCard,
+                    "hover:scale-[1.06] hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.45)]": isGroupHovered && !isTopCard,
                   }
                 )}
                 style={{
                   transform: transform,
-                  zIndex: isClicked ? 200 : isGroupHovered ? (isTopCard ? 150 : 100 + (numItems - stackPosition)) : (isTopCard ? numItems : numItems - stackPosition),
+                  zIndex: isTopCard ? 200 : (numItems - relIndex),
                 }}
               >
                 <div className="flex h-full w-full flex-col items-center justify-between">
