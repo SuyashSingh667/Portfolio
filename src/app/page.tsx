@@ -964,12 +964,12 @@ export default function Home() {
         className="relative z-20 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
       >
         <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} className="pt-6 pb-1 md:pt-8 md:pb-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-1">
-            <span className="relative flex h-2 w-2">
+          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg mt-1 transition-all duration-300">
+            <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
             </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
+            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
               Move cursor to reveal images
             </span>
           </div>
@@ -1025,12 +1025,12 @@ export default function Home() {
       ════════════════════════════════════════════════════════════════════════ */}
       <div className="relative z-30 overflow-x-hidden flex flex-col">
         <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-1">
-            <span className="relative flex h-2 w-2">
+          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg mt-2 transition-all duration-300">
+            <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
             </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
+            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
               Grab & toss the paper balls
             </span>
           </div>
@@ -1086,12 +1086,12 @@ export default function Home() {
       ════════════════════════════════════════════════════════════════════════ */}
       <div className="relative z-30 overflow-x-hidden flex flex-col">
         <Chapter num="04" eyebrow="Licenses & Certs" title="Certs." isMobile={isMobile}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-2">
-            <span className="relative flex h-2 w-2">
+          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg mt-2 transition-all duration-300">
+            <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
             </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
+            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
               Scroll over the certificate · Click to cycle
             </span>
           </div>
