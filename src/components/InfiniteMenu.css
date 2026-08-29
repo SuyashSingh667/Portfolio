@@ -218,25 +218,25 @@
 
 @media (max-width: 768px) {
   .face-title {
-    font-size: 1.85rem;
-    top: 12px;
+    font-size: 1.5rem;
+    top: 6px;
   }
   .center-disc-shadow {
-    width: 170px;
-    height: 40px;
-    transform: translate(-50%, 150%) rotate(-5deg);
+    width: 140px;
+    height: 35px;
+    transform: translate(-50%, 140%) rotate(-5deg);
   }
   .face-description {
     display: none !important;
   }
   .action-buttons-container {
-    bottom: 12px;
+    bottom: 10px;
     gap: 8px;
   }
   .action-button {
-    height: 38px;
-    padding: 0 16px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
+    height: 36px;
+    padding: 0 14px;
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
   }
 }

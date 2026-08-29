@@ -989,7 +989,7 @@ export default function Home() {
       <section id="work" className="relative w-full flex flex-col bg-[#fafafa] dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden">
         <Chapter num="01" eyebrow="Selected Work" title="Projects." isMobile={isMobile} />
 
-        <div className="relative w-full h-[46vh] sm:h-[58vh] md:h-screen overflow-hidden">
+        <div className="relative w-full h-[52vh] sm:h-[62vh] md:h-screen overflow-hidden">
           {/* Instruction Badge matching Experience section */}
           <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
@@ -1005,7 +1005,7 @@ export default function Home() {
 
           <InfiniteMenu 
             items={menuItems} 
-            scale={isMobile ? 0.48 : (typeof window !== "undefined" && window.innerWidth / window.innerHeight < 1.6 ? 0.75 : 0.85)} 
+            scale={isMobile ? 0.60 : (typeof window !== "undefined" && window.innerWidth / window.innerHeight < 1.6 ? 0.75 : 0.85)} 
           />
         </div>
       </section>
