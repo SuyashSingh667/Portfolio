@@ -77,7 +77,6 @@ About Suyash:
   * Tools: Git, GitHub, IntelliJ IDEA, VS Code.
 - Contact/Links:
   * Email: suyashsingh667@gmail.com
-  * Mobile: +91-9580235002
   * LinkedIn: Suyash Singh (https://www.linkedin.com/in/suyashsingh0435)
   * GitHub: https://github.com/SuyashSingh667
   * Portfolio: http://localhost:3001
