@@ -1080,7 +1080,17 @@ export default function Home() {
           04 — CERTIFICATIONS
       ════════════════════════════════════════════════════════════════════════ */}
       <div className="relative z-30 overflow-x-hidden flex flex-col">
-        <Chapter num="04" eyebrow="Licenses & Certs" title="Certs." isMobile={isMobile} />
+        <Chapter num="04" eyebrow="Licenses & Certs" title="Certs." isMobile={isMobile}>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
+              Scroll over the certificate
+            </span>
+          </div>
+        </Chapter>
 
         <section
           id="certifications"
@@ -1094,11 +1104,11 @@ export default function Home() {
           <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
             <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
               <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
               <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
-                Hover to fan out · Click to inspect
+                Scroll over the certificate · Click to cycle
               </span>
             </div>
           </div>

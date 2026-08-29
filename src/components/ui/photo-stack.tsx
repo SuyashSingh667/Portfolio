@@ -26,8 +26,8 @@ const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
   const positions: { x: number; y: number; r: number }[] = [];
   const displayedItems = items.slice(0, 5);
 
-  const cardWidthVW = 22;
-  const cardHeightVH = 38;
+  const cardWidthVW = 30;
+  const cardHeightVH = 26;
   const maxRetries = 100;
 
   displayedItems.forEach(() => {
@@ -37,9 +37,9 @@ const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
 
     do {
       collision = false;
-      const x = random(-35, 35); // vw
-      const y = random(-20, 20); // vh
-      const r = random(-20, 20); // deg
+      const x = random(-30, 30); // vw
+      const y = random(-16, 16); // vh
+      const r = random(-12, 12); // deg
       newPos = { x, y, r };
 
       for (const pos of positions) {
@@ -70,7 +70,7 @@ const InteractivePhotoStack = React.forwardRef<
   const [spreadTransforms, setSpreadTransforms] = React.useState<string[]>([]);
 
   const displayedItems = items.slice(0, 5);
-  const baseRotations = ["rotate-2", "-rotate-2", "rotate-4", "-rotate-4", "rotate-6"];
+  const baseRotations = ["rotate-2", "-rotate-2", "rotate-3", "-rotate-3", "rotate-4"];
 
   const handleMouseEnter = () => {
     // Generate new random positions every time the mouse enters
@@ -96,17 +96,17 @@ const InteractivePhotoStack = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex flex-col items-center justify-center gap-8 w-full select-none",
+        "flex flex-col items-center justify-center gap-6 w-full select-none",
         className,
       )}
       {...props}
     >
       <div
-        className="relative h-[420px] md:h-[480px] w-full flex items-center justify-center"
+        className="relative h-[360px] sm:h-[420px] md:h-[460px] w-full flex items-center justify-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => !clickedIndex && setIsGroupHovered(false)}
       >
-        <div className="relative h-80 w-64 md:h-96 md:w-72">
+        <div className="relative w-[310px] h-[230px] sm:w-[380px] sm:h-[280px] md:w-[440px] md:h-[310px]">
           {displayedItems.map((item, index) => {
             const isTopCard = index === topCardIndex;
             const numItems = displayedItems.length;
@@ -116,14 +116,14 @@ const InteractivePhotoStack = React.forwardRef<
             // Use the dynamically generated transforms from state
             const transform = isGroupHovered
               ? spreadTransforms[index]
-              : `translateY(${stackPosition * 0.5}rem) scale(${1 - stackPosition * 0.05})`;
+              : `translateY(${stackPosition * 0.4}rem) scale(${1 - stackPosition * 0.04})`;
 
             return (
               <div
                 key={item.name}
                 onClick={() => handleCardClick(index)}
                 className={cn(
-                  "absolute inset-0 h-80 w-64 md:h-96 md:w-72 cursor-pointer rounded-2xl bg-white dark:bg-zinc-900/95 p-3 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
+                  "absolute inset-0 w-[310px] h-[230px] sm:w-[380px] sm:h-[280px] md:w-[440px] md:h-[310px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
                     [baseRotations[stackPosition]]: !isGroupHovered && !isTopCard,
@@ -137,36 +137,35 @@ const InteractivePhotoStack = React.forwardRef<
                 }}
               >
                 <div className="flex h-full w-full flex-col items-center justify-between">
-                  <div className="h-[75%] w-full bg-zinc-100 dark:bg-zinc-950 rounded-xl overflow-hidden flex items-center justify-center border border-black/5 dark:border-white/5 relative">
+                  <div className="h-[80%] w-full bg-zinc-50 dark:bg-black/50 rounded-xl overflow-hidden flex items-center justify-center p-1 border border-black/5 dark:border-white/5 relative">
                     <img
                       src={item.src}
                       alt={item.name}
-                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                      className="h-full w-full object-contain rounded-lg transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                   </div>
-                  <div className="flex h-[25%] flex-col items-center justify-center px-3 text-center">
-                    <p className="font-mono text-xs uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 line-clamp-1">
-                      {item.name}
-                    </p>
-                    <div className="flex items-center gap-2 mt-0.5">
+                  <div className="flex h-[20%] w-full items-center justify-between px-2 pt-1">
+                    <div className="text-left max-w-[65%]">
+                      <p className="font-mono text-[11px] md:text-xs uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                        {item.name}
+                      </p>
                       {item.issuer && (
-                        <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+                        <span className="text-[9px] md:text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block truncate">
                           {item.issuer}
                         </span>
                       )}
-                      {item.verifyUrl && (
-                        <a
-                          href={item.verifyUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-[10px] font-mono text-blue-600 dark:text-blue-400 hover:underline uppercase tracking-wider font-semibold"
-                        >
-                          Verify ↗
-                        </a>
-                      )}
                     </div>
+                    {item.verifyUrl && (
+                      <a
+                        href={item.verifyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="px-2.5 py-1 rounded-full text-[9px] md:text-[10px] font-mono font-semibold uppercase tracking-wider bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-black/5 dark:border-white/10 transition-colors shrink-0 flex items-center gap-1"
+                      >
+                        Verify <span>↗</span>
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
