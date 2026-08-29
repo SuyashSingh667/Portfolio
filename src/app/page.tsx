@@ -958,24 +958,25 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           02 — EXPERIENCES
       ════════════════════════════════════════════════════════════════════════ */}
+      <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile}>
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
+            Move cursor to reveal images
+          </span>
+        </div>
+      </Chapter>
+
       <section
         id="experiences"
-        className="relative z-20 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
+        className="relative z-20 min-h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden flex items-center"
       >
-        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-2">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-650 dark:bg-zinc-250"></span>
-            </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
-              Move cursor to reveal images
-            </span>
-          </div>
-        </Chapter>
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
-        <div className="w-full overflow-hidden relative z-10 flex-1 flex items-center pb-6 md:pb-12">
+        <div className="w-full overflow-hidden relative z-10">
             <div
               ref={cardsContainerRef}
               className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
@@ -1086,16 +1087,9 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           04 — CERTIFICATIONS
       ════════════════════════════════════════════════════════════════════════ */}
-      <section
-        id="certifications"
-        className="relative z-30 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      >
+      <div className="relative z-30 overflow-x-hidden flex flex-col">
         <Chapter num="04" eyebrow="Licenses & Certs" title="Certs." isMobile={isMobile}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-1">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-2">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
@@ -1106,19 +1100,28 @@ export default function Home() {
           </div>
         </Chapter>
 
-        <div className="w-full max-w-5xl mx-auto px-6 flex-1 flex items-center justify-center relative z-10 pb-4 md:pb-8">
-          <InteractivePhotoStack
-            items={CERTIFICATIONS}
-            title={
-              <div className="flex flex-col items-center gap-1 mt-2">
-                <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.32em] font-semibold text-zinc-500 dark:text-zinc-400">
-                  Verified Licenses & Accomplishments
-                </span>
-              </div>
-            }
-          />
-        </div>
-      </section>
+        <section
+          id="certifications"
+          className="relative min-h-[90vh] md:min-h-screen py-16 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col items-center justify-center"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)`,
+            backgroundSize: "40px 40px",
+          }}
+        >
+          <div className="w-full max-w-5xl mx-auto px-6 flex items-center justify-center relative z-10">
+            <InteractivePhotoStack
+              items={CERTIFICATIONS}
+              title={
+                <div className="flex flex-col items-center gap-1 mt-6">
+                  <span className="font-mono text-[11px] md:text-xs uppercase tracking-[0.32em] font-semibold text-zinc-500 dark:text-zinc-400">
+                    Verified Licenses & Accomplishments
+                  </span>
+                </div>
+              }
+            />
+          </div>
+        </section>
+      </div>
 
       {/* ════════════════════════════════════════════════════════════════════════
           05 — ABOUT (full-screen 3D model)
