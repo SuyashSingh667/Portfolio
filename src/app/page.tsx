@@ -240,12 +240,12 @@ function SkillsMarquee() {
 }
 
 // ─── Bold editorial section header ────────────────────────────────────────────
-function Chapter({ num, eyebrow, title, isMobile = false, children }: { num: string; eyebrow: string; title: string; isMobile?: boolean; children?: React.ReactNode }) {
+function Chapter({ num, eyebrow, title, isMobile = false, children, className }: { num: string; eyebrow: string; title: string; isMobile?: boolean; children?: React.ReactNode; className?: string }) {
   const { resolvedTheme } = useTheme();
   const textColor = resolvedTheme === "dark" ? "#ffffff" : "#171717";
 
   return (
-    <div className="relative overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] transition-colors duration-500 px-6 md:px-16 pt-12 pb-4 md:pt-20 md:pb-10">
+    <div className={cn("relative overflow-hidden bg-[#fafafa] dark:bg-[#0a0a0a] transition-colors duration-500 px-6 md:px-16 pt-12 pb-4 md:pt-20 md:pb-10", className)}>
       {/* Ghost number */}
       <span
         aria-hidden
@@ -958,58 +958,57 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           02 — EXPERIENCES
       ════════════════════════════════════════════════════════════════════════ */}
-      <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile}>
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-2">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
-            Move cursor to reveal images
-          </span>
-        </div>
-      </Chapter>
-
       <section
         id="experiences"
-        className="relative z-20 min-h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-x-hidden flex items-center"
+        className="relative z-20 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
       >
+        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} className="pt-6 pb-1 md:pt-8 md:pb-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-1">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
+              Move cursor to reveal images
+            </span>
+          </div>
+        </Chapter>
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
-        <div className="w-full overflow-hidden relative z-10">
-            <div
-              ref={cardsContainerRef}
-              className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
-              style={{ 
-                willChange: "transform",
-                paddingRight: "6vw"
-              }}
-            >
+        <div className="w-full overflow-hidden relative z-10 flex-1 flex items-center pb-4 md:pb-8">
+          <div
+            ref={cardsContainerRef}
+            className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
+            style={{ 
+              willChange: "transform",
+              paddingRight: "8vw"
+            }}
+          >
             {experiences.map((item, idx) => (
               <div
                 key={idx}
-                className="experience-card w-[85vw] sm:w-[45vw] md:w-[42vw] lg:w-[36vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-8 md:pr-16 mr-8 md:mr-16 min-h-[35vh]"
+                className="experience-card w-[85vw] sm:w-[50vw] md:w-[42vw] lg:w-[35vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-8 md:pr-14 mr-8 md:mr-14 min-h-[40vh] md:min-h-[46vh]"
               >
                 {/* Top */}
                 <div>
-                  <span className="card-num text-[clamp(3rem,8vw,9rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-2 md:-mb-4">
+                  <span className="card-num text-[clamp(2.5rem,6vw,7rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-2 md:-mb-3">
                     {item.num}
                   </span>
-                  <span className="card-role text-[8px] md:text-[9px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-2 md:mb-3 font-semibold">
+                  <span className="card-role text-[8.5px] md:text-[9.5px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-1.5 md:mb-2 font-semibold">
                     {item.role}
                   </span>
-                  <h3 className="card-org text-xl md:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-3 md:mb-5 leading-tight">
+                  <h3 className="card-org text-xl md:text-3xl lg:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-2 md:mb-4 leading-tight">
                     {item.org}
                   </h3>
-                  <p className="card-desc text-[13px] md:text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-[340px]">
+                  <p className="card-desc text-xs md:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-[360px]">
                     {item.desc}
                   </p>
                 </div>
 
                 {/* Bottom — tags */}
-                <div className="flex flex-wrap gap-2 mt-8">
+                <div className="flex flex-wrap gap-1.5 md:gap-2 mt-4 md:mt-6">
                   {item.tags.map((tag) => (
-                    <span key={tag} className="card-tag px-3 py-1 border border-black/10 dark:border-zinc-800 rounded-full text-[8px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-500">
+                    <span key={tag} className="card-tag px-2.5 md:px-3 py-0.5 md:py-1 border border-black/10 dark:border-zinc-800 rounded-full text-[8px] md:text-[9px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                       {tag}
                     </span>
                   ))}
