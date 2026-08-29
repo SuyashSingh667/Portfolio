@@ -986,8 +986,9 @@ class InfiniteGridMenu {
       referenceSize = canvasEl.clientWidth;
       baseSize = 450; // standard mobile width
     }
-    
-    const zoomCompensation = Math.max(1.0, referenceSize / baseSize);
+    // Calculate zoom compensation so that the WebGL objects shrink when zooming out OR zooming in (small windows)
+    const ratio = referenceSize / baseSize;
+    const zoomCompensation = Math.max(ratio, 1.0 / ratio);
     const dynamicHeight = baseHeight * zoomCompensation;
     
     const distance = this.camera.position[2];
