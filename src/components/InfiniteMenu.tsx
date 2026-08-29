@@ -972,9 +972,23 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
-    // Calibrated so the center disc occupies ~52% of the viewport height,
-    // leaving a dedicated ~24% at the top for Title and ~24% at the bottom for Description/Buttons
-    const dynamicHeight = this.SPHERE_RADIUS * 0.52;
+    // Base height factor — lower value = bigger spheres on screen
+    const baseHeight = this.SPHERE_RADIUS * 0.30;
+    
+    // Calculate zoom compensation so that the WebGL objects shrink when zooming out
+    // just like normal CSS elements would, instead of remaining locked to 100vh.
+    let referenceSize;
+    let baseSize;
+    if (this.camera.aspect > 1) {
+      referenceSize = canvasEl.clientHeight;
+      baseSize = 900; // standard desktop height
+    } else {
+      referenceSize = canvasEl.clientWidth;
+      baseSize = 450; // standard mobile width
+    }
+    
+    const zoomCompensation = Math.max(1.0, referenceSize / baseSize);
+    const dynamicHeight = baseHeight * zoomCompensation;
     
     const distance = this.camera.position[2];
     if (this.camera.aspect > 1) {
@@ -1096,22 +1110,6 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
       );
     }
 
-    const wrapper = wrapperRef.current;
-    const preventZoom = (e: WheelEvent) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-      }
-    };
-    const preventGesture = (e: Event) => {
-      e.preventDefault();
-    };
-
-    if (wrapper) {
-      wrapper.addEventListener('wheel', preventZoom, { passive: false });
-      wrapper.addEventListener('gesturestart', preventGesture, { passive: false });
-      wrapper.addEventListener('gesturechange', preventGesture, { passive: false });
-    }
-
     const handleResize = () => {
       if (sketch) {
         sketch.resize();
@@ -1123,11 +1121,6 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      if (wrapper) {
-        wrapper.removeEventListener('wheel', preventZoom);
-        wrapper.removeEventListener('gesturestart', preventGesture);
-        wrapper.removeEventListener('gesturechange', preventGesture);
-      }
       if (sketch) {
         sketch.destroy();
       }
