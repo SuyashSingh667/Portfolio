@@ -54,11 +54,11 @@ const InteractivePhotoStack = React.forwardRef<
       {...props}
     >
       <div
-        className="relative h-[400px] sm:h-[480px] md:h-[550px] w-full flex items-center justify-center"
+        className="relative h-[260px] sm:h-[480px] md:h-[550px] w-full flex items-center justify-center"
         onMouseEnter={() => setIsGroupHovered(true)}
         onMouseLeave={() => setIsGroupHovered(false)}
       >
-        <div className="relative w-[330px] h-[235px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px]">
+        <div className="relative w-[260px] h-[180px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px]">
           {displayedItems.map((item, index) => {
             const isTopCard = index === topCardIndex;
             // Calculate relative offset from the currently active top card
@@ -76,7 +76,7 @@ const InteractivePhotoStack = React.forwardRef<
                 key={item.name}
                 onClick={() => handleCardClick(index)}
                 className={cn(
-                  "absolute inset-0 w-[330px] h-[235px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px] cursor-pointer rounded-2xl md:rounded-3xl bg-white dark:bg-[#121214] p-3 md:p-3.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
+                  "absolute inset-0 w-[260px] h-[180px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px] cursor-pointer rounded-2xl md:rounded-3xl bg-white dark:bg-[#121214] p-2.5 md:p-3.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
                     [baseRotations[relIndex]]: !isGroupHovered && !isTopCard,

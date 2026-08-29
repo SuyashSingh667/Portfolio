@@ -1152,7 +1152,7 @@ export default function Home() {
 
         <section
           id="certifications"
-          className="relative min-h-[90vh] md:min-h-screen py-16 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col items-center justify-center"
+          className="relative min-h-[50vh] md:min-h-screen py-8 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col items-center justify-center"
           style={{
             backgroundImage: `linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)`,
             backgroundSize: "40px 40px",
