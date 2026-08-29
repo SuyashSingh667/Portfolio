@@ -966,20 +966,20 @@ export default function Home() {
         <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} className="pt-6 pb-1 md:pt-8 md:pb-2" />
         <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
 
-        {/* Floating Instruction Badge */}
-        <div className="absolute top-28 md:top-36 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
-          <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
-            </span>
-            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
-              Move cursor to reveal images
-            </span>
+        <div className="w-full overflow-hidden relative z-10 flex-1 flex flex-col justify-center pb-4 md:pb-8">
+          {/* Floating Instruction Badge positioned in the cards canvas, clear of Chapter heading */}
+          <div className="pl-6 md:pl-16 mb-3 pointer-events-none select-none hidden md:block">
+            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
+              </span>
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
+                Move cursor to reveal images
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div className="w-full overflow-hidden relative z-10 flex-1 flex items-center pb-4 md:pb-8">
           <div
             ref={cardsContainerRef}
             className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
