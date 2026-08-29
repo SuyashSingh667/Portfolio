@@ -23,6 +23,7 @@ import ImageTrail from "@/components/ImageTrail";
 import LoadingScreen from "@/components/LoadingScreen";
 import { InteractivePhotoStack, PhotoStackItem } from "@/components/ui/photo-stack";
 import { preload } from "react-dom";
+import { cn } from "@/lib/utils";
 
 
 
