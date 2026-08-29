@@ -988,7 +988,7 @@ class InfiniteGridMenu {
     }
     
     const zoomCompensation = Math.max(1.0, referenceSize / baseSize);
-    const dynamicHeight = (baseHeight * zoomCompensation) / (this.scaleFactor || 1.0);
+    const dynamicHeight = baseHeight * zoomCompensation;
     
     const distance = this.camera.position[2];
     if (this.camera.aspect > 1) {
@@ -1009,10 +1009,7 @@ class InfiniteGridMenu {
   #onControlUpdate(deltaTime: number) {
     const timeScale = deltaTime / this.TARGET_FRAME_DURATION + 0.0001;
     let damping = 5 / timeScale;
-    let cameraTargetZ = 3.0;
-    if (this.scaleFactor && this.scaleFactor < 1.0) {
-      cameraTargetZ = 3.0 / this.scaleFactor;
-    }
+    let cameraTargetZ = 3.0 * this.scaleFactor;
 
     const isMoving = this.control.isPointerDown || Math.abs(this.smoothRotationVelocity) > 0.01;
 

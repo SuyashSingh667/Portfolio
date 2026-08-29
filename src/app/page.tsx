@@ -1005,7 +1005,7 @@ export default function Home() {
 
           <InfiniteMenu 
             items={menuItems} 
-            scale={isMobile ? 0.60 : (typeof window !== "undefined" && window.innerWidth / window.innerHeight < 1.6 ? 0.75 : 0.85)} 
+            scale={isMobile ? 1.45 : (typeof window !== "undefined" && window.innerWidth / window.innerHeight < 1.6 ? 0.75 : 0.85)} 
           />
         </div>
       </section>
