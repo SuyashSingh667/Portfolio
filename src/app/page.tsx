@@ -1038,50 +1038,47 @@ export default function Home() {
 
         <section
           id="skillset"
-          className="relative flex-1 bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-4 md:pt-8 pb-4 md:pb-8 flex flex-col h-[100dvh] md:h-screen"
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      >
-        {/* Warm glow */}
-        <div 
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] pointer-events-none transform-gpu"
-          style={{ background: 'radial-gradient(circle, rgba(113, 113, 122, 0.12) 0%, transparent 60%)' }} 
-        />
+          className="relative flex-1 bg-white dark:bg-zinc-950 border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden pt-2 md:pt-4 pb-4 md:pb-8 flex flex-col min-h-[85vh] md:min-h-[90vh]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.045) 1px, transparent 1px)`,
+            backgroundSize: "40px 40px",
+          }}
+        >
+          {/* Warm glow */}
+          <div 
+            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] pointer-events-none transform-gpu"
+            style={{ background: 'radial-gradient(circle, rgba(113, 113, 122, 0.12) 0%, transparent 60%)' }} 
+          />
 
-        {/* Top fade — softens the hard edge between the Skills heading and the grid */}
-        <div className="absolute top-0 left-0 w-full h-28 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent pointer-events-none z-20" />
+          <div className="w-full max-w-[1380px] mx-auto px-6 md:px-16 flex-1 flex justify-center items-center relative z-10">
+            {/* Centered 3D Paper Bin / Dustbin Skillset Canvas */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true, margin: "-60px" }}
+              className="w-full max-w-[1000px] h-[65vh] md:h-[80vh] relative"
+            >
+              {/* Sticky Notes Snug & Random Around the Dustbin */}
+              {STICKY_NOTES.map((note) => (
+                <StickyNote key={note.id} item={note} />
+              ))}
 
-        <div className="w-full max-w-[1380px] mx-auto px-6 md:px-16 flex-1 flex justify-center items-end relative z-10">
-          {/* Centered 3D Paper Bin / Dustbin Skillset Canvas — shifted lower */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            viewport={{ once: true, margin: "-60px" }}
-            className="w-full max-w-[1000px] h-[65vh] md:h-[85vh] relative -translate-y-4 md:-translate-y-8"
-          >
-            {/* Sticky Notes Snug & Random Around the Dustbin */}
-            {STICKY_NOTES.map((note) => (
-              <StickyNote key={note.id} item={note} />
-            ))}
-
-            <div className="absolute inset-0">
-              <PaperBinSkillset 
-                theme={resolvedTheme} 
-                gravityY={gravityY}
-                gravityX={gravityX}
-                bounciness={bounciness}
-                explodeTrigger={explodeTrigger}
-                vacuumTrigger={vacuumTrigger}
-                resetKey={resetKey}
-                highlightedSkills={highlightedSkills}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
+              <div className="absolute inset-0">
+                <PaperBinSkillset 
+                  theme={resolvedTheme} 
+                  gravityY={gravityY}
+                  gravityX={gravityX}
+                  bounciness={bounciness}
+                  explodeTrigger={explodeTrigger}
+                  vacuumTrigger={vacuumTrigger}
+                  resetKey={resetKey}
+                  highlightedSkills={highlightedSkills}
+                />
+              </div>
+            </motion.div>
+          </div>
+        </section>
       </div>
 
       {/* ════════════════════════════════════════════════════════════════════════
