@@ -972,11 +972,9 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
-    // Base height factor — lower value = bigger spheres on screen
-    const baseHeight = this.SPHERE_RADIUS * 0.30;
+    // Base height factor — lower value = bigger spheres on screen. Increased from 0.30 to 0.45 to prevent overlap.
+    const baseHeight = this.SPHERE_RADIUS * 0.45;
     
-    // Calculate zoom compensation so that the WebGL objects shrink when zooming out
-    // just like normal CSS elements would, instead of remaining locked to 100vh.
     let referenceSize;
     let baseSize;
     if (this.camera.aspect > 1) {
@@ -986,9 +984,9 @@ class InfiniteGridMenu {
       referenceSize = canvasEl.clientWidth;
       baseSize = 450; // standard mobile width
     }
-    // Calculate zoom compensation so that the WebGL objects shrink when zooming out OR zooming in (small windows)
+    // Aggressively shrink spheres when the window height gets small (zoomed in)
     const ratio = referenceSize / baseSize;
-    const zoomCompensation = Math.max(ratio, 1.0 / ratio);
+    const zoomCompensation = Math.max(ratio, Math.pow(1.0 / ratio, 2.0));
     const dynamicHeight = baseHeight * zoomCompensation;
     
     const distance = this.camera.position[2];
