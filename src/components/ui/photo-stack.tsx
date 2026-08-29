@@ -9,6 +9,7 @@ export interface PhotoStackItem {
   name: string;
   issuer?: string;
   date?: string;
+  verifyUrl?: string;
 }
 
 export interface InteractivePhotoStackProps {
@@ -122,7 +123,7 @@ const InteractivePhotoStack = React.forwardRef<
                 key={item.name}
                 onClick={() => handleCardClick(index)}
                 className={cn(
-                  "absolute inset-0 h-80 w-64 md:h-96 md:w-72 cursor-pointer rounded-2xl bg-white dark:bg-zinc-900/90 p-3 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
+                  "absolute inset-0 h-80 w-64 md:h-96 md:w-72 cursor-pointer rounded-2xl bg-white dark:bg-zinc-900/95 p-3 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
                     [baseRotations[stackPosition]]: !isGroupHovered && !isTopCard,
@@ -148,11 +149,24 @@ const InteractivePhotoStack = React.forwardRef<
                     <p className="font-mono text-xs uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 line-clamp-1">
                       {item.name}
                     </p>
-                    {item.issuer && (
-                      <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mt-0.5">
-                        {item.issuer}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {item.issuer && (
+                        <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
+                          {item.issuer}
+                        </span>
+                      )}
+                      {item.verifyUrl && (
+                        <a
+                          href={item.verifyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-[10px] font-mono text-blue-600 dark:text-blue-400 hover:underline uppercase tracking-wider font-semibold"
+                        >
+                          Verify ↗
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
