@@ -707,10 +707,10 @@ export default function Home() {
           end: () => {
             if (!container || !container.parentElement) return "+=1000";
             const dist = container.scrollWidth - container.parentElement.clientWidth;
-            return `+=${Math.max(dist, 400)}`;
+            return `+=${Math.max(dist, 200)}`;
           },
           pin: true,
-          scrub: 1, // 1 second smoothing provides the most butter-smooth experience
+          scrub: 0.5,
           anticipatePin: 1,
           animation: anim,
           invalidateOnRefresh: true,
@@ -945,7 +945,7 @@ export default function Home() {
               className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
               style={{ 
                 willChange: "transform",
-                paddingRight: "30vw" // Added horizontal space after the 4th experience
+                paddingRight: "4vw"
               }}
             >
             {experiences.map((item, idx) => (
@@ -983,12 +983,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Removed Vertical Dead Space between Experiences and Skills */}
-
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
-      <div className="relative z-30 -mt-[10vh] md:-mt-[28vh] overflow-x-hidden flex flex-col">
+      <div className="relative z-30 overflow-x-hidden flex flex-col">
         <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile} />
 
         <section
