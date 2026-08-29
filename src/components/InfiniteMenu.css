@@ -216,29 +216,27 @@
   transform: translate(2px, -2px);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .face-title {
-    font-size: 2.5rem;
-    top: 18%;
+    font-size: 1.85rem;
+    top: 12px;
   }
   .center-disc-shadow {
-    width: 240px;
-    height: 60px;
-    transform: translate(-50%, 200%) rotate(-5deg);
+    width: 170px;
+    height: 40px;
+    transform: translate(-50%, 150%) rotate(-5deg);
   }
   .face-description {
-    font-size: 0.85rem;
-    bottom: 22%;
-    max-width: 95%;
+    display: none !important;
   }
   .action-buttons-container {
-    bottom: 8%;
-    gap: 10px;
+    bottom: 12px;
+    gap: 8px;
   }
   .action-button {
-    height: 44px;
-    padding: 0 20px;
-    font-size: 11px;
-    letter-spacing: 0.12em;
+    height: 38px;
+    padding: 0 16px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
   }
 }
