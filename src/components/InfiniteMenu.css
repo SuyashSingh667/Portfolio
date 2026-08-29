@@ -106,7 +106,7 @@
 .face-description {
   user-select: none;
   position: absolute;
-  bottom: clamp(68px, 9vh, 90px);
+  bottom: clamp(75px, 10.5vh, 98px);
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -140,7 +140,7 @@
 .action-buttons-container {
   position: absolute;
   left: 50%;
-  bottom: clamp(14px, 2.2vh, 26px);
+  bottom: clamp(16px, 2.5vh, 28px);
   z-index: 30;
   transform: translateX(-50%);
   display: flex;
