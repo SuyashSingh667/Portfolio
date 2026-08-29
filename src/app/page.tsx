@@ -963,8 +963,12 @@ export default function Home() {
         id="experiences"
         className="relative z-20 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
       >
-        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} className="pt-6 pb-1 md:pt-8 md:pb-2">
-          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg mt-1 transition-all duration-300">
+        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} className="pt-6 pb-1 md:pt-8 md:pb-2" />
+        <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
+
+        {/* Floating Instruction Badge */}
+        <div className="absolute top-28 md:top-36 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
+          <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
@@ -973,8 +977,7 @@ export default function Home() {
               Move cursor to reveal images
             </span>
           </div>
-        </Chapter>
-        <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
+        </div>
 
         <div className="w-full overflow-hidden relative z-10 flex-1 flex items-center pb-4 md:pb-8">
           <div
@@ -1024,17 +1027,7 @@ export default function Home() {
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
       <div className="relative z-30 overflow-x-hidden flex flex-col">
-        <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile}>
-          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg mt-2 transition-all duration-300">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
-            </span>
-            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
-              Grab & toss the paper balls
-            </span>
-          </div>
-        </Chapter>
+        <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile} />
 
         <section
           id="skillset"
@@ -1044,6 +1037,19 @@ export default function Home() {
             backgroundSize: "40px 40px",
           }}
         >
+          {/* Floating Instruction Badge */}
+          <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
+            <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
+              </span>
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
+                Grab & toss the paper balls
+              </span>
+            </div>
+          </div>
+
           {/* Warm glow */}
           <div 
             className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] pointer-events-none transform-gpu"
@@ -1085,17 +1091,7 @@ export default function Home() {
           04 — CERTIFICATIONS
       ════════════════════════════════════════════════════════════════════════ */}
       <div className="relative z-30 overflow-x-hidden flex flex-col">
-        <Chapter num="04" eyebrow="Licenses & Certs" title="Certs." isMobile={isMobile}>
-          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg mt-2 transition-all duration-300">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
-            </span>
-            <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
-              Scroll over the certificate · Click to cycle
-            </span>
-          </div>
-        </Chapter>
+        <Chapter num="04" eyebrow="Licenses & Certs" title="Certs." isMobile={isMobile} />
 
         <section
           id="certifications"
@@ -1105,6 +1101,19 @@ export default function Home() {
             backgroundSize: "40px 40px",
           }}
         >
+          {/* Floating Instruction Badge */}
+          <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
+            <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
+              </span>
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
+                Scroll over the certificate · Click to cycle
+              </span>
+            </div>
+          </div>
+
           <div className="w-full max-w-5xl mx-auto px-6 flex items-center justify-center relative z-10">
             <InteractivePhotoStack
               items={CERTIFICATIONS}
