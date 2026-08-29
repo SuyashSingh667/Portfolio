@@ -1110,6 +1110,25 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
       );
     }
 
+    const preventZoom = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    };
+    const preventKeyZoom = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+' || e.key === '-' || e.key === '_' || e.key === '0')) {
+        e.preventDefault();
+      }
+    };
+    const preventGesture = (e: Event) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('wheel', preventZoom, { passive: false });
+    window.addEventListener('keydown', preventKeyZoom);
+    window.addEventListener('gesturestart', preventGesture, { passive: false });
+    window.addEventListener('gesturechange', preventGesture, { passive: false });
+
     const handleResize = () => {
       if (sketch) {
         sketch.resize();
@@ -1120,6 +1139,10 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
     handleResize();
 
     return () => {
+      window.removeEventListener('wheel', preventZoom);
+      window.removeEventListener('keydown', preventKeyZoom);
+      window.removeEventListener('gesturestart', preventGesture);
+      window.removeEventListener('gesturechange', preventGesture);
       window.removeEventListener('resize', handleResize);
       if (sketch) {
         sketch.destroy();
