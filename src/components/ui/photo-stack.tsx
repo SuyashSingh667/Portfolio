@@ -18,13 +18,13 @@ export interface InteractivePhotoStackProps {
   className?: string;
 }
 
-// Pre-defined non-overlapping layout anchors for 5 cards across the screen
+// Pre-defined non-overlapping layout anchors for 5 cards with generous separation
 const BASE_SPREAD_ANCHORS = [
   { x: 0, y: 0, r: 0 },         // Center card
-  { x: -28, y: -18, r: -5 },    // Top-Left
-  { x: 28, y: -18, r: 5 },      // Top-Right
-  { x: -27, y: 18, r: 4 },      // Bottom-Left
-  { x: 27, y: 18, r: -4 },      // Bottom-Right
+  { x: -35, y: -22, r: -5 },    // Top-Left (wide corner)
+  { x: 35, y: -22, r: 5 },      // Top-Right (wide corner)
+  { x: -33, y: 22, r: 4 },      // Bottom-Left (wide corner)
+  { x: 33, y: 22, r: -4 },      // Bottom-Right (wide corner)
 ];
 
 const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
@@ -32,16 +32,7 @@ const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
 
   return displayedItems.map((_, index) => {
     const anchor = BASE_SPREAD_ANCHORS[index % BASE_SPREAD_ANCHORS.length];
-    // Add subtle organic jitter while maintaining guaranteed wide separation
-    const jitterX = (Math.random() * 2 - 1) * 1.5; // ±1.5vw
-    const jitterY = (Math.random() * 2 - 1) * 1.5; // ±1.5vh
-    const jitterR = (Math.random() * 2 - 1) * 1.5; // ±1.5deg
-    
-    const posX = anchor.x + jitterX;
-    const posY = anchor.y + jitterY;
-    const posR = anchor.r + jitterR;
-
-    return `translate(${posX}vw, ${posY}vh) rotate(${posR}deg)`;
+    return `translate(${anchor.x}vw, ${anchor.y}vh) rotate(${anchor.r}deg)`;
   });
 };
 
@@ -88,11 +79,11 @@ const InteractivePhotoStack = React.forwardRef<
       {...props}
     >
       <div
-        className="relative h-[380px] sm:h-[430px] md:h-[480px] w-full flex items-center justify-center"
+        className="relative h-[380px] sm:h-[440px] md:h-[500px] w-full flex items-center justify-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => !clickedIndex && setIsGroupHovered(false)}
       >
-        <div className="relative w-[300px] h-[215px] sm:w-[350px] sm:h-[250px] md:w-[410px] md:h-[285px]">
+        <div className="relative w-[280px] h-[200px] sm:w-[330px] sm:h-[235px] md:w-[370px] md:h-[260px]">
           {displayedItems.map((item, index) => {
             const isTopCard = index === topCardIndex;
             const numItems = displayedItems.length;
@@ -109,7 +100,7 @@ const InteractivePhotoStack = React.forwardRef<
                 key={item.name}
                 onClick={() => handleCardClick(index)}
                 className={cn(
-                  "absolute inset-0 w-[300px] h-[215px] sm:w-[350px] sm:h-[250px] md:w-[410px] md:h-[285px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
+                  "absolute inset-0 w-[280px] h-[200px] sm:w-[330px] sm:h-[235px] md:w-[370px] md:h-[260px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
                     [baseRotations[stackPosition]]: !isGroupHovered && !isTopCard,
@@ -132,11 +123,11 @@ const InteractivePhotoStack = React.forwardRef<
                   </div>
                   <div className="flex h-[22%] w-full items-center justify-between px-2 pt-1">
                     <div className="text-left max-w-[65%]">
-                      <p className="font-mono text-[11px] md:text-xs uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                      <p className="font-mono text-[10px] sm:text-[11px] md:text-xs uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 truncate">
                         {item.name}
                       </p>
                       {item.issuer && (
-                        <span className="text-[9px] md:text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block truncate">
+                        <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block truncate">
                           {item.issuer}
                         </span>
                       )}
@@ -147,7 +138,7 @@ const InteractivePhotoStack = React.forwardRef<
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="px-2.5 py-1 rounded-full text-[9px] md:text-[10px] font-mono font-semibold uppercase tracking-wider bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-black/5 dark:border-white/10 transition-colors shrink-0 flex items-center gap-1"
+                        className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-mono font-semibold uppercase tracking-wider bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-black/5 dark:border-white/10 transition-colors shrink-0 flex items-center gap-1"
                       >
                         Verify <span>↗</span>
                       </a>
