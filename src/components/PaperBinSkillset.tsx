@@ -752,16 +752,6 @@ export default function PaperBinSkillset({
       <canvas ref={frontCanvasR}
         style={{ position:"absolute", inset:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:15 }}
       />
-
-      {/* Hint */}
-      <div style={{
-        position:"absolute", top:14, left:"50%", transform:"translateX(-50%)",
-        fontSize:"9px", fontFamily:"monospace", textTransform:"uppercase",
-        letterSpacing:".28em", opacity:.28, pointerEvents:"none",
-        whiteSpace:"nowrap", zIndex:40,
-      }}>
-        Grab &amp; toss the paper balls
-      </div>
     </div>
   );
 }

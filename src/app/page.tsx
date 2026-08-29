@@ -1023,7 +1023,17 @@ export default function Home() {
           03 — SKILLSET
       ════════════════════════════════════════════════════════════════════════ */}
       <div className="relative z-30 overflow-x-hidden flex flex-col">
-        <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile} />
+        <Chapter num="03" eyebrow="Skills" title="Skills." isMobile={isMobile}>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/12 bg-black/[0.03] dark:bg-white/[0.04] backdrop-blur-md mt-1">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-600 dark:bg-zinc-300"></span>
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] font-semibold text-zinc-600 dark:text-zinc-300">
+              Grab & toss the paper balls
+            </span>
+          </div>
+        </Chapter>
 
         <section
           id="skillset"
