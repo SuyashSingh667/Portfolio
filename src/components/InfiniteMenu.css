@@ -69,7 +69,7 @@
 .face-title {
   user-select: none;
   position: absolute;
-  top: 10%;
+  top: 5%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -105,7 +105,7 @@
 .face-description {
   user-select: none;
   position: absolute;
-  bottom: 15%;
+  bottom: 20%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
@@ -139,7 +139,7 @@
 .action-buttons-container {
   position: absolute;
   left: 50%;
-  bottom: 6%;
+  bottom: 9%;
   z-index: 30;
   transform: translateX(-50%);
   display: flex;
@@ -218,7 +218,7 @@
 @media (max-width: 640px) {
   .face-title {
     font-size: 2.5rem;
-    top: 18%;
+    top: 12%;
   }
   .center-disc-shadow {
     width: 240px;
