@@ -18,45 +18,31 @@ export interface InteractivePhotoStackProps {
   className?: string;
 }
 
-// Helper function to generate a random number in a range
-const random = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
+// Pre-defined non-overlapping layout anchors for 5 cards across the screen
+const BASE_SPREAD_ANCHORS = [
+  { x: 0, y: 0, r: 0 },         // Center card
+  { x: -28, y: -18, r: -5 },    // Top-Left
+  { x: 28, y: -18, r: 5 },      // Top-Right
+  { x: -27, y: 18, r: 4 },      // Bottom-Left
+  { x: 27, y: 18, r: -4 },      // Bottom-Right
+];
 
-// Helper function to generate a set of non-overlapping positions
 const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
-  const positions: { x: number; y: number; r: number }[] = [];
   const displayedItems = items.slice(0, 5);
 
-  const cardWidthVW = 30;
-  const cardHeightVH = 26;
-  const maxRetries = 100;
-
-  displayedItems.forEach(() => {
-    let newPos;
-    let collision;
-    let retries = 0;
-
-    do {
-      collision = false;
-      const x = random(-30, 30); // vw
-      const y = random(-16, 16); // vh
-      const r = random(-12, 12); // deg
-      newPos = { x, y, r };
-
-      for (const pos of positions) {
-        const dx = Math.abs(newPos.x - pos.x);
-        const dy = Math.abs(newPos.y - pos.y);
-        if (dx < cardWidthVW && dy < cardHeightVH) {
-          collision = true;
-          break;
-        }
-      }
-      retries++;
-    } while (collision && retries < maxRetries);
+  return displayedItems.map((_, index) => {
+    const anchor = BASE_SPREAD_ANCHORS[index % BASE_SPREAD_ANCHORS.length];
+    // Add subtle organic jitter while maintaining guaranteed wide separation
+    const jitterX = (Math.random() * 2 - 1) * 1.5; // ±1.5vw
+    const jitterY = (Math.random() * 2 - 1) * 1.5; // ±1.5vh
+    const jitterR = (Math.random() * 2 - 1) * 1.5; // ±1.5deg
     
-    positions.push(newPos);
-  });
+    const posX = anchor.x + jitterX;
+    const posY = anchor.y + jitterY;
+    const posR = anchor.r + jitterR;
 
-  return positions.map(pos => `translate(${pos.x}vw, ${pos.y}vh) rotate(${pos.r}deg)`);
+    return `translate(${posX}vw, ${posY}vh) rotate(${posR}deg)`;
+  });
 };
 
 const InteractivePhotoStack = React.forwardRef<
@@ -73,7 +59,7 @@ const InteractivePhotoStack = React.forwardRef<
   const baseRotations = ["rotate-2", "-rotate-2", "rotate-3", "-rotate-3", "rotate-4"];
 
   const handleMouseEnter = () => {
-    // Generate new random positions every time the mouse enters
+    // Generate clean non-overlapping positions every time the mouse enters
     const newTransforms = generateNonOverlappingTransforms(items);
     setSpreadTransforms(newTransforms);
     setIsGroupHovered(true);
@@ -102,11 +88,11 @@ const InteractivePhotoStack = React.forwardRef<
       {...props}
     >
       <div
-        className="relative h-[360px] sm:h-[420px] md:h-[460px] w-full flex items-center justify-center"
+        className="relative h-[380px] sm:h-[430px] md:h-[480px] w-full flex items-center justify-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => !clickedIndex && setIsGroupHovered(false)}
       >
-        <div className="relative w-[310px] h-[230px] sm:w-[380px] sm:h-[280px] md:w-[440px] md:h-[310px]">
+        <div className="relative w-[300px] h-[215px] sm:w-[350px] sm:h-[250px] md:w-[410px] md:h-[285px]">
           {displayedItems.map((item, index) => {
             const isTopCard = index === topCardIndex;
             const numItems = displayedItems.length;
@@ -123,7 +109,7 @@ const InteractivePhotoStack = React.forwardRef<
                 key={item.name}
                 onClick={() => handleCardClick(index)}
                 className={cn(
-                  "absolute inset-0 w-[310px] h-[230px] sm:w-[380px] sm:h-[280px] md:w-[440px] md:h-[310px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
+                  "absolute inset-0 w-[300px] h-[215px] sm:w-[350px] sm:h-[250px] md:w-[410px] md:h-[285px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
                     [baseRotations[stackPosition]]: !isGroupHovered && !isTopCard,
@@ -133,18 +119,18 @@ const InteractivePhotoStack = React.forwardRef<
                 )}
                 style={{
                   transform: transform,
-                  zIndex: isClicked ? 200 : isGroupHovered ? 100 : isTopCard ? numItems : numItems - stackPosition,
+                  zIndex: isClicked ? 200 : isGroupHovered ? (isTopCard ? 150 : 100 + (numItems - stackPosition)) : (isTopCard ? numItems : numItems - stackPosition),
                 }}
               >
                 <div className="flex h-full w-full flex-col items-center justify-between">
-                  <div className="h-[80%] w-full bg-zinc-50 dark:bg-black/50 rounded-xl overflow-hidden flex items-center justify-center p-1 border border-black/5 dark:border-white/5 relative">
+                  <div className="h-[78%] w-full bg-zinc-50 dark:bg-black/50 rounded-xl overflow-hidden flex items-center justify-center p-1 border border-black/5 dark:border-white/5 relative">
                     <img
                       src={item.src}
                       alt={item.name}
                       className="h-full w-full object-contain rounded-lg transition-transform duration-300"
                     />
                   </div>
-                  <div className="flex h-[20%] w-full items-center justify-between px-2 pt-1">
+                  <div className="flex h-[22%] w-full items-center justify-between px-2 pt-1">
                     <div className="text-left max-w-[65%]">
                       <p className="font-mono text-[11px] md:text-xs uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 truncate">
                         {item.name}
