@@ -18,13 +18,13 @@ export interface InteractivePhotoStackProps {
   className?: string;
 }
 
-// Pre-defined non-overlapping layout anchors for 5 cards with generous separation
+// Pre-defined non-overlapping layout anchors for 5 cards with closer, balanced spacing
 const BASE_SPREAD_ANCHORS = [
-  { x: 0, y: 0, r: 0 },         // Center card
-  { x: -35, y: -22, r: -5 },    // Top-Left (wide corner)
-  { x: 35, y: -22, r: 5 },      // Top-Right (wide corner)
-  { x: -33, y: 22, r: 4 },      // Bottom-Left (wide corner)
-  { x: 33, y: 22, r: -4 },      // Bottom-Right (wide corner)
+  { x: 0, y: 2, r: 0 },         // Center card
+  { x: -22, y: -12, r: -4 },    // Top-Left
+  { x: 22, y: -12, r: 4 },      // Top-Right
+  { x: -20, y: 15, r: 3 },      // Bottom-Left
+  { x: 20, y: 15, r: -3 },      // Bottom-Right
 ];
 
 const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
@@ -73,17 +73,17 @@ const InteractivePhotoStack = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex flex-col items-center justify-center gap-6 w-full select-none",
+        "flex flex-col items-center justify-center gap-4 w-full select-none",
         className,
       )}
       {...props}
     >
       <div
-        className="relative h-[380px] sm:h-[440px] md:h-[500px] w-full flex items-center justify-center"
+        className="relative h-[340px] sm:h-[390px] md:h-[430px] w-full flex items-center justify-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => !clickedIndex && setIsGroupHovered(false)}
       >
-        <div className="relative w-[280px] h-[200px] sm:w-[330px] sm:h-[235px] md:w-[370px] md:h-[260px]">
+        <div className="relative w-[260px] h-[185px] sm:w-[310px] sm:h-[220px] md:w-[350px] md:h-[245px]">
           {displayedItems.map((item, index) => {
             const isTopCard = index === topCardIndex;
             const numItems = displayedItems.length;
@@ -100,7 +100,7 @@ const InteractivePhotoStack = React.forwardRef<
                 key={item.name}
                 onClick={() => handleCardClick(index)}
                 className={cn(
-                  "absolute inset-0 w-[280px] h-[200px] sm:w-[330px] sm:h-[235px] md:w-[370px] md:h-[260px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
+                  "absolute inset-0 w-[260px] h-[185px] sm:w-[310px] sm:h-[220px] md:w-[350px] md:h-[245px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
                     [baseRotations[stackPosition]]: !isGroupHovered && !isTopCard,
