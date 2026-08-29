@@ -69,14 +69,14 @@
 .face-title {
   user-select: none;
   position: absolute;
-  top: 5%;
+  top: clamp(1rem, 4vh, 2.5rem);
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
   text-align: center;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 900;
-  font-size: clamp(2.2rem, 4.5vw, 4.2rem);
+  font-size: clamp(2rem, 3.8vw, 3.6rem);
   letter-spacing: -0.04em;
   color: #09090b;
   width: 90%;
@@ -105,18 +105,18 @@
 .face-description {
   user-select: none;
   position: absolute;
-  bottom: 20%;
+  bottom: clamp(4.5rem, 11vh, 6.5rem);
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
   text-align: center;
   font-family: var(--font-sans, system-ui), sans-serif;
-  font-size: clamp(0.88rem, 1.35vw, 1.1rem);
-  line-height: 1.6;
+  font-size: clamp(0.82rem, 1.1vw, 0.98rem);
+  line-height: 1.5;
   font-weight: 500;
   color: #27272a;
   width: 90%;
-  max-width: 600px;
+  max-width: 580px;
   pointer-events: none;
   transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -139,7 +139,7 @@
 .action-buttons-container {
   position: absolute;
   left: 50%;
-  bottom: 9%;
+  bottom: clamp(1.2rem, 3.5vh, 2.2rem);
   z-index: 30;
   transform: translateX(-50%);
   display: flex;
@@ -217,8 +217,8 @@
 
 @media (max-width: 640px) {
   .face-title {
-    font-size: 2.5rem;
-    top: 12%;
+    font-size: 2.2rem;
+    top: 1rem;
   }
   .center-disc-shadow {
     width: 240px;
@@ -226,18 +226,60 @@
     transform: translate(-50%, 200%) rotate(-5deg);
   }
   .face-description {
-    font-size: 0.85rem;
-    bottom: 22%;
+    font-size: 0.82rem;
+    bottom: 4.8rem;
     max-width: 95%;
   }
   .action-buttons-container {
-    bottom: 8%;
+    bottom: 1.2rem;
     gap: 10px;
   }
   .action-button {
-    height: 44px;
-    padding: 0 20px;
-    font-size: 11px;
+    height: 42px;
+    padding: 0 18px;
+    font-size: 10px;
     letter-spacing: 0.12em;
+  }
+}
+
+@media (max-height: 820px) {
+  .face-title {
+    top: 1rem;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+  }
+  .face-description {
+    bottom: 3.8rem;
+    font-size: 0.82rem;
+    max-width: 520px;
+  }
+  .action-buttons-container {
+    bottom: 0.8rem;
+    gap: 8px;
+  }
+  .action-button {
+    height: 40px;
+    padding: 0 18px;
+    font-size: 10px;
+  }
+}
+
+@media (max-height: 680px) {
+  .face-title {
+    top: 0.5rem;
+    font-size: 1.5rem;
+  }
+  .face-description {
+    bottom: 3.2rem;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    max-width: 450px;
+  }
+  .action-buttons-container {
+    bottom: 0.5rem;
+  }
+  .action-button {
+    height: 34px;
+    padding: 0 14px;
+    font-size: 9px;
   }
 }

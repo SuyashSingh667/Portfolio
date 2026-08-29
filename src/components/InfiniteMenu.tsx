@@ -972,8 +972,8 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
-    // Base height factor — lower value = bigger spheres on screen. Increased from 0.30 to 0.45 to prevent overlap.
-    const baseHeight = this.SPHERE_RADIUS * 0.45;
+    // Base height factor — focused on center disc
+    const baseHeight = this.SPHERE_RADIUS * 0.30;
     
     let referenceSize;
     let baseSize;
@@ -984,9 +984,7 @@ class InfiniteGridMenu {
       referenceSize = canvasEl.clientWidth;
       baseSize = 450; // standard mobile width
     }
-    // Aggressively shrink spheres when the window height gets small (zoomed in)
-    const ratio = referenceSize / baseSize;
-    const zoomCompensation = Math.max(ratio, Math.pow(1.0 / ratio, 2.0));
+    const zoomCompensation = Math.max(1.0, referenceSize / baseSize);
     const dynamicHeight = baseHeight * zoomCompensation;
     
     const distance = this.camera.position[2];
