@@ -18,13 +18,13 @@ export interface InteractivePhotoStackProps {
   className?: string;
 }
 
-// Pre-defined non-overlapping layout anchors for 5 cards with closer, balanced spacing
+// Pre-defined non-overlapping layout anchors for 5 cards with generous, balanced spacing
 const BASE_SPREAD_ANCHORS = [
   { x: 0, y: 0, r: 0 },         // Center card
-  { x: -24, y: -14, r: -4 },    // Top-Left
-  { x: 24, y: -14, r: 4 },      // Top-Right
-  { x: -22, y: 16, r: 3 },      // Bottom-Left
-  { x: 22, y: 16, r: -3 },      // Bottom-Right
+  { x: -28, y: -16, r: -4 },    // Top-Left
+  { x: 28, y: -16, r: 4 },      // Top-Right
+  { x: -26, y: 17, r: 3 },      // Bottom-Left
+  { x: 26, y: 17, r: -3 },      // Bottom-Right
 ];
 
 const generateNonOverlappingTransforms = (items: PhotoStackItem[]) => {
@@ -79,11 +79,11 @@ const InteractivePhotoStack = React.forwardRef<
       {...props}
     >
       <div
-        className="relative h-[360px] sm:h-[420px] md:h-[470px] w-full flex items-center justify-center"
+        className="relative h-[400px] sm:h-[480px] md:h-[550px] w-full flex items-center justify-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => !clickedIndex && setIsGroupHovered(false)}
       >
-        <div className="relative w-[280px] h-[200px] sm:w-[330px] sm:h-[235px] md:w-[380px] md:h-[265px]">
+        <div className="relative w-[330px] h-[235px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px]">
           {displayedItems.map((item, index) => {
             const isTopCard = index === topCardIndex;
             const numItems = displayedItems.length;
@@ -93,18 +93,18 @@ const InteractivePhotoStack = React.forwardRef<
             // Use the dynamically generated transforms from state
             const transform = isGroupHovered
               ? spreadTransforms[index]
-              : `translateY(${stackPosition * 0.4}rem) scale(${1 - stackPosition * 0.04})`;
+              : `translateY(${stackPosition * 0.5}rem) scale(${1 - stackPosition * 0.04})`;
 
             return (
               <div
                 key={item.name}
                 onClick={() => handleCardClick(index)}
                 className={cn(
-                  "absolute inset-0 w-[280px] h-[200px] sm:w-[330px] sm:h-[235px] md:w-[380px] md:h-[265px] cursor-pointer rounded-2xl bg-white dark:bg-[#121214] p-2.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
+                  "absolute inset-0 w-[330px] h-[235px] sm:w-[430px] sm:h-[305px] md:w-[530px] md:h-[370px] cursor-pointer rounded-2xl md:rounded-3xl bg-white dark:bg-[#121214] p-3 md:p-3.5 shadow-2xl transition-all duration-500 ease-out border border-black/10 dark:border-white/10 backdrop-blur-md",
                   {
                     "rotate-0": isGroupHovered,
                     [baseRotations[stackPosition]]: !isGroupHovered && !isTopCard,
-                    "hover:scale-105": isGroupHovered && !isClicked,
+                    "hover:scale-[1.03]": isGroupHovered && !isClicked,
                     "animate-spin-y": isClicked,
                   }
                 )}
@@ -114,20 +114,20 @@ const InteractivePhotoStack = React.forwardRef<
                 }}
               >
                 <div className="flex h-full w-full flex-col items-center justify-between">
-                  <div className="h-[78%] w-full bg-zinc-50 dark:bg-black/50 rounded-xl overflow-hidden flex items-center justify-center p-1 border border-black/5 dark:border-white/5 relative">
+                  <div className="h-[80%] w-full bg-zinc-50 dark:bg-black/50 rounded-xl md:rounded-2xl overflow-hidden flex items-center justify-center p-1.5 border border-black/5 dark:border-white/5 relative">
                     <img
                       src={item.src}
                       alt={item.name}
-                      className="h-full w-full object-contain rounded-lg transition-transform duration-300"
+                      className="h-full w-full object-contain rounded-lg md:rounded-xl transition-transform duration-300"
                     />
                   </div>
-                  <div className="flex h-[22%] w-full items-center justify-between px-2 pt-1">
-                    <div className="text-left max-w-[65%]">
-                      <p className="font-mono text-[10px] sm:text-[11px] md:text-xs uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 truncate">
+                  <div className="flex h-[20%] w-full items-center justify-between px-2.5 pt-1.5">
+                    <div className="text-left max-w-[70%]">
+                      <p className="font-mono text-xs sm:text-sm md:text-[15px] uppercase tracking-wider font-bold text-zinc-900 dark:text-zinc-100 truncate">
                         {item.name}
                       </p>
                       {item.issuer && (
-                        <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block truncate">
+                        <span className="text-[9px] sm:text-[11px] md:text-xs font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-widest block truncate">
                           {item.issuer}
                         </span>
                       )}
@@ -138,7 +138,7 @@ const InteractivePhotoStack = React.forwardRef<
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-[9px] md:text-[10px] font-mono font-semibold uppercase tracking-wider bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-black/5 dark:border-white/10 transition-colors shrink-0 flex items-center gap-1"
+                        className="px-3 md:px-4 py-1 md:py-1.5 rounded-full text-[9px] sm:text-[10px] md:text-xs font-mono font-semibold uppercase tracking-wider bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 border border-black/5 dark:border-white/10 transition-colors shrink-0 flex items-center gap-1.5"
                       >
                         Verify <span>↗</span>
                       </a>
