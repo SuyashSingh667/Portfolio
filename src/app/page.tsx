@@ -21,6 +21,7 @@ import { CinematicFooter } from "@/components/CinematicFooter";
 import { motion, useScroll, useSpring } from "framer-motion";
 import ImageTrail from "@/components/ImageTrail";
 import LoadingScreen from "@/components/LoadingScreen";
+import { InteractivePhotoStack, PhotoStackItem } from "@/components/ui/photo-stack";
 import { preload } from "react-dom";
 
 
@@ -164,6 +165,34 @@ const SKILLS = [
   "Particle Systems Addict", "Cloud-Native Thinker", "Ships Fast, Breaks Nothing",
   "WebGL Experiments", "Steel Plant to Startups", "CodeChef Chapter Lead",
   "IIT Kanpur Research Intern", "Blockchain Voter Systems", "Satellite Tracker Builder",
+];
+
+const CERTIFICATIONS: PhotoStackItem[] = [
+  {
+    src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1887&auto=format&fit=crop",
+    name: "AWS Cloud Practitioner",
+    issuer: "Amazon Web Services",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1887&auto=format&fit=crop",
+    name: "Full Stack Engineering",
+    issuer: "Meta / Coursera",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop",
+    name: "Google Cloud Fundamentals",
+    issuer: "Google Cloud",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
+    name: "Algorithms & Problem Solving",
+    issuer: "HackerRank",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1964&auto=format&fit=crop",
+    name: "Modern Web Architecture",
+    issuer: "Oracle / Coursera",
+  },
 ];
 
 // ─── Reveal wrapper ───────────────────────────────────────────────────────────
@@ -797,7 +826,7 @@ export default function Home() {
           suyash.dev
         </a>
         <nav className="hidden md:flex items-center gap-7">
-          {[["#top","Home"],["#work","Work"],["#experiences","Exp"],["#skillset","Skills"],["#about","About"],["#contact","Contact"]].map(([href, label]) => (
+          {[["#top","Home"],["#work","Work"],["#experiences","Exp"],["#skillset","Skills"],["#certifications","Certs"],["#about","About"],["#contact","Contact"]].map(([href, label]) => (
             <a key={href} href={href} className="text-[9px] font-mono uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity duration-200">
               {label}
             </a>
@@ -1038,10 +1067,52 @@ export default function Home() {
       </div>
 
       {/* ════════════════════════════════════════════════════════════════════════
-          04 — ABOUT (full-screen 3D model)
+          04 — CERTIFICATIONS
+      ════════════════════════════════════════════════════════════════════════ */}
+      <div className="relative z-30 overflow-x-hidden flex flex-col">
+        <Chapter num="04" eyebrow="Licenses & Certs" title="Certs." isMobile={isMobile} />
+
+        <section
+          id="certifications"
+          className="relative min-h-[90vh] md:min-h-screen py-16 md:py-0 w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col items-center justify-center"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)`,
+            backgroundSize: "40px 40px",
+          }}
+        >
+          {/* Subtle Instruction Badge */}
+          <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
+            <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
+              </span>
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-[0.22em] font-semibold text-zinc-700 dark:text-zinc-200">
+                Hover to fan out · Click to inspect
+              </span>
+            </div>
+          </div>
+
+          <div className="w-full max-w-5xl mx-auto px-6 flex items-center justify-center relative z-10">
+            <InteractivePhotoStack
+              items={CERTIFICATIONS}
+              title={
+                <div className="flex flex-col items-center gap-1 mt-6">
+                  <span className="font-mono text-[11px] md:text-xs uppercase tracking-[0.32em] font-semibold text-zinc-500 dark:text-zinc-400">
+                    Verified Licenses & Accomplishments
+                  </span>
+                </div>
+              }
+            />
+          </div>
+        </section>
+      </div>
+
+      {/* ════════════════════════════════════════════════════════════════════════
+          05 — ABOUT (full-screen 3D model)
       ════════════════════════════════════════════════════════════════════════ */}
       <div className="min-h-[100dvh] md:min-h-0 flex flex-col md:block">
-        <Chapter num="04" eyebrow="About Me" title="Hello." isMobile={isMobile} />
+        <Chapter num="05" eyebrow="About Me" title="Hello." isMobile={isMobile} />
 
         <section
           id="about"
