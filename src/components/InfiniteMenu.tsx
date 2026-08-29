@@ -972,20 +972,9 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
-    // Base height factor — focused on center disc
-    const baseHeight = this.SPHERE_RADIUS * 0.30;
-    
-    let referenceSize;
-    let baseSize;
-    if (this.camera.aspect > 1) {
-      referenceSize = canvasEl.clientHeight;
-      baseSize = 900; // standard desktop height
-    } else {
-      referenceSize = canvasEl.clientWidth;
-      baseSize = 450; // standard mobile width
-    }
-    const zoomCompensation = Math.max(1.0, referenceSize / baseSize);
-    const dynamicHeight = baseHeight * zoomCompensation;
+    // Fixed constant baseHeight to lock the sphere size directly to viewport height
+    // This makes the 3D scene completely zoom-invariant
+    const dynamicHeight = this.SPHERE_RADIUS * 0.28;
     
     const distance = this.camera.position[2];
     if (this.camera.aspect > 1) {
