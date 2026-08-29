@@ -1175,7 +1175,7 @@ export default function Home() {
             <InteractivePhotoStack
               items={CERTIFICATIONS}
               title={
-                <div className="flex flex-col items-center gap-1 mt-6">
+                <div className="flex flex-col items-center gap-1 mt-12 md:mt-16 pb-6">
                   <span className="font-mono text-[11px] md:text-xs uppercase tracking-[0.32em] font-semibold text-zinc-500 dark:text-zinc-400">
                     Verified Licenses & Accomplishments
                   </span>
