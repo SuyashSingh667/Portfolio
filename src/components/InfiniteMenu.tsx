@@ -972,9 +972,9 @@ class InfiniteGridMenu {
   #updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvasEl = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
-    // Fixed constant baseHeight to lock the sphere size directly to viewport height
-    // This makes the 3D scene completely zoom-invariant
-    const dynamicHeight = this.SPHERE_RADIUS * 0.28;
+    // Calibrated so the center disc occupies ~52% of the viewport height,
+    // leaving a dedicated ~24% at the top for Title and ~24% at the bottom for Description/Buttons
+    const dynamicHeight = this.SPHERE_RADIUS * 0.52;
     
     const distance = this.camera.position[2];
     if (this.camera.aspect > 1) {
@@ -1096,6 +1096,22 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
       );
     }
 
+    const wrapper = wrapperRef.current;
+    const preventZoom = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    };
+    const preventGesture = (e: Event) => {
+      e.preventDefault();
+    };
+
+    if (wrapper) {
+      wrapper.addEventListener('wheel', preventZoom, { passive: false });
+      wrapper.addEventListener('gesturestart', preventGesture, { passive: false });
+      wrapper.addEventListener('gesturechange', preventGesture, { passive: false });
+    }
+
     const handleResize = () => {
       if (sketch) {
         sketch.resize();
@@ -1107,6 +1123,11 @@ export default function InfiniteMenu({ items = [], scale = 1.0 }: InfiniteMenuPr
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      if (wrapper) {
+        wrapper.removeEventListener('wheel', preventZoom);
+        wrapper.removeEventListener('gesturestart', preventGesture);
+        wrapper.removeEventListener('gesturechange', preventGesture);
+      }
       if (sketch) {
         sketch.destroy();
       }

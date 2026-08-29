@@ -29,9 +29,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: clamp(280px, 34vw, 420px);
-  height: clamp(90px, 11vw, 130px);
-  transform: translate(-65%, 210%) rotate(-8deg);
+  width: clamp(220px, 26vw, 340px);
+  height: clamp(60px, 7vw, 90px);
+  transform: translate(-60%, 140%) rotate(-8deg);
   z-index: 4;
   pointer-events: none;
   border-radius: 50%;
