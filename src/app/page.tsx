@@ -959,17 +959,18 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════════════
           02 — EXPERIENCES
       ════════════════════════════════════════════════════════════════════════ */}
-      <section
-        id="experiences"
-        className="relative z-20 h-[100dvh] md:h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex flex-col justify-between"
-      >
-        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} className="pt-6 pb-1 md:pt-8 md:pb-2" />
-        <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
+      <div className="relative z-30 overflow-x-hidden flex flex-col">
+        <Chapter num="02" eyebrow="Journey" title="Experience." isMobile={isMobile} />
 
-        <div className="w-full overflow-hidden relative z-10 flex-1 flex flex-col justify-center pb-4 md:pb-8">
-          {/* Floating Instruction Badge positioned in the cards canvas, clear of Chapter heading */}
-          <div className="pl-6 md:pl-16 mb-3 pointer-events-none select-none hidden md:block">
-            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
+        <section
+          id="experiences"
+          className="relative z-20 min-h-[90vh] md:min-h-screen w-full bg-white dark:bg-[#0a0a0a] border-b border-black/5 dark:border-white/5 transition-colors duration-500 overflow-hidden flex items-center"
+        >
+          <ImageTrail items={EXPERIENCE_IMAGES} variant={1} />
+
+          {/* Floating Instruction Badge matching Projects section */}
+          <div className="absolute top-6 left-6 md:left-16 z-30 pointer-events-none select-none hidden md:block">
+            <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full border border-black/10 dark:border-white/12 bg-white/85 dark:bg-black/85 backdrop-blur-xl shadow-lg transition-all duration-300">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-zinc-650 dark:bg-zinc-250"></span>
@@ -980,48 +981,50 @@ export default function Home() {
             </div>
           </div>
 
-          <div
-            ref={cardsContainerRef}
-            className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
-            style={{ 
-              willChange: "transform",
-              paddingRight: "8vw"
-            }}
-          >
-            {experiences.map((item, idx) => (
-              <div
-                key={idx}
-                className="experience-card w-[85vw] sm:w-[50vw] md:w-[42vw] lg:w-[35vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-8 md:pr-14 mr-8 md:mr-14 min-h-[40vh] md:min-h-[46vh]"
-              >
-                {/* Top */}
-                <div>
-                  <span className="card-num text-[clamp(2.5rem,6vw,7rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-2 md:-mb-3">
-                    {item.num}
-                  </span>
-                  <span className="card-role text-[8.5px] md:text-[9.5px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-1.5 md:mb-2 font-semibold">
-                    {item.role}
-                  </span>
-                  <h3 className="card-org text-xl md:text-3xl lg:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-2 md:mb-4 leading-tight">
-                    {item.org}
-                  </h3>
-                  <p className="card-desc text-xs md:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-[360px]">
-                    {item.desc}
-                  </p>
-                </div>
-
-                {/* Bottom — tags */}
-                <div className="flex flex-wrap gap-1.5 md:gap-2 mt-4 md:mt-6">
-                  {item.tags.map((tag) => (
-                    <span key={tag} className="card-tag px-2.5 md:px-3 py-0.5 md:py-1 border border-black/10 dark:border-zinc-800 rounded-full text-[8px] md:text-[9px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      {tag}
+          <div className="w-full overflow-hidden relative z-10 py-8">
+            <div
+              ref={cardsContainerRef}
+              className="flex gap-0 pl-6 md:pl-16 transform-gpu items-center"
+              style={{ 
+                willChange: "transform",
+                paddingRight: "8vw"
+              }}
+            >
+              {experiences.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="experience-card w-[85vw] sm:w-[50vw] md:w-[42vw] lg:w-[35vw] shrink-0 flex flex-col justify-between border-r border-black/8 dark:border-white/8 pr-8 md:pr-14 mr-8 md:mr-14 min-h-[42vh] md:min-h-[48vh]"
+                >
+                  {/* Top */}
+                  <div>
+                    <span className="card-num text-[clamp(2.5rem,6vw,7rem)] font-black leading-none text-black/[0.06] dark:text-white/[0.05] select-none block -mb-2 md:-mb-3">
+                      {item.num}
                     </span>
-                  ))}
+                    <span className="card-role text-[8.5px] md:text-[9.5px] font-mono uppercase tracking-[0.28em] text-[#171717] dark:text-[#ededed] block mb-1.5 md:mb-2 font-semibold">
+                      {item.role}
+                    </span>
+                    <h3 className="card-org text-xl md:text-3xl lg:text-4xl font-black tracking-tight text-[#171717] dark:text-white mb-2 md:mb-4 leading-tight">
+                      {item.org}
+                    </h3>
+                    <p className="card-desc text-xs md:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 max-w-[360px]">
+                      {item.desc}
+                    </p>
+                  </div>
+
+                  {/* Bottom — tags */}
+                  <div className="flex flex-wrap gap-1.5 md:gap-2 mt-4 md:mt-6">
+                    {item.tags.map((tag) => (
+                      <span key={tag} className="card-tag px-2.5 md:px-3 py-0.5 md:py-1 border border-black/10 dark:border-zinc-800 rounded-full text-[8px] md:text-[9px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* ════════════════════════════════════════════════════════════════════════
           03 — SKILLSET
