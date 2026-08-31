@@ -74,7 +74,13 @@ About Suyash:
   * Frontend: React.js, Three.js, Responsive UI Design, Next.js, Tailwind CSS, TypeScript.
   * Cloud: AWS (S3, Lambda, DynamoDB, SQS, Cognito, Elastic Beanstalk, API Gateway, CloudWatch).
   * Backend & Databases: REST APIs, MySQL, DBMS, Spring Boot (Basics).
-  * Tools: Git, GitHub, IntelliJ IDEA, VS Code.
+- Certifications & Licenses:
+  * AWS Certified AI Practitioner (Issued August 2026, Exp Aug 2029 - Validation: b7f47cb6d7044136b82c283d44c2feb2)
+  * AWS Cloud Architecting (AWS Academy)
+  * AWS Data Engineering (AWS Academy)
+  * AWS Cloud Foundations (AWS Academy)
+  * Operating Systems & Power User (Google / Coursera)
+  * Design Thinking for Innovation (Univ. of Virginia)
 - Contact/Links:
   * Email: suyashsingh667@gmail.com
   * LinkedIn: https://www.linkedin.com/in/suyashsingh0435

@@ -170,6 +170,13 @@ const SKILLS = [
 
 const CERTIFICATIONS: PhotoStackItem[] = [
   {
+    src: "/certificates/aws_ai_practitioner.png",
+    name: "AWS Certified AI Practitioner",
+    issuer: "Amazon Web Services",
+    date: "08/30/2026",
+    verifyUrl: "https://aws.amazon.com/verification",
+  },
+  {
     src: "/certificates/aws_cloud_architecting.png",
     name: "AWS Cloud Architecting",
     issuer: "AWS Academy",
