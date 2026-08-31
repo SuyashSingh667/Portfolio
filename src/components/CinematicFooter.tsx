@@ -227,9 +227,41 @@ export function CinematicFooter() {
   const giantTextRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const linksRef = useRef<HTMLDivElement>(null);
+  const [showResumeModal, setShowResumeModal] = React.useState(false);
+
+  const handleResumeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // 1. Programmatically trigger download of the updated PDF
+    const link = document.createElement('a');
+    link.href = '/resume.pdf';
+    link.download = 'Suyash_Singh_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // 2. Simultaneously open the crisp image preview modal
+    setShowResumeModal(true);
+  };
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowResumeModal(false);
+    };
+    if (showResumeModal) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [showResumeModal]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") return;
     if (!wrapperRef.current) return;
 
     // React strict mode compatible GSAP context cleanup
@@ -349,7 +381,10 @@ export function CinematicFooter() {
                 <MagneticButton as="a" href="https://www.linkedin.com/in/suyashsingh0435" target="_blank" rel="noopener noreferrer" className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground">
                   LinkedIn
                 </MagneticButton>
-                <MagneticButton as="a" href="/resume_suyashsingh.pdf" download="Suyash_Singh_Resume.pdf" target="_blank" rel="noopener noreferrer" className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground">
+                <MagneticButton as="button" onClick={handleResumeClick} className="footer-glass-pill px-6 py-3 rounded-full text-muted-foreground font-medium text-xs md:text-sm hover:text-foreground flex items-center gap-2">
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
                   Resume
                 </MagneticButton>
               </div>
@@ -363,8 +398,6 @@ export function CinematicFooter() {
             <div className="text-muted-foreground text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
               © 2026 Suyash Singh. All rights reserved.
             </div>
-
-
 
             {/* Back to top */}
             <MagneticButton
@@ -380,6 +413,75 @@ export function CinematicFooter() {
           </div>
         </footer>
       </div>
+
+      {/* 4. Interactive High-Res Resume Preview Modal */}
+      {showResumeModal && (
+        <div 
+          className="fixed inset-0 z-[600] flex items-center justify-center bg-black/80 backdrop-blur-xl p-3 md:p-6 animate-in fade-in duration-200"
+          onClick={() => setShowResumeModal(false)}
+        >
+          <div 
+            className="relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl md:rounded-3xl bg-white dark:bg-[#121214] border border-black/10 dark:border-white/12 shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header Bar */}
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/10 dark:border-white/10 bg-zinc-50 dark:bg-[#18181b]/80 backdrop-blur-md flex-shrink-0">
+              <div className="flex items-center gap-2.5">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span className="font-mono text-xs md:text-sm font-bold uppercase tracking-wider text-zinc-900 dark:text-white">
+                  Suyash Singh — Resume
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href="/resume.pdf"
+                  download="Suyash_Singh_Resume.pdf"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-mono text-[11px] font-semibold tracking-wide hover:opacity-90 transition-opacity"
+                >
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  <span>Download PDF</span>
+                </a>
+
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-black/10 dark:border-white/15 text-zinc-700 dark:text-zinc-300 font-mono text-[11px] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                >
+                  <span>Open PDF ↗</span>
+                </a>
+
+                <button
+                  onClick={() => setShowResumeModal(false)}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+                  aria-label="Close modal"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body: Scrollable High-Res Image View */}
+            <div className="flex-1 overflow-y-auto p-3 md:p-6 bg-zinc-100 dark:bg-black/60 flex items-center justify-center">
+              <div className="relative shadow-2xl rounded-lg md:rounded-xl overflow-hidden border border-black/10 dark:border-white/10 bg-white max-w-full">
+                <img
+                  src="/resume.png"
+                  alt="Suyash Singh Resume"
+                  className="w-full h-auto object-contain max-h-[75vh]"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
