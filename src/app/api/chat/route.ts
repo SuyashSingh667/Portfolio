@@ -75,7 +75,7 @@ About Suyash:
   * Cloud: AWS (S3, Lambda, DynamoDB, SQS, Cognito, Elastic Beanstalk, API Gateway, CloudWatch).
   * Backend & Databases: REST APIs, MySQL, DBMS, Spring Boot (Basics).
 - Certifications & Licenses:
-  * AWS Certified AI Practitioner (Issued August 2026, Exp Aug 2029 - Validation: b7f47cb6d7044136b82c283d44c2feb2)
+  * AWS Certified AI Practitioner (Issued August 2026, Exp Aug 2029 - Credly: https://www.credly.com/badges/c676d757-074c-4c4b-91e6-a02d92b5c75e/public_url)
   * AWS Cloud Architecting (AWS Academy)
   * AWS Data Engineering (AWS Academy)
   * AWS Cloud Foundations (AWS Academy)

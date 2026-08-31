@@ -174,7 +174,7 @@ const CERTIFICATIONS: PhotoStackItem[] = [
     name: "AWS Certified AI Practitioner",
     issuer: "Amazon Web Services",
     date: "08/30/2026",
-    verifyUrl: "https://aws.amazon.com/verification",
+    verifyUrl: "https://www.credly.com/badges/c676d757-074c-4c4b-91e6-a02d92b5c75e/public_url",
   },
   {
     src: "/certificates/aws_cloud_architecting.png",
