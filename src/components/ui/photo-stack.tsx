@@ -18,15 +18,14 @@ export interface InteractivePhotoStackProps {
   className?: string;
 }
 
-// Pre-defined non-overlapping layout anchors for cards with generous, balanced spacing
+// Pre-defined non-overlapping layout anchors for 5 cards with generous, balanced spacing
 // Anchor 0 is always the active top card (front and center)
 const SPREAD_ANCHORS = [
   { x: 0, y: 0, r: 0 },         // 0: Active Top Card (Center)
-  { x: -30, y: -16, r: -4 },    // 1: Top-Left
-  { x: 30, y: -16, r: 4 },      // 2: Top-Right
-  { x: -28, y: 17, r: 3 },      // 3: Bottom-Left
-  { x: 28, y: 17, r: -3 },      // 4: Bottom-Right
-  { x: 0, y: 22, r: -2 },       // 5: Bottom-Center
+  { x: -28, y: -16, r: -4 },    // 1: Top-Left
+  { x: 28, y: -16, r: 4 },      // 2: Top-Right
+  { x: -26, y: 17, r: 3 },      // 3: Bottom-Left
+  { x: 26, y: 17, r: -3 },      // 4: Bottom-Right
 ];
 
 const InteractivePhotoStack = React.forwardRef<
@@ -38,7 +37,7 @@ const InteractivePhotoStack = React.forwardRef<
 
   const displayedItems = items;
   const numItems = displayedItems.length;
-  const baseRotations = ["rotate-2", "-rotate-2", "rotate-3", "-rotate-3", "rotate-2", "-rotate-2"];
+  const baseRotations = ["rotate-2", "-rotate-2", "rotate-3", "-rotate-3", "rotate-4"];
 
   const handleCardClick = (index: number) => {
     // Instantly bring the clicked certificate to the top/center

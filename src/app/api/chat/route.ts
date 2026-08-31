@@ -80,7 +80,6 @@ About Suyash:
   * AWS Data Engineering (AWS Academy)
   * AWS Cloud Foundations (AWS Academy)
   * Operating Systems & Power User (Google / Coursera)
-  * Design Thinking for Innovation (Univ. of Virginia)
 - Contact/Links:
   * Email: suyashsingh667@gmail.com
   * LinkedIn: https://www.linkedin.com/in/suyashsingh0435

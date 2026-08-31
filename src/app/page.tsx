@@ -204,13 +204,6 @@ const CERTIFICATIONS: PhotoStackItem[] = [
     date: "03/06/2026",
     verifyUrl: "https://coursera.org/verify/YY8E4Q03JLI7",
   },
-  {
-    src: "/certificates/uva_design_thinking.png",
-    name: "Design Thinking: Ideas to Action",
-    issuer: "Univ. of Virginia",
-    date: "03/07/2026",
-    verifyUrl: "https://coursera.org/verify/2FF0XSLRGDK3",
-  },
 ];
 
 // ─── Reveal wrapper ───────────────────────────────────────────────────────────
